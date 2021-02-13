@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/pcandido/survey-api/issues"
   },
-  "homepage": "https://github.com/pcandido/survey-api#readme"
+  "homepage": "https://github.com/pcandido/survey-api#readme",
+  "devDependencies": {
+    "git-commit-msg-linter": "^3.0.0"
+  }
 }
