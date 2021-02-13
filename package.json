@@ -6,11 +6,12 @@
   "private": true,
   "scripts": {
     "postinstall": "husky install",
-    "lint-staged": "lint-staged",
+    "build": "tsc",
     "test": "npm test:unit",
     "test:unit": "jest --projects ./src",
     "test:watch": "jest --projects ./src --watch",
-    "test:staged": "jest --passWithNoTests"
+    "test:staged": "jest --passWithNoTests",
+    "lint-staged": "lint-staged"
   },
   "repository": {
     "type": "git",
