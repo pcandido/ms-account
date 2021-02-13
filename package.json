@@ -8,7 +8,7 @@
     "postinstall": "husky install",
     "lint-staged": "lint-staged",
     "test": "jest",
-    "test:staged": "jest"
+    "test:staged": "jest --passWithNoTests"
   },
   "repository": {
     "type": "git",
