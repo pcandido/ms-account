@@ -4,6 +4,7 @@
         "module": "commonjs",
         "outDir": "dist",
         "esModuleInterop": true,
-        "allowJs": true
+        "allowJs": true,
+        "strict": true
     }
 }
