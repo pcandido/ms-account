@@ -8,8 +8,8 @@ describe('SingUpController', () => {
       body: {
         email: 'any_email@email.com',
         password: 'any_password',
-        passwordConfirmation: 'any_password'
-      }
+        passwordConfirmation: 'any_password',
+      },
     }
 
     const httpResponse = sut.handle(httpRequest)
@@ -24,8 +24,8 @@ describe('SingUpController', () => {
       body: {
         name: 'any_name',
         password: 'any_password',
-        passwordConfirmation: 'any_password'
-      }
+        passwordConfirmation: 'any_password',
+      },
     }
 
     const httpResponse = sut.handle(httpRequest)
