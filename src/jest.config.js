@@ -9,5 +9,8 @@ module.exports = {
   ...rootConfig,
   rootDir: root,
   displayName: 'unit',
-  testMatch: ['<rootDir>/src/**/*.test.ts'],
+  testMatch: [
+    '<rootDir>/src/**/*.test.ts',
+    '<rootDir>/src/**/*.spec.ts',
+  ],
 }

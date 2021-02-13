@@ -7,9 +7,10 @@
   "scripts": {
     "postinstall": "husky install",
     "lint-staged": "lint-staged",
-    "test": "jest",
-    "test:staged": "jest --passWithNoTests",
-    "test:watch": "jest --watch"
+    "test": "npm test:unit",
+    "test:unit": "jest --projects ./src",
+    "test:watch": "jest --projects ./src --watch",
+    "test:staged": "jest --passWithNoTests"
   },
   "repository": {
     "type": "git",
