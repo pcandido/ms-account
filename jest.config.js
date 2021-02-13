@@ -1,10 +1,19 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+
+const { resolve } = require('path')
+const root = resolve(__dirname)
+
 module.exports = {
-  roots: ['<rootDir>/src'],
+  rootDir: root,
+  displayName: 'root',
   collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',
   testEnvironment: 'node',
-  transform: {
-    '.+\\.ts$': 'ts-jest'
-  }
+  clearMocks: true,
+  preset: 'ts-jest',
+  moduleNameMapper: {
+    '@src/(.*)': '<rootDir>/src/$1',
+    '@test/(.*)': '<rootDir>/test/$1',
+  },
 }
