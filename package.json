@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "Training project",
   "main": "index.js",
+  "private": true,
   "scripts": {
+    "postinstall": "husky install",
+    "lint-staged": "lint-staged",
     "test": "jest",
     "test:staged": "jest"
   },
