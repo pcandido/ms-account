@@ -14,6 +14,7 @@ module.exports = {
   preset: 'ts-jest',
   moduleNameMapper: {
     '@src/(.*)': '<rootDir>/src/$1',
+    '@presentation/(.*)': '<rootDir>/src/presentation/$1',
     '@test/(.*)': '<rootDir>/test/$1',
   },
 }

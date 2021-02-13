@@ -12,6 +12,9 @@
       "@src/*": [
         "./src/*"
       ],
+      "@presentation/*": [
+        "./src/presentation/*"
+      ],
       "@test/*": [
         "./test/*"
       ]

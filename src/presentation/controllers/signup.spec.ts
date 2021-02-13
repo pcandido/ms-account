@@ -1,5 +1,5 @@
-import { SignUpController } from '@src/presentation/controllers/signup'
-import { MissingParamError } from '@src/presentation/errors/missing-param-error'
+import { SignUpController } from '@presentation/controllers/signup'
+import { MissingParamError } from '@presentation/errors/missing-param-error'
 
 describe('SingUpController', () => {
 
