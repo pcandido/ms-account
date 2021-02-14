@@ -1,8 +1,6 @@
-import { SignUpController } from '@presentation/controllers/signup'
-import { MissingParamError } from '@presentation/errors/missing-param-error'
-import { InvalidParamError } from '@presentation/errors/invalid-param-error'
+import { SignUpController } from './signup'
+import { MissingParamError, InvalidParamError, ServerError } from '@presentation/errors'
 import { EmailValidator } from '@presentation/protocols/email-validator'
-import { ServerError } from '@src/presentation/errors/server-error'
 import { DoNothingLogger } from '@service/logger'
 
 describe('SingUpController', () => {
@@ -22,7 +20,7 @@ describe('SingUpController', () => {
     const emailValidatorStub = new EmailValidatorStub()
     const logger = new DoNothingLogger()
     const sut = new SignUpController(logger, emailValidatorStub)
-    
+
     return { sut, emailValidatorStub }
   }
 
