@@ -1,6 +1,6 @@
 import { SignUpController } from './signup'
 import { MissingParamError, InvalidParamError, ServerError } from '@presentation/errors'
-import { EmailValidator } from '@presentation/protocols/email-validator'
+import { EmailValidator } from '@presentation/protocols'
 import { DoNothingLogger } from '@service/logger'
 
 describe('SingUpController', () => {
