@@ -2,7 +2,7 @@ import { SignUpController } from '@presentation/controllers/signup'
 import { MissingParamError } from '@presentation/errors/missing-param-error'
 import { InvalidParamError } from '@presentation/errors/invalid-param-error'
 import { EmailValidator } from '@presentation/protocols/email-validator'
-import { InternalError } from '@presentation/errors/internal-error'
+import { ServerError } from '@src/presentation/errors/server-error'
 
 describe('SingUpController', () => {
 
@@ -148,7 +148,7 @@ describe('SingUpController', () => {
     const httpResponse = sut.handle(givenHttpRequest)
 
     expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual(new InternalError())
+    expect(httpResponse.body).toEqual(new ServerError())
   })
 
 
