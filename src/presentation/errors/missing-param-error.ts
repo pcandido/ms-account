@@ -1,4 +1,6 @@
-export class MissingParamError extends Error {
+import { ValidationError } from './validation-error'
+
+export class MissingParamError extends ValidationError {
 
   constructor(paramName: string) {
     super(`Missing param: ${paramName}`)
