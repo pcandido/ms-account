@@ -3,6 +3,7 @@ import { MissingParamError } from '@presentation/errors/missing-param-error'
 import { InvalidParamError } from '@presentation/errors/invalid-param-error'
 import { EmailValidator } from '@presentation/protocols/email-validator'
 import { ServerError } from '@src/presentation/errors/server-error'
+import { DoNothingLogger } from '@service/logger'
 
 describe('SingUpController', () => {
 
@@ -17,8 +18,11 @@ describe('SingUpController', () => {
         return true
       }
     }
+
     const emailValidatorStub = new EmailValidatorStub()
-    const sut = new SignUpController(emailValidatorStub)
+    const logger = new DoNothingLogger()
+    const sut = new SignUpController(logger, emailValidatorStub)
+    
     return { sut, emailValidatorStub }
   }
 
