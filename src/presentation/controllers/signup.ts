@@ -15,12 +15,12 @@ export class SignUpController implements Controller {
   handle(request: HttpRequest): HttpResponse {
     try {
       this.validate(request.body)
-      this.addAccount.add({
+      const account = this.addAccount.add({
         name: request.body.name,
         email: request.body.email,
         password: request.body.password,
       })
-      return { statusCode: 200, body: {} }
+      return { statusCode: 201, body: account }
     } catch (error) {
       if (error instanceof ValidationError) {
         return badRequest(error)
