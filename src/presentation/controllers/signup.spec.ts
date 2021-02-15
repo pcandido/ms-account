@@ -240,5 +240,31 @@ describe('SingUpController', () => {
     expect(httpResponse.body).toEqual(new ServerError())
   })
 
+  it('should return 201 if valid data is provided', () => {
+    const { sut } = makeSut()
+
+    const givenName = 'any_name'
+    const givenEmail = 'given_email'
+    const givenPassword = 'given_password'
+
+    const givenHttpRequest = {
+      body: {
+        name: givenName,
+        email: givenEmail,
+        password: givenPassword,
+        passwordConfirmation: givenPassword,
+      },
+    }
+
+    const httpResponse = sut.handle(givenHttpRequest)
+
+    expect(httpResponse.statusCode).toBe(201)
+    expect(httpResponse.body).toEqual({
+      id: 'generated_id',
+      name: givenName,
+      email: givenEmail,
+      password: givenPassword,
+    })
+  })
 
 })
