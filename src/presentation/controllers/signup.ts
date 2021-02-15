@@ -2,15 +2,24 @@ import { Controller, HttpRequest, HttpResponse, EmailValidator } from '@presenta
 import { MissingParamError, InvalidParamError, ValidationError } from '@presentation/errors'
 import { badRequest, serverError } from '@presentation/helpers/http-helper'
 import { Logger } from '@service/logger'
+import { AddAccount, AddAccountModel } from '@domain/usecases/add-account'
 
 export class SignUpController implements Controller {
 
-  constructor(private logger: Logger, private emailValidator: EmailValidator) { }
+  constructor(
+    private logger: Logger,
+    private emailValidator: EmailValidator,
+    private addAccount: AddAccount,
+  ) { }
 
   handle(request: HttpRequest): HttpResponse {
     try {
       this.validate(request.body)
-
+      this.addAccount.add({
+        name: request.body.name,
+        email: request.body.email,
+        password: request.body.password,
+      })
       return { statusCode: 200, body: {} }
     } catch (error) {
       if (error instanceof ValidationError) {

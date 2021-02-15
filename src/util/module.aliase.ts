@@ -6,6 +6,7 @@ const files = path.resolve(__dirname, '..', '..')
 moduleAlias.addAliases({
   '@src': path.join(files, 'src'),
   '@presentation': path.join(files, 'src', 'presentation'),
+  '@domain': path.join(files, 'src', 'domain'),
   '@service': path.join(files, 'src', 'service'),
   '@test': path.join(files, 'test'),
 })
