@@ -2,26 +2,48 @@ import { SignUpController } from './signup'
 import { MissingParamError, InvalidParamError, ServerError } from '@presentation/errors'
 import { EmailValidator } from '@presentation/protocols'
 import { DoNothingLogger } from '@service/logger'
+import { AccountModel } from '@domain/models'
+import { AddAccount, AddAccountModel } from '@domain/usecases'
 
 describe('SingUpController', () => {
 
   interface SutTypes {
     sut: SignUpController,
     emailValidatorStub: EmailValidator
+    addAccountStub: AddAccount
   }
 
-  const makeSut = (): SutTypes => {
+  const makeEmailValidatorStub = () => {
     class EmailValidatorStub implements EmailValidator {
       isValid(email: string): boolean {
         return true
       }
     }
 
-    const emailValidatorStub = new EmailValidatorStub()
-    const logger = new DoNothingLogger()
-    const sut = new SignUpController(logger, emailValidatorStub)
+    return new EmailValidatorStub()
+  }
 
-    return { sut, emailValidatorStub }
+  const makeAddAccountStub = () => {
+    class AddAccountStub implements AddAccount {
+      add(account: AddAccountModel): AccountModel {
+        return {
+          id: 'generated_id',
+          ...account,
+        }
+      }
+    }
+
+    return new AddAccountStub()
+  }
+
+  const makeSut = (): SutTypes => {
+
+    const logger = new DoNothingLogger()
+    const emailValidatorStub = makeEmailValidatorStub()
+    const addAccountStub = makeAddAccountStub()
+    const sut = new SignUpController(logger, emailValidatorStub, addAccountStub)
+
+    return { sut, emailValidatorStub, addAccountStub }
   }
 
   it('should return 400 if no name is provided', () => {
@@ -169,6 +191,33 @@ describe('SingUpController', () => {
 
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(new ServerError())
+  })
+
+  it('should call AddAccount with correct values', () => {
+    const { sut, addAccountStub } = makeSut()
+
+    const addSpy = jest.spyOn(addAccountStub, 'add')
+
+    const givenName = 'any_name'
+    const givenEmail = 'any_email@mail.com'
+    const givenPassword = 'any_password'
+    const givenHttpRequest = {
+      body: {
+        name: givenName,
+        email: givenEmail,
+        password: givenPassword,
+        passwordConfirmation: givenPassword,
+      },
+    }
+
+    sut.handle(givenHttpRequest)
+
+    expect(addSpy).toHaveBeenCalledTimes(1)
+    expect(addSpy).toHaveBeenCalledWith({
+      name: givenName,
+      email: givenEmail,
+      password: givenPassword,
+    })
   })
 
 
