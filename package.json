@@ -7,7 +7,7 @@
   "scripts": {
     "postinstall": "husky install",
     "build": "tsc",
-    "test": "npm test:unit",
+    "test": "npm run test:unit",
     "test:unit": "jest --projects ./src",
     "test:watch": "jest --projects ./src --watch",
     "test:staged": "jest --passWithNoTests",
