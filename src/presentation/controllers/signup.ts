@@ -1,8 +1,8 @@
 import { Controller, HttpRequest, HttpResponse, EmailValidator } from '@presentation/protocols'
 import { MissingParamError, InvalidParamError, ValidationError } from '@presentation/errors'
-import { badRequest, serverError } from '@presentation/helpers/http-helper'
+import { badRequest, serverError, created } from '@presentation/helpers/http-helper'
 import { Logger } from '@service/logger'
-import { AddAccount, AddAccountModel } from '@domain/usecases/add-account'
+import { AddAccount } from '@domain/usecases/add-account'
 
 export class SignUpController implements Controller {
 
@@ -20,7 +20,7 @@ export class SignUpController implements Controller {
         email: request.body.email,
         password: request.body.password,
       })
-      return { statusCode: 201, body: account }
+      return created(account)
     } catch (error) {
       if (error instanceof ValidationError) {
         return badRequest(error)
