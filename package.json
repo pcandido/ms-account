@@ -7,10 +7,12 @@
   "scripts": {
     "postinstall": "husky install",
     "build": "tsc",
-    "test": "npm run test:unit",
-    "test:unit": "jest --projects ./src",
-    "test:watch": "jest --projects ./src --watch",
-    "test:staged": "jest --passWithNoTests",
+    "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
+    "test:verbose": "jest --passWithNoTests --runInBand --watch",
+    "test:unit": "npm test -- -c ./jest-unit.config.js --watch",
+    "test:integration": "npm test -- -c ./jest-integration.config.js --watch",
+    "test:staged": "npm test -- --findRelatedTests",
+    "test:ci": "npm test -- --coverage",
     "lint-staged": "lint-staged"
   },
   "repository": {
