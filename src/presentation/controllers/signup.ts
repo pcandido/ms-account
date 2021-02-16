@@ -2,7 +2,7 @@ import { Controller, HttpRequest, HttpResponse, EmailValidator } from '@presenta
 import { MissingParamError, InvalidParamError, ValidationError } from '@presentation/errors'
 import { badRequest, serverError, created } from '@presentation/helpers/http-helper'
 import { Logger } from '@service/logger'
-import { AddAccount } from '@domain/usecases/add-account'
+import { AddAccount } from '@domain/usecases'
 
 export class SignUpController implements Controller {
 

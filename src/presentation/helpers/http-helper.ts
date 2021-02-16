@@ -1,5 +1,10 @@
-import { HttpResponse } from '@src/presentation/protocols/http'
-import { ServerError } from '@src/presentation/errors/server-error'
+import { HttpResponse } from '@src/presentation/protocols'
+import { ServerError } from '@src/presentation/errors'
+
+export const created = <T>(body: T): HttpResponse => ({
+  statusCode: 201,
+  body,
+})
 
 export const badRequest = (error: Error): HttpResponse => ({
   statusCode: 400,
@@ -9,9 +14,4 @@ export const badRequest = (error: Error): HttpResponse => ({
 export const serverError = (): HttpResponse => ({
   statusCode: 500,
   body: new ServerError(),
-})
-
-export const created = <T>(body: T): HttpResponse => ({
-  statusCode: 201,
-  body,
 })
