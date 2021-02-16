@@ -12,10 +12,10 @@ export class SignUpController implements Controller {
     private addAccount: AddAccount,
   ) { }
 
-  handle(request: HttpRequest): HttpResponse {
+  async handle(request: HttpRequest): Promise<HttpResponse> {
     try {
       this.validate(request.body)
-      const account = this.addAccount.add({
+      const account = await this.addAccount.add({
         name: request.body.name,
         email: request.body.email,
         password: request.body.password,
