@@ -21,6 +21,9 @@
       "@service/*": [
         "./src/service/*"
       ],
+      "@utils/*": [
+        "./src/utils/*"
+      ],
       "@test/*": [
         "./test/*"
       ]
