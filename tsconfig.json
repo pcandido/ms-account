@@ -18,9 +18,6 @@
       "@domain/*": [
         "./src/domain/*"
       ],
-      "@service/*": [
-        "./src/service/*"
-      ],
       "@utils/*": [
         "./src/utils/*"
       ],

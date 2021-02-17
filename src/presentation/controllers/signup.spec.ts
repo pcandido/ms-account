@@ -1,7 +1,7 @@
 import { SignUpController } from './signup'
 import { MissingParamError, InvalidParamError, ServerError } from '@presentation/errors'
 import { EmailValidator } from '@presentation/protocols'
-import { DoNothingLogger } from '@service/logger'
+import { DiscardLoggerAdapter } from '@utils/discard-logger-adapter'
 import { AccountModel } from '@domain/models'
 import { AddAccount, AddAccountModel } from '@domain/usecases'
 
@@ -38,7 +38,7 @@ describe('SingUpController', () => {
 
   const makeSut = (): SutTypes => {
 
-    const logger = new DoNothingLogger()
+    const logger = new DiscardLoggerAdapter()
     const emailValidatorStub = makeEmailValidatorStub()
     const addAccountStub = makeAddAccountStub()
     const sut = new SignUpController(logger, emailValidatorStub, addAccountStub)
