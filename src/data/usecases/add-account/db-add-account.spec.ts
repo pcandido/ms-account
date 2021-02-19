@@ -8,16 +8,19 @@ describe('DbAddAccount', () => {
     encrypterStub: Encrypter
   }
 
-  const makeSut = (): SutTypes => {
-    class EncrypterStub {
+  const makeEncrypter = (): Encrypter => {
+    class EncrypterStub implements Encrypter {
       async encrypt(value: string): Promise<string> {
         return Promise.resolve('hashed_password')
       }
     }
 
-    const encrypterStub = new EncrypterStub()
-    const sut = new DbAddAccount(encrypterStub)
+    return new EncrypterStub()
+  }
 
+  const makeSut = (): SutTypes => {
+    const encrypterStub = makeEncrypter()
+    const sut = new DbAddAccount(encrypterStub)
     return { sut, encrypterStub }
   }
 
