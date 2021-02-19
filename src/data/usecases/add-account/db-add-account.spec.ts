@@ -12,6 +12,7 @@ describe('DbAddAccount', () => {
     addAccountRepositoryStub: AddAccountRepository,
   }
 
+  const givenGeneratedId = 'generatedId'
   const givenHashedPassword = 'hashed_password'
 
   const makeEncrypter = (): Encrypter => {
@@ -27,7 +28,7 @@ describe('DbAddAccount', () => {
   const makeAddAccountRepository = (): AddAccountRepository => {
     class AddAccountRepositoryStub implements AddAccountRepository {
       async add(account: AddAccountModel): Promise<AccountModel> {
-        const addedAccount = { ...account, id: 'generated_id' }
+        const addedAccount = { ...account, id: givenGeneratedId }
         return Promise.resolve(addedAccount)
       }
     }
@@ -101,6 +102,18 @@ describe('DbAddAccount', () => {
     jest.spyOn(addAccountRepositoryStub, 'add').mockRejectedValueOnce(givenError)
 
     await expect(() => sut.add(givenAccount)).rejects.toThrow(givenError)
+  })
+
+  it('should return the added account on success', async () => {
+    const givenAccount = {
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'any_password',
+    }
+
+    const { sut } = makeSut()
+    const added = await sut.add(givenAccount)
+    expect(added).toEqual({ ...givenAccount, password: givenHashedPassword, id: givenGeneratedId })
   })
 
 })
