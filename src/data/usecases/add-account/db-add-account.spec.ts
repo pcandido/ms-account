@@ -89,4 +89,18 @@ describe('DbAddAccount', () => {
 
   })
 
+  it('should not handle AddAccountRepository errors', async () => {
+    const givenAccount = {
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'any_password',
+    }
+    const givenError = new Error('some error')
+
+    const { sut, addAccountRepositoryStub } = makeSut()
+    jest.spyOn(addAccountRepositoryStub, 'add').mockRejectedValueOnce(givenError)
+
+    await expect(() => sut.add(givenAccount)).rejects.toThrow(givenError)
+  })
+
 })
