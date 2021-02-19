@@ -7,6 +7,7 @@ moduleAlias.addAliases({
   '@src': path.join(files, 'src'),
   '@presentation': path.join(files, 'src', 'presentation'),
   '@domain': path.join(files, 'src', 'domain'),
+  '@data': path.join(files, 'src', 'data'),
   '@utils': path.join(files, 'src', 'utils'),
   '@test': path.join(files, 'test'),
 })
