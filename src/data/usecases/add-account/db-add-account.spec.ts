@@ -41,4 +41,18 @@ describe('DbAddAccount', () => {
 
   })
 
+  it('should not handle Encrypter errors', async () => {
+    const givenAccount = {
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'any_password',
+    }
+    const givenError = new Error('some error')
+
+    const { sut, encrypterStub } = makeSut()
+    jest.spyOn(encrypterStub, 'encrypt').mockRejectedValueOnce(givenError)
+
+    await expect(() => sut.add(givenAccount)).rejects.toThrow(givenError)
+  })
+
 })
