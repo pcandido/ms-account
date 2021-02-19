@@ -30,4 +30,12 @@ describe('BCryptAdapter', () => {
     expect(hash).toBe(givenGeneratedHash)
   })
 
+  it('should not handle BCrypt errors', async () => {
+    const givenValue = 'some_value'
+    const givenError = new Error('some_error')
+    const sut = makeSut()
+    jest.spyOn(bcrypt, 'hash').mockRejectedValue(givenError)
+    await expect(() => sut.encrypt(givenValue)).rejects.toThrow(givenError)
+  })
+
 })
