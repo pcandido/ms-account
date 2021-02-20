@@ -1,7 +1,13 @@
 import request from 'supertest'
 import app from '@main/config/app'
+import { MongoHelper } from '@infra/db/mongodb/helpers/mogodb-helper'
 
 describe('SignUp Routes', () => {
+
+  beforeEach(async () => {
+    const accountsCollection = MongoHelper.getCollection('collections')
+    await accountsCollection.deleteMany({})
+  })
 
   it('should return an account on success', async () => {
     const givenRoute = '/api/signup'
