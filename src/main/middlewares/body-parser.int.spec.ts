@@ -1,7 +1,7 @@
 import request from 'supertest'
 import app from '@main/config/app'
 
-describe('BodyParserMiddleware', () => {
+describe('BodyParser Middleware', () => {
 
   it('should parser body as json', async () => {
     const givenRoute = '/body_parser_route'
