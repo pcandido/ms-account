@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb'
+import { Collection, MongoClient } from 'mongodb'
 
 export const MongoHelper = {
   client: null as MongoClient | null,
@@ -7,12 +7,19 @@ export const MongoHelper = {
       throw new Error('Invalid MongoDB URL')
     }
 
-    this.client = await new MongoClient(url, {
+    this.client = await MongoClient.connect(url, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })
   },
   async close(): Promise<void> {
     await this.client?.close()
+  },
+  getCollection(name: string): Collection {
+    const collection = this.client?.db().collection(name)
+    if (!collection) {
+      throw new Error(`Unknkown collection: ${name}`)
+    }
+    return collection
   },
 }
