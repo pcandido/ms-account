@@ -1,5 +1,5 @@
-import { HttpResponse } from '@src/presentation/protocols'
-import { ServerError } from '@src/presentation/errors'
+import { HttpResponse } from '@presentation/protocols'
+import { ServerError } from '@presentation/errors'
 
 export const created = <T>(body: T): HttpResponse => ({
   statusCode: 201,

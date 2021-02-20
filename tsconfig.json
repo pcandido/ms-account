@@ -9,8 +9,8 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "@src/*": [
-        "./src/*"
+      "@main/*": [
+        "./src/main/*"
       ],
       "@presentation/*": [
         "./src/presentation/*"
@@ -27,13 +27,9 @@
       "@utils/*": [
         "./src/utils/*"
       ],
-      "@test/*": [
-        "./test/*"
-      ]
     },
     "rootDirs": [
       "./src",
-      "./test",
     ],
     "strict": true,
     "removeComments": true,
@@ -47,8 +43,7 @@
     "emitDecoratorMetadata": true
   },
   "include": [
-    "./src/**/*.ts",
-    "./test/**/*.ts"
+    "./src/**/*.ts"
   ],
   "exclude": [
     "./node_modules/*",

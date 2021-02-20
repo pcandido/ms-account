@@ -58,7 +58,8 @@
   "jest": {
     "projects": [
       "./jest/jest-unit.config.js",
-      "./jest/jest-int.config.js"
+      "./jest/jest-int.config.js",
+      "./jest/jest-e2e.config.js"
     ]
   }
 }
