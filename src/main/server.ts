@@ -1,5 +1,9 @@
-import app from './config/app'
+import '../utils/module-aliases'
+import app from '@main/config/app'
+import config from 'config'
 
-app.listen(3000, () => {
-  console.log('Server runing at http://localhost:3000')
+const port = config.get('app.port')
+
+app.listen(port, () => {
+  console.log(`Server runing at http://localhost:${port}`)
 })
