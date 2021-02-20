@@ -7,6 +7,11 @@ describe('AccountMongoRepository', () => {
     await MongoHelper.connect(process.env.MONGO_URL)
   })
 
+  beforeEach(async () => {
+    const accountsCollection = MongoHelper.getCollection('collections')
+    await accountsCollection.deleteMany({})
+  })
+
   afterAll(async () => {
     await MongoHelper.close()
   })
