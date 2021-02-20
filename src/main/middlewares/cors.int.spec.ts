@@ -6,7 +6,7 @@ describe('Cors Middleware', () => {
   it('should enable CORS', async () => {
     const givenRoute = '/cors_route'
 
-    app.post(givenRoute, (req, res) => {
+    app.get(givenRoute, (req, res) => {
       res.send()
     })
 
