@@ -9,8 +9,8 @@
     "build": "tsc",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand --watch",
-    "test:unit": "npm test -- -c ./jest-unit.config.js --watch",
-    "test:integration": "npm test -- -c ./jest-integration.config.js --watch",
+    "test:unit": "npm test -- --projects ./jest/jest-unit.config.js --watch",
+    "test:integration": "npm test -- --projects ./jest/jest-int.config.js --watch",
     "test:staged": "npm test -- --findRelatedTests",
     "test:ci": "npm test -- --coverage",
     "lint-staged": "lint-staged"
@@ -47,5 +47,11 @@
     "bcrypt": "^5.0.0",
     "module-alias": "^2.2.2",
     "validator": "^13.5.2"
+  },
+  "jest":{
+    "projects":[
+      "./jest/jest-unit.config.js",
+      "./jest/jest-int.config.js"
+    ]
   }
 }

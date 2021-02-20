@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
+const path = require('path')
+const root = path.resolve(__dirname, '..')
+
 module.exports = {
+  rootDir: root,
   roots: ['<rootDir>/src'],
   collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
   coverageDirectory: 'coverage',
