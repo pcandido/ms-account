@@ -1,15 +1,21 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
+const tsPreset = require('ts-jest/jest-preset')
+const jestMongoPreset = require('@shelf/jest-mongodb/jest-preset')
+
 const path = require('path')
 const root = path.resolve(__dirname, '..')
 
 module.exports = {
   rootDir: root,
   roots: ['<rootDir>/src'],
+
+  ...tsPreset,
+  ...jestMongoPreset,
+
   collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
   coverageDirectory: 'coverage',
   testEnvironment: 'node',
-  preset: 'ts-jest',
   moduleNameMapper: {
     '@src/(.*)': '<rootDir>/src/$1',
     '@presentation/(.*)': '<rootDir>/src/presentation/$1',
