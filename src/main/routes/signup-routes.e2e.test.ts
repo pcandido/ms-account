@@ -22,7 +22,7 @@ describe('SignUp Routes', () => {
     await request(app)
       .post(givenRoute)
       .send(givenAccount)
-      .expect(200)
+      .expect(201)
   })
 
 })
