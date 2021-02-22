@@ -8,7 +8,7 @@ export const created = <T>(body: T): HttpResponse => ({
 
 export const badRequest = (error: Error): HttpResponse => ({
   statusCode: 400,
-  body: error,
+  body: error?.message ?? error,
 })
 
 export const serverError = (): HttpResponse => ({

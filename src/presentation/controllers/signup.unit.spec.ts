@@ -60,7 +60,7 @@ describe('SingUpController', () => {
     const httpResponse = await sut.handle(givenHttpRequest)
 
     expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new MissingParamError('name'))
+    expect(httpResponse.body).toEqual('Missing param: name')
   })
 
   it('should return 400 if no email is provided', async () => {
@@ -77,7 +77,7 @@ describe('SingUpController', () => {
     const httpResponse = await sut.handle(givenHttpRequest)
 
     expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new MissingParamError('email'))
+    expect(httpResponse.body).toEqual('Missing param: email')
   })
 
   it('should return 400 if no password is provided', async () => {
@@ -94,7 +94,7 @@ describe('SingUpController', () => {
     const httpResponse = await sut.handle(givenHttpRequest)
 
     expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new MissingParamError('password'))
+    expect(httpResponse.body).toEqual('Missing param: password')
   })
 
   it('should return 400 if no passwordConfirmation is provided', async () => {
@@ -111,7 +111,7 @@ describe('SingUpController', () => {
     const httpResponse = await sut.handle(givenHttpRequest)
 
     expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new MissingParamError('passwordConfirmation'))
+    expect(httpResponse.body).toEqual('Missing param: passwordConfirmation')
   })
 
   it('should return 400 if password confirmation fails', async () => {
@@ -129,7 +129,7 @@ describe('SingUpController', () => {
     const httpResponse = await sut.handle(givenHttpRequest)
 
     expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new InvalidParamError('passwordConfirmation'))
+    expect(httpResponse.body).toEqual('Invalid param: passwordConfirmation')
   })
 
   it('should return 400 if an invalid email is provided', async () => {
@@ -149,7 +149,7 @@ describe('SingUpController', () => {
     const httpResponse = await sut.handle(givenHttpRequest)
 
     expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new InvalidParamError('email'))
+    expect(httpResponse.body).toEqual('Invalid param: email')
   })
 
   it('should call email validator with correct email', async () => {
