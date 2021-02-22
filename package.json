@@ -14,6 +14,8 @@
     "test:integration": "npm test -- --projects ./jest/jest-int.config.js --watch",
     "test:staged": "npm test -- --findRelatedTests",
     "test:ci": "npm test -- --coverage",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
     "lint-staged": "lint-staged"
   },
   "repository": {
