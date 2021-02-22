@@ -5,7 +5,7 @@ import { MongoHelper } from '@infra/db/mongodb/helpers/mogodb-helper'
 describe('SignUp Routes', () => {
 
   beforeEach(async () => {
-    const accountsCollection = MongoHelper.getCollection('collections')
+    const accountsCollection = await MongoHelper.getCollection('collections')
     await accountsCollection.deleteMany({})
   })
 
