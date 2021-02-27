@@ -22,7 +22,7 @@ export class LoginController implements Controller {
 
       const token = await this.authenticator.auth(email, password)
 
-      return ok({})
+      return ok({ accessToken: token })
 
     } catch (error) {
       if (error instanceof ValidationError)
