@@ -78,4 +78,11 @@ describe('ControllerLogger Decorator', () => {
     expect(errorSpy).toBeCalledWith(givenError)
   })
 
+  it('should not call the logger.error if controller does not return an internal error', async () => {
+    const { sut, loggerStub } = makeSut()
+    const errorSpy = jest.spyOn(loggerStub, 'error')
+    await sut.handle(givenHttpRequest)
+    expect(errorSpy).not.toBeCalled()
+  })
+
 })
