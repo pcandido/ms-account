@@ -1,6 +1,11 @@
 import { HttpResponse } from '@presentation/protocols'
 import { ServerError } from '@presentation/errors'
 
+export const ok = <T>(body: T): HttpResponse => ({
+  statusCode: 200,
+  body,
+})
+
 export const created = <T>(body: T): HttpResponse => ({
   statusCode: 201,
   body,
