@@ -78,7 +78,7 @@ describe('SingUpValidator', () => {
     expect(() => sut.validate(givenHttpRequest)).toThrow(new MissingParamError('passwordConfirmation'))
   })
 
-  it.skip('should throw if password confirmation fails', async () => {
+  it('should throw if password confirmation fails', async () => {
     const { sut } = makeSut()
     const givenHttpRequest = makeHttpRequest().with('passwordConfirmation', 'different_password').build()
     expect(() => sut.validate(givenHttpRequest)).toThrow(new InvalidParamError('passwordConfirmation'))

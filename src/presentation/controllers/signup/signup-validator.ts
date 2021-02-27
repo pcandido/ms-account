@@ -1,4 +1,4 @@
-import { MissingParamError } from '@presentation/errors'
+import { MatchFieldsValidator } from '@presentation/helpers/validation/match-fields-validator'
 import { MissingParamValidator } from '@presentation/helpers/validation/missing-param-validator'
 import { Validator } from '@presentation/helpers/validation/validator'
 import { ValidatorComposite } from '@presentation/helpers/validation/validator-composite'
@@ -9,5 +9,6 @@ export const signupValidator = (): Validator => {
 
   return new ValidatorComposite([
     ...requiredFields.map(a => new MissingParamValidator(a)),
+    new MatchFieldsValidator('password', 'passwordConfirmation'),
   ])
 }
