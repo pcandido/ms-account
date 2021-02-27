@@ -25,7 +25,7 @@ export class SignUpController implements Controller {
       if (error instanceof ValidationError) {
         return badRequest(error)
       } else {
-        return serverError()
+        return serverError(error)
       }
     }
   }
