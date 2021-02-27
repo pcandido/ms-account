@@ -3,7 +3,7 @@ import { BCryptAdapter } from '@infra/cryptography/bcrypt-adapter'
 import { DbAddAccount } from '@data/usecases/add-account/db-add-account'
 import { EmailValidatorAdapter } from '@utils/email-validator-adapter'
 import { ConsoleLoggerAdapter } from '@utils/console-logger-adapter'
-import { SignUpController } from '@presentation/controllers/signup'
+import { SignUpController } from '@presentation/controllers/signup/signup'
 import { Controller } from '@presentation/protocols'
 import { ControllerLogger } from '@presentation/decorators/controller-logger'
 
