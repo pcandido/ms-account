@@ -1,6 +1,6 @@
 import { Authenticator } from '@domain/usecases'
 import { InvalidParamError, MissingParamError, AuthenticationError } from '@presentation/errors'
-import { badRequest, serverError, unauthorized } from '@presentation/helpers/http-helper'
+import { badRequest, serverError, unauthorized, ok } from '@presentation/helpers/http-helper'
 import { EmailValidator } from '@presentation/protocols'
 import { LoginController } from './login'
 
@@ -9,6 +9,8 @@ interface SutTypes {
   emailValidatorStub: EmailValidator
   authenticatorStub: Authenticator
 }
+
+const givenToken = 'any_token'
 
 const makeEmailValidator = () => {
   class EmailValidatorStub implements EmailValidator {
@@ -23,7 +25,7 @@ const makeEmailValidator = () => {
 const makeAuthenticator = () => {
   class AuthenticatorStub implements Authenticator {
     async auth(): Promise<string> {
-      return 'any_token'
+      return givenToken
     }
   }
 
@@ -144,6 +146,14 @@ describe('Login Controller', () => {
 
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(serverError(givenError))
+  })
+
+  it('should return 200 if valid credentials are provided', async () => {
+    const { sut } = makeSut()
+    const httpRequest = makeRequest().build()
+
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(ok({ accessToken: givenToken }))
   })
 
 })
