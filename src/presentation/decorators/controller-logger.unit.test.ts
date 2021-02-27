@@ -8,10 +8,23 @@ describe('ControllerLogger Decorator', () => {
     controllerStub: Controller
   }
 
+  const givenHttpRequest = {
+    body: {
+      field: 'field',
+    },
+  }
+
+  const givenHttpResponse = {
+    statusCode: 200,
+    body: {
+      ok: true,
+    },
+  }
+
   const makeControllerStub = () => {
     class ControllerStub implements Controller {
       async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-        return { statusCode: 200, body: { ok: true } }
+        return givenHttpResponse
       }
     }
     return new ControllerStub()
@@ -24,17 +37,18 @@ describe('ControllerLogger Decorator', () => {
   }
 
   it('should call controller handle', async () => {
-    const givenHttpRequest = {
-      body: {
-        field: 'field',
-      },
-    }
-
     const { sut, controllerStub } = makeSut()
     const handleSpy = jest.spyOn(controllerStub, 'handle')
 
     await sut.handle(givenHttpRequest)
     expect(handleSpy).toBeCalledWith(givenHttpRequest)
+  })
+
+  it('should return the controller return', async () => {
+    const { sut } = makeSut()
+
+    const response = await sut.handle(givenHttpRequest)
+    expect(response).toEqual(givenHttpResponse)
   })
 
 })
