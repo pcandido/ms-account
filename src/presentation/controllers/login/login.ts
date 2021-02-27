@@ -1,7 +1,7 @@
 import { Authenticator } from '@domain/usecases'
-import { InvalidParamError, ValidationError } from '@presentation/errors'
+import { AuthenticationError, InvalidParamError, ValidationError } from '@presentation/errors'
 import { bodyValidator } from '@presentation/helpers/body-validator'
-import { badRequest, ok, serverError } from '@presentation/helpers/http-helper'
+import { badRequest, ok, serverError, unauthorized } from '@presentation/helpers/http-helper'
 import { Controller, EmailValidator, HttpRequest, HttpResponse } from '@presentation/protocols'
 
 export class LoginController implements Controller {
@@ -27,6 +27,8 @@ export class LoginController implements Controller {
     } catch (error) {
       if (error instanceof ValidationError)
         return badRequest(error)
+      else if (error instanceof AuthenticationError)
+        return unauthorized(error)
       else
         return serverError(error)
     }
