@@ -22,7 +22,7 @@ export class LoginController implements Controller {
         return badRequest(new InvalidParamError('email'))
       }
 
-      const token = this.authenticator.auth(email, password)
+      const token = await this.authenticator.auth(email, password)
 
       return ok({})
     } catch (error) {
