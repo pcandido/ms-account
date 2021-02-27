@@ -1,7 +1,6 @@
 import { SignUpController } from './signup'
 import { MissingParamError, InvalidParamError, ServerError } from '@presentation/errors'
 import { EmailValidator } from '@presentation/protocols'
-import { DiscardLoggerAdapter } from '@utils/discard-logger-adapter'
 import { AccountModel } from '@domain/models'
 import { AddAccount, AddAccountModel } from '@domain/usecases'
 
@@ -38,10 +37,9 @@ describe('SingUpController', () => {
 
   const makeSut = (): SutTypes => {
 
-    const logger = new DiscardLoggerAdapter()
     const emailValidatorStub = makeEmailValidatorStub()
     const addAccountStub = makeAddAccountStub()
-    const sut = new SignUpController(logger, emailValidatorStub, addAccountStub)
+    const sut = new SignUpController(emailValidatorStub, addAccountStub)
 
     return { sut, emailValidatorStub, addAccountStub }
   }
@@ -190,7 +188,7 @@ describe('SingUpController', () => {
     const httpResponse = await sut.handle(givenHttpRequest)
 
     expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual(new ServerError())
+    expect(httpResponse.body).toEqual(new ServerError(new Error()))
   })
 
   it('should call AddAccount with correct values', async () => {
@@ -237,7 +235,7 @@ describe('SingUpController', () => {
     const httpResponse = await sut.handle(givenHttpRequest)
 
     expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual(new ServerError())
+    expect(httpResponse.body).toEqual(new ServerError(new Error()))
   })
 
   it('should return 201 if valid data is provided', async () => {
