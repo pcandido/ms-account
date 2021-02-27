@@ -1,7 +1,8 @@
 import { Controller, HttpRequest, HttpResponse, EmailValidator } from '@presentation/protocols'
-import { MissingParamError, InvalidParamError, ValidationError } from '@presentation/errors'
+import { InvalidParamError, ValidationError } from '@presentation/errors'
 import { badRequest, serverError, created } from '@presentation/helpers/http-helper'
 import { AddAccount } from '@domain/usecases'
+import { bodyValidator } from '@presentation/helpers/body-validator'
 
 export class SignUpController implements Controller {
 
@@ -12,12 +13,23 @@ export class SignUpController implements Controller {
 
   async handle(request: HttpRequest): Promise<HttpResponse> {
     try {
-      this.validate(request.body)
+      bodyValidator(request.body, ['name', 'email', 'password', 'passwordConfirmation'])
+      const { email, password, passwordConfirmation } = request.body
+
+      if (!this.emailValidator.isValid(email)) {
+        throw new InvalidParamError('email')
+      }
+
+      if (password !== passwordConfirmation) {
+        throw new InvalidParamError('passwordConfirmation')
+      }
+
       const account = await this.addAccount.add({
         name: request.body.name,
         email: request.body.email,
         password: request.body.password,
       })
+      
       return created(account)
     } catch (error) {
       if (error instanceof ValidationError) {
@@ -25,24 +37,6 @@ export class SignUpController implements Controller {
       } else {
         return serverError(error)
       }
-    }
-  }
-
-  private validate(body: any) {
-    const requiredFields = ['name', 'email', 'password', 'passwordConfirmation']
-    for (const field of requiredFields) {
-      if (!body[field])
-        throw new MissingParamError(field)
-    }
-
-    const { email, password, passwordConfirmation } = body
-
-    if (!this.emailValidator.isValid(email)) {
-      throw new InvalidParamError('email')
-    }
-
-    if (password !== passwordConfirmation) {
-      throw new InvalidParamError('passwordConfirmation')
     }
   }
 }
