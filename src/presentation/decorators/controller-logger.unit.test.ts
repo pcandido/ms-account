@@ -1,4 +1,6 @@
+import { serverError } from '@presentation/helpers/http-helper'
 import { Controller, HttpRequest, HttpResponse } from '@presentation/protocols'
+import { Logger } from '@utils/logger'
 import { ControllerLogger } from './controller-logger'
 
 describe('ControllerLogger Decorator', () => {
@@ -6,6 +8,7 @@ describe('ControllerLogger Decorator', () => {
   interface SutTypes {
     sut: ControllerLogger
     controllerStub: Controller
+    loggerStub: Logger
   }
 
   const givenHttpRequest = {
@@ -21,6 +24,17 @@ describe('ControllerLogger Decorator', () => {
     },
   }
 
+  const makeLoggerStub = () => {
+    class LoggerStub implements Logger {
+      debug(message: string): void { /* do nothing */ }
+      info(message: string): void { /* do nothing */ }
+      warn(message: string): void { /* do nothing */ }
+      error(message: string | Error): void { /* do nothing */ }
+      fatal(message: string | Error): void { /* do nothing */ }
+    }
+    return new LoggerStub()
+  }
+
   const makeControllerStub = () => {
     class ControllerStub implements Controller {
       async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -32,8 +46,9 @@ describe('ControllerLogger Decorator', () => {
 
   const makeSut = (): SutTypes => {
     const controllerStub = makeControllerStub()
-    const sut = new ControllerLogger(controllerStub)
-    return { sut, controllerStub }
+    const loggerStub = makeLoggerStub()
+    const sut = new ControllerLogger(controllerStub, loggerStub)
+    return { sut, controllerStub, loggerStub }
   }
 
   it('should call controller handle', async () => {
@@ -49,6 +64,18 @@ describe('ControllerLogger Decorator', () => {
 
     const response = await sut.handle(givenHttpRequest)
     expect(response).toEqual(givenHttpResponse)
+  })
+
+  it('should call the logger.error if controller returns an internal error', async () => {
+    const { sut, controllerStub, loggerStub } = makeSut()
+    const givenError = new Error('internal error')
+
+    jest.spyOn(controllerStub, 'handle').mockResolvedValueOnce(serverError(givenError))
+    const errorSpy = jest.spyOn(loggerStub, 'error')
+
+    await sut.handle(givenHttpRequest)
+
+    expect(errorSpy).toBeCalledWith(givenError)
   })
 
 })
