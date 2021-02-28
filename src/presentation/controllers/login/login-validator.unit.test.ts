@@ -28,27 +28,27 @@ describe('LoginValidator', () => {
 
   it('should throw if no email is provided', async () => {
     const { sut } = makeSut()
-    const givenHttpRequest = { password: 'any_password' }
-    expect(() => sut.validate(givenHttpRequest)).toThrow(new MissingParamError('email'))
+    const givenRequest = { password: 'any_password' }
+    expect(() => sut.validate(givenRequest)).toThrow(new MissingParamError('email'))
   })
 
   it('should throw if no password is provided', async () => {
     const { sut } = makeSut()
-    const givenHttpRequest = { email: 'any_email@mail.com' }
-    expect(() => sut.validate(givenHttpRequest)).toThrow(new MissingParamError('password'))
+    const givenRequest = { email: 'any_email@mail.com' }
+    expect(() => sut.validate(givenRequest)).toThrow(new MissingParamError('password'))
   })
 
   it('should throw if an invalid email is provided', async () => {
     const { sut, emailValidatorStub } = makeSut()
-    const givenHttpRequest = { email: 'invalid_email@mail.com', password: 'any_password' }
+    const givenRequest = { email: 'invalid_email@mail.com', password: 'any_password' }
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValue(false)
-    expect(() => sut.validate(givenHttpRequest)).toThrow(new InvalidParamError('email'))
+    expect(() => sut.validate(givenRequest)).toThrow(new InvalidParamError('email'))
   })
 
   it('should not throw if no validator throws', () => {
     const { sut } = makeSut()
-    const givenHttpRequest = { email: 'any_email@mail.com', password: 'any_password' }
-    expect(() => sut.validate(givenHttpRequest)).not.toThrow()
+    const givenRequest = { email: 'any_email@mail.com', password: 'any_password' }
+    expect(() => sut.validate(givenRequest)).not.toThrow()
   })
 
 })

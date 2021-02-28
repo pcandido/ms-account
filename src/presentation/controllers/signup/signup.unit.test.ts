@@ -47,7 +47,7 @@ const makeSut = (): SutTypes => {
   return { sut, addAccountStub, validatorStub }
 }
 
-const makeHttpRequest = () => ({
+const makeRequest = () => ({
   body: {
     name: givenName,
     email: givenEmail,
@@ -61,38 +61,38 @@ describe('SingUpController', () => {
   it('should call validator with correct values', async () => {
     const { sut, validatorStub } = makeSut()
     const validateSpy = jest.spyOn(validatorStub, 'validate')
-    const givenHttpRequest = makeHttpRequest()
+    const givenRequest = makeRequest()
 
-    await sut.handle(givenHttpRequest)
-    expect(validateSpy).toBeCalledWith(givenHttpRequest.body)
+    await sut.handle(givenRequest)
+    expect(validateSpy).toBeCalledWith(givenRequest.body)
   })
 
   it('should reuturn bad request if validator throws', async () => {
     const { sut, validatorStub } = makeSut()
-    const givenHttpRequest = makeHttpRequest()
+    const givenRequest = makeRequest()
     const givenError = new ValidationError('')
     jest.spyOn(validatorStub, 'validate').mockImplementation(() => { throw givenError })
 
-    const response = await sut.handle(givenHttpRequest)
+    const response = await sut.handle(givenRequest)
     expect(response).toEqual(badRequest(givenError))
   })
 
   it('should reuturn 500 if validator throws internal error', async () => {
     const { sut, validatorStub } = makeSut()
-    const givenHttpRequest = makeHttpRequest()
+    const givenRequest = makeRequest()
     const givenError = new Error('')
     jest.spyOn(validatorStub, 'validate').mockImplementation(() => { throw givenError })
 
-    const response = await sut.handle(givenHttpRequest)
+    const response = await sut.handle(givenRequest)
     expect(response).toEqual(serverError(givenError))
   })
 
   it('should call AddAccount with correct values', async () => {
     const { sut, addAccountStub } = makeSut()
-    const givenHttpRequest = makeHttpRequest()
+    const givenRequest = makeRequest()
     const addSpy = jest.spyOn(addAccountStub, 'add')
 
-    await sut.handle(givenHttpRequest)
+    await sut.handle(givenRequest)
 
     expect(addSpy).toHaveBeenCalledTimes(1)
     expect(addSpy).toHaveBeenCalledWith({
@@ -104,20 +104,20 @@ describe('SingUpController', () => {
 
   it('should return 500 if addAccount throws an error', async () => {
     const { sut, addAccountStub } = makeSut()
-    const givenHttpRequest = makeHttpRequest()
+    const givenRequest = makeRequest()
     const givenError = new Error('any_error')
     jest.spyOn(addAccountStub, 'add').mockRejectedValue(givenError)
 
-    const httpResponse = await sut.handle(givenHttpRequest)
-    expect(httpResponse).toEqual(serverError(givenError))
+    const response = await sut.handle(givenRequest)
+    expect(response).toEqual(serverError(givenError))
   })
 
   it('should return 201 if valid data is provided', async () => {
     const { sut } = makeSut()
-    const givenHttpRequest = makeHttpRequest()
+    const givenRequest = makeRequest()
 
-    const httpResponse = await sut.handle(givenHttpRequest)
-    expect(httpResponse).toEqual(created({
+    const response = await sut.handle(givenRequest)
+    expect(response).toEqual(created({
       id: givenGeneratedId,
       name: givenName,
       email: givenEmail,

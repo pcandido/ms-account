@@ -1,4 +1,4 @@
-import { Controller, HttpRequest, HttpResponse } from '@presentation/protocols'
+import { Controller, Request, Response } from '@presentation/protocols'
 import { ValidationError } from '@presentation/errors'
 import { badRequest, serverError, created } from '@presentation/helpers/http-helper'
 import { AddAccount } from '@domain/usecases'
@@ -11,7 +11,7 @@ export class SignUpController implements Controller {
     private validator: Validator,
   ) { }
 
-  async handle(request: HttpRequest): Promise<HttpResponse> {
+  async handle(request: Request): Promise<Response> {
     try {
       this.validator.validate(request.body)
 

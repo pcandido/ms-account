@@ -1,17 +1,17 @@
-import { HttpRequest } from '@presentation/protocols/http'
-import { Request, Response } from 'express'
+import { Request } from '@presentation/protocols/http'
+import { Request as ExpressRequest, Response as ExpressResponse } from 'express'
 import { Controller } from '@presentation/protocols/controllers'
 
 export const adaptRoute = (controller: Controller) => {
 
-  return async (req: Request, res: Response): Promise<void> => {
-    const httpRequest: HttpRequest = {
+  return async (req: ExpressRequest, res: ExpressResponse): Promise<void> => {
+    const request: Request = {
       body: req.body,
     }
 
-    const httpResponse = await controller.handle(httpRequest)
+    const response = await controller.handle(request)
 
-    res.status(httpResponse.statusCode).json(httpResponse.body)
+    res.status(response.statusCode).json(response.body)
   }
 
 }

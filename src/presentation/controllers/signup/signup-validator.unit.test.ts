@@ -31,7 +31,7 @@ interface AccountRequest {
   passwordConfirmation: string
 }
 
-const makeHttpRequest = () => ({
+const makeRequest = () => ({
   body: {
     name: 'any_name',
     email: 'any_email@email.com',
@@ -58,45 +58,45 @@ describe('SingUpValidator', () => {
 
   it('should throw if no name is provided', async () => {
     const { sut } = makeSut()
-    const givenHttpRequest = makeHttpRequest().without('name').build()
-    expect(() => sut.validate(givenHttpRequest)).toThrow(new MissingParamError('name'))
+    const givenRequest = makeRequest().without('name').build()
+    expect(() => sut.validate(givenRequest)).toThrow(new MissingParamError('name'))
   })
 
   it('should throw if no email is provided', async () => {
     const { sut } = makeSut()
-    const givenHttpRequest = makeHttpRequest().without('email').build()
-    expect(() => sut.validate(givenHttpRequest)).toThrow(new MissingParamError('email'))
+    const givenRequest = makeRequest().without('email').build()
+    expect(() => sut.validate(givenRequest)).toThrow(new MissingParamError('email'))
   })
 
   it('should throw if no password is provided', async () => {
     const { sut } = makeSut()
-    const givenHttpRequest = makeHttpRequest().without('password').build()
-    expect(() => sut.validate(givenHttpRequest)).toThrow(new MissingParamError('password'))
+    const givenRequest = makeRequest().without('password').build()
+    expect(() => sut.validate(givenRequest)).toThrow(new MissingParamError('password'))
   })
 
   it('should throw if no passwordConfirmation is provided', async () => {
     const { sut } = makeSut()
-    const givenHttpRequest = makeHttpRequest().without('passwordConfirmation').build()
-    expect(() => sut.validate(givenHttpRequest)).toThrow(new MissingParamError('passwordConfirmation'))
+    const givenRequest = makeRequest().without('passwordConfirmation').build()
+    expect(() => sut.validate(givenRequest)).toThrow(new MissingParamError('passwordConfirmation'))
   })
 
   it('should throw if password confirmation fails', async () => {
     const { sut } = makeSut()
-    const givenHttpRequest = makeHttpRequest().with('passwordConfirmation', 'different_password').build()
-    expect(() => sut.validate(givenHttpRequest)).toThrow(new InvalidParamError('passwordConfirmation'))
+    const givenRequest = makeRequest().with('passwordConfirmation', 'different_password').build()
+    expect(() => sut.validate(givenRequest)).toThrow(new InvalidParamError('passwordConfirmation'))
   })
 
   it('should throw if an invalid email is provided', async () => {
     const { sut, emailValidatorStub } = makeSut()
-    const givenHttpRequest = makeHttpRequest().build()
+    const givenRequest = makeRequest().build()
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValue(false)
-    expect(() => sut.validate(givenHttpRequest)).toThrow(new InvalidParamError('email'))
+    expect(() => sut.validate(givenRequest)).toThrow(new InvalidParamError('email'))
   })
 
   it('should not throw if no validator throws', () => {
     const { sut } = makeSut()
-    const givenHttpRequest = makeHttpRequest().build()
-    expect(() => sut.validate(givenHttpRequest)).not.toThrow()
+    const givenRequest = makeRequest().build()
+    expect(() => sut.validate(givenRequest)).not.toThrow()
   })
 
 })

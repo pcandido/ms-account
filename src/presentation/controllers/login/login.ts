@@ -2,7 +2,7 @@ import { Authenticator } from '@domain/usecases'
 import { AuthenticationError, ValidationError } from '@presentation/errors'
 import { badRequest, ok, serverError, unauthorized } from '@presentation/helpers/http-helper'
 import { Validator } from '@presentation/helpers/validation/validator'
-import { Controller, HttpRequest, HttpResponse } from '@presentation/protocols'
+import { Controller, Request, Response } from '@presentation/protocols'
 
 export class LoginController implements Controller {
 
@@ -11,7 +11,7 @@ export class LoginController implements Controller {
     private validator: Validator,
   ) { }
 
-  async handle(request: HttpRequest): Promise<HttpResponse> {
+  async handle(request: Request): Promise<Response> {
     try {
       this.validator.validate(request.body)
 
