@@ -1,29 +1,24 @@
 import { Authenticator } from '@domain/usecases'
-import { AuthenticationError, InvalidParamError, ValidationError } from '@presentation/errors'
-import { bodyValidator } from '@presentation/helpers/body-validator'
+import { AuthenticationError, ValidationError } from '@presentation/errors'
 import { badRequest, ok, serverError, unauthorized } from '@presentation/helpers/http-helper'
-import { Controller, EmailValidator, HttpRequest, HttpResponse } from '@presentation/protocols'
+import { Validator } from '@presentation/helpers/validation/validator'
+import { Controller, HttpRequest, HttpResponse } from '@presentation/protocols'
 
 export class LoginController implements Controller {
 
   constructor(
-    private emailValidator: EmailValidator,
     private authenticator: Authenticator,
+    private validator: Validator,
   ) { }
 
   async handle(request: HttpRequest): Promise<HttpResponse> {
     try {
-      bodyValidator(request.body, ['email', 'password'])
+      this.validator.validate(request.body)
+
       const { email, password } = request.body
-
-      if (!this.emailValidator.isValid(email)) {
-        throw new InvalidParamError('email')
-      }
-
       const token = await this.authenticator.auth(email, password)
 
       return ok({ accessToken: token })
-
     } catch (error) {
       if (error instanceof ValidationError)
         return badRequest(error)
