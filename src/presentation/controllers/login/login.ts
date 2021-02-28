@@ -1,4 +1,4 @@
-import { Authenticator } from '@domain/usecases'
+import { Authentication } from '@domain/usecases'
 import { AuthenticationError, ValidationError } from '@presentation/errors'
 import { badRequest, ok, serverError, unauthorized } from '@presentation/helpers/http-helper'
 import { Controller, Request, Response, Validator } from '@presentation/protocols'
@@ -6,7 +6,7 @@ import { Controller, Request, Response, Validator } from '@presentation/protocol
 export class LoginController implements Controller {
 
   constructor(
-    private authenticator: Authenticator,
+    private authentication: Authentication,
     private validator: Validator,
   ) { }
 
@@ -15,7 +15,7 @@ export class LoginController implements Controller {
       this.validator.validate(request.body)
 
       const { email, password } = request.body
-      const token = await this.authenticator.auth(email, password)
+      const token = await this.authentication.auth(email, password)
 
       return ok({ accessToken: token })
     } catch (error) {
