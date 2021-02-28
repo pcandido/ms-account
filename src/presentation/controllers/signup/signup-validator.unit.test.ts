@@ -1,25 +1,27 @@
 import { InvalidParamError, MissingParamError } from '@presentation/errors'
 import { Validator } from '@presentation/helpers/validation/validator'
+import { EmailValidator } from '@presentation/protocols'
 import { signupValidator } from './signup-validator'
 
 interface SutTypes {
-  sut: Validator,
-  // emailValidatorStub: EmailValidator
+  sut: Validator
+  emailValidatorStub: EmailValidator
 }
 
-// const makeEmailValidatorStub = () => {
-//   class EmailValidatorStub implements EmailValidator {
-//     isValid(): boolean {
-//       return true
-//     }
-//   }
+const makeEmailValidator = () => {
+  class EmailValidatorStub implements EmailValidator {
+    isValid(): boolean {
+      return true
+    }
+  }
 
-//   return new EmailValidatorStub()
-// }
+  return new EmailValidatorStub()
+}
 
 const makeSut = (): SutTypes => {
-  const sut = signupValidator()
-  return { sut }
+  const emailValidatorStub = makeEmailValidator()
+  const sut = signupValidator(emailValidatorStub)
+  return { sut, emailValidatorStub }
 }
 
 interface AccountRequest {
@@ -54,7 +56,7 @@ const makeHttpRequest = () => ({
 
 describe('SingUpValidator', () => {
 
-  it('should throw if no name is provided', async () => {
+  it('should validate if name is provided', async () => {
     const { sut } = makeSut()
     const givenHttpRequest = makeHttpRequest().without('name').build()
     expect(() => sut.validate(givenHttpRequest)).toThrow(new MissingParamError('name'))
@@ -84,7 +86,7 @@ describe('SingUpValidator', () => {
     expect(() => sut.validate(givenHttpRequest)).toThrow(new InvalidParamError('passwordConfirmation'))
   })
 
-  it.skip('should throw if an invalid email is provided', async () => {
+  it('should throw if an invalid email is provided', async () => {
     const { sut, emailValidatorStub } = makeSut()
     const givenHttpRequest = makeHttpRequest().build()
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValue(false)
