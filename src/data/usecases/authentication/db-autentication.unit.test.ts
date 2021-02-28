@@ -88,4 +88,10 @@ describe('DbAuthentication UseCase', () => {
     await expect(() => sut.auth(makeCredentials())).rejects.toThrow(givenError)
   })
 
+  it('should throw AuthenticationError if password is incorrect', async () => {
+    const { sut, hashComparerStub } = makeSut()
+    jest.spyOn(hashComparerStub, 'compare').mockResolvedValueOnce(false)
+    await expect(() => sut.auth(makeCredentials())).rejects.toThrow(new AuthenticationError())
+  })
+
 })

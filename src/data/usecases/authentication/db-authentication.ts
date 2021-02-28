@@ -16,6 +16,8 @@ export class DbAuthentication implements Authentication {
       throw new AuthenticationError()
 
     const isPasswordCorrect = await this.hashComparer.compare(credentials.password, account.password)
+    if (!isPasswordCorrect)
+      throw new AuthenticationError()
 
     return ''
   }
