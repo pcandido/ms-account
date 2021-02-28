@@ -1,5 +1,6 @@
 import { Response } from '@presentation/protocols'
-import { AuthenticationError, ServerError } from '@presentation/errors'
+import { AuthenticationError } from '@errors/authentication-error'
+import { ServerError } from '@errors/server-error'
 
 export const ok = <T>(body: T): Response => ({
   statusCode: 200,

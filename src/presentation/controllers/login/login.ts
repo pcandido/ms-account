@@ -1,5 +1,6 @@
 import { Authentication } from '@domain/usecases'
-import { AuthenticationError, ValidationError } from '@presentation/errors'
+import { AuthenticationError } from '@errors/authentication-error'
+import { ValidationError } from '@errors/validation-error'
 import { badRequest, ok, serverError, unauthorized } from '@presentation/helpers/http-helper'
 import { Controller, Request, Response, Validator } from '@presentation/protocols'
 

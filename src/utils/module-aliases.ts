@@ -10,4 +10,5 @@ moduleAlias.addAliases({
   '@data': path.join(files, 'src', 'data'),
   '@infra': path.join(files, 'src', 'infra'),
   '@utils': path.join(files, 'src', 'utils'),
+  '@errors': path.join(files, 'src', 'errors'),
 })
