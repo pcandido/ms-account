@@ -1,7 +1,7 @@
 import { AccountModel } from '@domain/models/account'
 import { AddAccountModel } from '@domain/usecases/add-account'
-import { AddAccountRepository } from '@data/protocols/add-account-repository'
-import { Encrypter } from '@data/protocols/encrypter'
+import { AddAccountRepository } from '@data/protocols/db/add-account-repository'
+import { Encrypter } from '@data/protocols/cryptography/encrypter'
 import { DbAddAccount } from './db-add-account'
 
 interface SutTypes {
