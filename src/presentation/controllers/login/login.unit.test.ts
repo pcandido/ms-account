@@ -1,7 +1,7 @@
 import { Authenticator } from '@domain/usecases'
 import { AuthenticationError, ValidationError } from '@presentation/errors'
 import { badRequest, serverError, unauthorized, ok } from '@presentation/helpers/http-helper'
-import { Validator } from '@presentation/helpers/validation/validator'
+import { Validator } from '@presentation/protocols'
 import { LoginController } from './login'
 
 interface SutTypes {

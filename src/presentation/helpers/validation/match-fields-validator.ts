@@ -1,5 +1,5 @@
 import { InvalidParamError } from '@presentation/errors'
-import { Validator } from './validator'
+import { Validator } from '@presentation/protocols'
 
 export class MatchFieldsValidator implements Validator {
 

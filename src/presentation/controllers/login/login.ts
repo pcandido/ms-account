@@ -1,8 +1,7 @@
 import { Authenticator } from '@domain/usecases'
 import { AuthenticationError, ValidationError } from '@presentation/errors'
 import { badRequest, ok, serverError, unauthorized } from '@presentation/helpers/http-helper'
-import { Validator } from '@presentation/helpers/validation/validator'
-import { Controller, Request, Response } from '@presentation/protocols'
+import { Controller, Request, Response, Validator } from '@presentation/protocols'
 
 export class LoginController implements Controller {
 

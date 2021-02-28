@@ -1,6 +1,5 @@
 import { InvalidParamError, MissingParamError } from '@presentation/errors'
-import { Validator } from '@presentation/helpers/validation/validator'
-import { EmailValidator } from '@presentation/protocols'
+import { EmailValidator, Validator } from '@presentation/protocols'
 import { loginValidator } from './login-validator'
 
 interface SutTypes {

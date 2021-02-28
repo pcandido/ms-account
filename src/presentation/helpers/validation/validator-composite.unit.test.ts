@@ -1,4 +1,4 @@
-import { Validator } from './validator'
+import { Validator } from '@presentation/protocols'
 import { ValidatorComposite } from './validator-composite'
 
 interface SutTypes {

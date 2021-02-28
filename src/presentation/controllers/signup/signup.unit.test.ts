@@ -2,7 +2,7 @@ import { SignUpController } from './signup'
 import { AccountModel } from '@domain/models'
 import { AddAccount, AddAccountModel } from '@domain/usecases'
 import { badRequest, created, serverError } from '@presentation/helpers/http-helper'
-import { Validator } from '@presentation/helpers/validation/validator'
+import { Validator } from '@presentation/protocols'
 import { ValidationError } from '@presentation/errors'
 
 interface SutTypes {

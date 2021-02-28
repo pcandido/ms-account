@@ -1,8 +1,7 @@
-import { Controller, Request, Response } from '@presentation/protocols'
+import { Controller, Request, Response, Validator } from '@presentation/protocols'
 import { ValidationError } from '@presentation/errors'
 import { badRequest, serverError, created } from '@presentation/helpers/http-helper'
 import { AddAccount } from '@domain/usecases'
-import { Validator } from '@presentation/helpers/validation/validator'
 
 export class SignUpController implements Controller {
 
