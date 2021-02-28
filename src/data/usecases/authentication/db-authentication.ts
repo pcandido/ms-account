@@ -1,3 +1,4 @@
+import { HashComparer } from '@data/protocols/cryptography/hash-comparer'
 import { LoadAccountByEmailRepository } from '@data/protocols/db/load-account-by-email-repository'
 import { Authentication, AuthenticationModel } from '@domain/usecases'
 import { AuthenticationError } from '@errors/authentication-error'
@@ -6,6 +7,7 @@ export class DbAuthentication implements Authentication {
 
   constructor(
     private loadAccountByEmailRepository: LoadAccountByEmailRepository,
+    private hashComparer: HashComparer,
   ) { }
 
   async auth(credentials: AuthenticationModel): Promise<string> {
@@ -13,6 +15,7 @@ export class DbAuthentication implements Authentication {
     if (!account)
       throw new AuthenticationError()
 
+    this.hashComparer.compare(credentials.password, account.password)
 
     return ''
   }
