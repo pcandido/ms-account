@@ -22,10 +22,8 @@ export class DbAuthentication implements Authentication {
       throw new AuthenticationError()
 
     const { password, ...accountWithoutPassword } = account
-
     const token = await this.tokenGenerator.generate(accountWithoutPassword)
-
-    return ''
+    return token
   }
 
 }
