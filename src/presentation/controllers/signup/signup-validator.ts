@@ -1,7 +1,4 @@
-import { EmailFieldValidator } from '@presentation/helpers/validation/email-field-validator.ts'
-import { MatchFieldsValidator } from '@presentation/helpers/validation/match-fields-validator'
-import { MissingParamValidator } from '@presentation/helpers/validation/missing-param-validator'
-import { ValidatorComposite } from '@presentation/helpers/validation/validator-composite'
+import { MissingParamValidator, MatchFieldsValidator, EmailFieldValidator, ValidatorComposite } from '@presentation/helpers/validation'
 import { EmailValidator, Validator } from '@presentation/protocols'
 
 export const signupValidator = (emailValidator: EmailValidator): Validator => {
