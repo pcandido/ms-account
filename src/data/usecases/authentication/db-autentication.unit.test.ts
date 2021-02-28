@@ -127,4 +127,10 @@ describe('DbAuthentication UseCase', () => {
     await expect(() => sut.auth(makeCredentials())).rejects.toThrow(givenError)
   })
 
+  it('should return the generated token', async () => {
+    const { sut } = makeSut()
+    const token = await sut.auth(makeCredentials())
+    expect(token).toBe(givenToken)
+  })
+
 })
