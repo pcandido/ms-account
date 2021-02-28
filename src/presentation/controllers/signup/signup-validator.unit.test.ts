@@ -56,7 +56,7 @@ const makeHttpRequest = () => ({
 
 describe('SingUpValidator', () => {
 
-  it('should validate if name is provided', async () => {
+  it('should throw if no name is provided', async () => {
     const { sut } = makeSut()
     const givenHttpRequest = makeHttpRequest().without('name').build()
     expect(() => sut.validate(givenHttpRequest)).toThrow(new MissingParamError('name'))
@@ -91,6 +91,12 @@ describe('SingUpValidator', () => {
     const givenHttpRequest = makeHttpRequest().build()
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValue(false)
     expect(() => sut.validate(givenHttpRequest)).toThrow(new InvalidParamError('email'))
+  })
+
+  it('should not throw if no validator throws', () => {
+    const { sut } = makeSut()
+    const givenHttpRequest = makeHttpRequest().build()
+    expect(() => sut.validate(givenHttpRequest)).not.toThrow()
   })
 
 })
