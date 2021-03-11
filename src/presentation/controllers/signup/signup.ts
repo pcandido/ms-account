@@ -1,5 +1,5 @@
 import { Controller, Request, Response, Validator } from '@presentation/protocols'
-import { ValidationError } from '@errors/validation-error'
+import { ValidationError } from '@presentation/errors/validation-error'
 import { badRequest, serverError, created } from '@presentation/helpers/http-helper'
 import { AddAccount } from '@domain/usecases'
 

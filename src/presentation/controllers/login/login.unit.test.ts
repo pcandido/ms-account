@@ -1,6 +1,6 @@
 import { Authentication } from '@domain/usecases'
-import { AuthenticationError } from '@errors/authentication-error'
-import { ValidationError } from '@errors/validation-error'
+import { AuthenticationError } from '@presentation/errors/authentication-error'
+import { ValidationError } from '@presentation/errors/validation-error'
 import { badRequest, serverError, unauthorized, ok } from '@presentation/helpers/http-helper'
 import { Validator } from '@presentation/protocols'
 import { LoginController } from './login'
@@ -93,11 +93,10 @@ describe('Login Controller', () => {
   it('should return 401 if invalid credentials are provided', async () => {
     const { sut, authenticationStub: authenticationStub } = makeSut()
     const givenRequest = makeRequest()
-    const givenError = new AuthenticationError()
-    jest.spyOn(authenticationStub, 'auth').mockRejectedValueOnce(givenError)
+    jest.spyOn(authenticationStub, 'auth').mockResolvedValue(null)
 
     const response = await sut.handle(givenRequest)
-    expect(response).toEqual(unauthorized(givenError))
+    expect(response).toEqual(unauthorized())
   })
 
   it('should return 500 if Authentication throws', async () => {

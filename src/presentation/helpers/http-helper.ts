@@ -1,6 +1,6 @@
 import { Response } from '@presentation/protocols'
-import { AuthenticationError } from '@errors/authentication-error'
-import { ServerError } from '@errors/server-error'
+import { AuthenticationError } from '@presentation/errors/authentication-error'
+import { ServerError } from '@presentation/errors/server-error'
 
 export const ok = <T>(body: T): Response => ({
   statusCode: 200,
@@ -17,9 +17,9 @@ export const badRequest = (error: Error): Response => ({
   body: error,
 })
 
-export const unauthorized = (error: AuthenticationError): Response => ({
+export const unauthorized = (): Response => ({
   statusCode: 401,
-  body: error,
+  body: new AuthenticationError(),
 })
 
 export const serverError = (error: Error): Response => ({

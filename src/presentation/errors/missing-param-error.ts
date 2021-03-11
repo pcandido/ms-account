@@ -1,4 +1,4 @@
-import { ValidationError } from '../../errors/validation-error'
+import { ValidationError } from './validation-error'
 
 export class MissingParamError extends ValidationError {
 

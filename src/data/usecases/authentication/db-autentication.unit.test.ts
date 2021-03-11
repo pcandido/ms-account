@@ -3,7 +3,6 @@ import { TokenGenerator } from '@data/protocols/cryptography/token-generator'
 import { LoadAccountByEmailRepository } from '@data/protocols/db/load-account-by-email-repository'
 import { AccountModel } from '@domain/models'
 import { AuthenticationModel } from '@domain/usecases'
-import { AuthenticationError } from '@errors/authentication-error'
 import { DbAuthentication } from './db-authentication'
 
 interface SutTypes {
@@ -86,7 +85,8 @@ describe('DbAuthentication UseCase', () => {
   it('should throw AuthenticationError if no account is found', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
     jest.spyOn(loadAccountByEmailRepositoryStub, 'load').mockResolvedValueOnce(null)
-    await expect(() => sut.auth(makeCredentials())).rejects.toThrow(new AuthenticationError())
+    const response = await sut.auth(makeCredentials())
+    expect(response).toBeNull()
   })
 
   it('should call HashComparer with correct values', async () => {
@@ -106,7 +106,8 @@ describe('DbAuthentication UseCase', () => {
   it('should throw AuthenticationError if password is incorrect', async () => {
     const { sut, hashComparerStub } = makeSut()
     jest.spyOn(hashComparerStub, 'compare').mockResolvedValueOnce(false)
-    await expect(() => sut.auth(makeCredentials())).rejects.toThrow(new AuthenticationError())
+    const response = await sut.auth(makeCredentials())
+    expect(response).toBeNull()
   })
 
   it('should call TokenGenerator with correct values', async () => {
