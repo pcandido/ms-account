@@ -24,7 +24,7 @@ export class DbAuthentication implements Authentication {
 
     const { password, ...accountWithoutPassword } = account
     const token = await this.tokenGenerator.generate(accountWithoutPassword)
-    this.updateAccessTokenRepository.update(account.id, token)
+    await this.updateAccessTokenRepository.update(account.id, token)
     return token
   }
 
