@@ -5,8 +5,7 @@ import { Router } from 'express'
 export default (): Router => {
   const router = Router()
 
-  router.route('/signup')
-    .post(adaptRoute(makeSignUpController()))
+  router.route('/signup').post(adaptRoute(makeSignUpController()))
 
   return router
 }
