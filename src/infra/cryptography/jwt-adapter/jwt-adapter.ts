@@ -7,9 +7,8 @@ export class JwtAdapter implements TokenGenerator {
     private secretPhrase: string,
   ) { }
 
-  async generate(data: any): Promise<string> {
-    jwt.sign(data, this.secretPhrase)
-    return ''
+  generate(data: any): string {
+    return jwt.sign(data, this.secretPhrase)
   }
 
 }

@@ -53,7 +53,7 @@ const makeHashComparatorStub = (): HashComparer => {
 
 const makeTokenGeneratorStub = (): TokenGenerator => {
   class TokenGeneratorStub implements TokenGenerator {
-    async generate(): Promise<string> {
+    generate(): string {
       return givenToken
     }
   }

@@ -1,5 +1,5 @@
 export interface TokenGenerator {
 
-  generate(data: any): Promise<string>
+  generate(data: any): string
 
 }
