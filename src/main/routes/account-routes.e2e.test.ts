@@ -9,20 +9,35 @@ describe('SignUp Routes', () => {
     await accountsCollection.deleteMany({})
   })
 
-  it('should return an account on success', async () => {
+  describe('POST /signup', () => {
     const givenRoute = '/api/signup'
 
-    const givenAccount = {
-      name: 'any name',
-      email: 'signup-routes@mail.com',
-      password: 'any password',
-      passwordConfirmation: 'any password',
-    }
+    it('should fail on any error', async () => {
+      const givenAccount = {
+        name: 'any name',
+        password: 'any password',
+        passwordConfirmation: 'any password',
+      }
 
-    await request(app)
-      .post(givenRoute)
-      .send(givenAccount)
-      .expect(201)
+      await request(app)
+        .post(givenRoute)
+        .send(givenAccount)
+        .expect(400)
+    })
+
+    it('should return an account on success', async () => {
+      const givenAccount = {
+        name: 'any name',
+        email: 'signup-routes@mail.com',
+        password: 'any password',
+        passwordConfirmation: 'any password',
+      }
+
+      await request(app)
+        .post(givenRoute)
+        .send(givenAccount)
+        .expect(201)
+    })
   })
 
 })
