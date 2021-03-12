@@ -1,4 +1,4 @@
-import { AccountMongoRepository } from '@infra/db/mongodb/acount/account-repository'
+import { AccountMongoRepository } from '@infra/db/mongodb/acount/account-mongo-repository'
 import { BCryptAdapter } from '@infra/cryptography/bcrypt-adapter/bcrypt-adapter'
 import { DbAddAccount } from '@data/usecases/add-account/db-add-account'
 import { EmailValidatorAdapter } from '@utils/email-validator-adapter'

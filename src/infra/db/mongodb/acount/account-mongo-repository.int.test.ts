@@ -1,4 +1,4 @@
-import { AccountMongoRepository } from './account-repository'
+import { AccountMongoRepository } from './account-mongo-repository'
 import { MongoHelper } from '../helpers/mogodb-helper'
 import { Collection } from 'mongodb'
 
@@ -39,6 +39,7 @@ describe('AccountMongoRepository', () => {
     accountsCollection.insertOne(makeAccount())
 
     const account = await sut.loadByEmail(givenEmail)
+    console.log(await accountsCollection.find({}).count())
     expect(account).toEqual({ ...makeAccount(), id: expect.anything() })
   })
 

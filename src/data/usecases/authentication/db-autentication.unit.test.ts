@@ -1,6 +1,6 @@
 import { HashComparer } from '@data/protocols/cryptography/hash-comparer'
 import { TokenGenerator } from '@data/protocols/cryptography/token-generator'
-import { LoadAccountByEmailRepository } from '@data/protocols/db/load-account-by-email-repository'
+import { LoadAccountByEmailRepository } from '@data/protocols/db/account/load-account-by-email-repository'
 import { AccountModel } from '@domain/models'
 import { AuthenticationModel } from '@domain/usecases'
 import { DbAuthentication } from './db-authentication'
