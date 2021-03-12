@@ -26,4 +26,11 @@ describe('JwtAdapter', () => {
     expect(token).toBe(generatedToken)
   })
 
+  it('should not handle Jwt errors', () => {
+    const sut = new JwtAdapter(givenSecretPhrase)
+    const givenError = new Error('any_error')
+    jest.spyOn(jwt, 'sign').mockImplementationOnce(() => { throw givenError })
+    expect(() => sut.generate(givenPayload)).toThrow(givenError)
+  })
+
 })
