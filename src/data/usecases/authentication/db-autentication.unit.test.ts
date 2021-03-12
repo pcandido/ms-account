@@ -35,7 +35,7 @@ const makeAccount = (): AccountModel => ({
 
 const makeLoadAccountByEmailRepositoryStub = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
-    async load(): Promise<AccountModel> {
+    async loadAccountByEmail(): Promise<AccountModel> {
       return makeAccount()
     }
   }
@@ -82,7 +82,7 @@ describe('DbAuthentication UseCase', () => {
 
   it('should call LoadAccountByEmailRepository with correct email', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
-    const loadSpy = jest.spyOn(loadAccountByEmailRepositoryStub, 'load')
+    const loadSpy = jest.spyOn(loadAccountByEmailRepositoryStub, 'loadAccountByEmail')
     await sut.auth(makeCredentials())
     expect(loadSpy).toBeCalledWith(givenEmail)
   })
@@ -90,13 +90,13 @@ describe('DbAuthentication UseCase', () => {
   it('should not handle LoadAccountByEmailRepository errors', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
     const givenError = new Error('any error')
-    jest.spyOn(loadAccountByEmailRepositoryStub, 'load').mockRejectedValueOnce(givenError)
+    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadAccountByEmail').mockRejectedValueOnce(givenError)
     await expect(() => sut.auth(makeCredentials())).rejects.toThrow(givenError)
   })
 
   it('should throw AuthenticationError if no account is found', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
-    jest.spyOn(loadAccountByEmailRepositoryStub, 'load').mockResolvedValueOnce(null)
+    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadAccountByEmail').mockResolvedValueOnce(null)
     const response = await sut.auth(makeCredentials())
     expect(response).toBeNull()
   })
@@ -136,7 +136,7 @@ describe('DbAuthentication UseCase', () => {
   it('should not handle TokenGenerator errors', async () => {
     const { sut, tokenGeneratorStub } = makeSut()
     const givenError = new Error('any error')
-    jest.spyOn(tokenGeneratorStub, 'generate').mockRejectedValueOnce(givenError)
+    jest.spyOn(tokenGeneratorStub, 'generate').mockImplementationOnce(() => { throw givenError })
     await expect(() => sut.auth(makeCredentials())).rejects.toThrow(givenError)
   })
 

@@ -26,7 +26,7 @@ describe('AccountMongoRepository', () => {
     }
 
     const sut = makeSut()
-    const added = await sut.add(givenAccount)
+    const added = await sut.addAccount(givenAccount)
 
     expect(added).toEqual({ ...givenAccount, id: expect.anything() })
   })

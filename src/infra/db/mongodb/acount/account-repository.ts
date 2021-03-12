@@ -5,7 +5,7 @@ import { AccountModel } from '@domain/models'
 
 export class AccountMongoRepository implements AddAccountRepository {
 
-  async add(account: AddAccountModel): Promise<AccountModel> {
+  async addAccount(account: AddAccountModel): Promise<AccountModel> {
     const accountCollection = await MongoHelper.getCollection('accounts')
     const { insertedId } = await accountCollection.insertOne({ ...account })
     return { ...account, id: insertedId }

@@ -25,7 +25,7 @@ const makeHasher = (): Hasher => {
 
 const makeAddAccountRepository = (): AddAccountRepository => {
   class AddAccountRepositoryStub implements AddAccountRepository {
-    async add(account: AddAccountModel): Promise<AccountModel> {
+    async addAccount(account: AddAccountModel): Promise<AccountModel> {
       const addedAccount = { ...account, id: givenGeneratedId }
       return Promise.resolve(addedAccount)
     }
@@ -80,7 +80,7 @@ describe('DbAddAccount', () => {
   it('should call AddAccountRepository with correct data', async () => {
     const { sut, addAccountRepositoryStub } = makeSut()
     const givenAccount = makeAccount().build()
-    const addSpy = jest.spyOn(addAccountRepositoryStub, 'add')
+    const addSpy = jest.spyOn(addAccountRepositoryStub, 'addAccount')
 
     await sut.add(givenAccount)
     expect(addSpy).toHaveBeenCalledWith({ ...givenAccount, password: givenHashedPassword })
@@ -90,7 +90,7 @@ describe('DbAddAccount', () => {
     const { sut, addAccountRepositoryStub } = makeSut()
     const givenAccount = makeAccount().build()
     const givenError = new Error('some error')
-    jest.spyOn(addAccountRepositoryStub, 'add').mockRejectedValueOnce(givenError)
+    jest.spyOn(addAccountRepositoryStub, 'addAccount').mockRejectedValueOnce(givenError)
 
     await expect(() => sut.add(givenAccount)).rejects.toThrow(givenError)
   })
