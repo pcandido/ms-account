@@ -28,18 +28,16 @@ describe('BCryptAdapter', () => {
     })
 
     it('should return the generated hash on success', async () => {
-      const givenValue = 'some_value'
       const sut = makeSut()
-      const hash = await sut.hash(givenValue)
+      const hash = await sut.hash('some_value')
       expect(hash).toBe(givenGeneratedHash)
     })
 
     it('should not handle BCrypt errors', async () => {
-      const givenValue = 'some_value'
       const givenError = new Error('some_error')
       const sut = makeSut()
       jest.spyOn(bcrypt, 'hash').mockRejectedValueOnce(givenError)
-      await expect(() => sut.hash(givenValue)).rejects.toThrow(givenError)
+      await expect(() => sut.hash('some_value')).rejects.toThrow(givenError)
     })
   })
 
@@ -52,5 +50,14 @@ describe('BCryptAdapter', () => {
       await sut.compare(givenValue, givenHash)
       expect(hashSpy).toBeCalledWith(givenValue, givenHash)
     })
+
+    it('should return the compare result on success', async () => {
+      const sut = makeSut()
+      const givenCompareResult = false
+      jest.spyOn(bcrypt, 'compare').mockResolvedValueOnce(givenCompareResult)
+      const result = await sut.compare('some_value', 'some_hash')
+      expect(result).toBe(givenCompareResult)
+    })
+
   })
 })
