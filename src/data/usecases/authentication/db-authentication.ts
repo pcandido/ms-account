@@ -1,7 +1,6 @@
 import { HashComparer } from '@data/protocols/cryptography/hash-comparer'
 import { TokenGenerator } from '@data/protocols/cryptography/token-generator'
 import { LoadAccountByEmailRepository } from '@data/protocols/db/load-account-by-email-repository'
-import { UpdateAccessTokenRepository } from '@data/protocols/db/update-access-token-repository'
 import { Authentication, AuthenticationModel } from '@domain/usecases'
 
 export class DbAuthentication implements Authentication {
@@ -10,7 +9,6 @@ export class DbAuthentication implements Authentication {
     private loadAccountByEmailRepository: LoadAccountByEmailRepository,
     private hashComparer: HashComparer,
     private tokenGenerator: TokenGenerator,
-    private updateAccessTokenRepository: UpdateAccessTokenRepository,
   ) { }
 
   async auth(credentials: AuthenticationModel): Promise<string | null> {
@@ -24,7 +22,6 @@ export class DbAuthentication implements Authentication {
 
     const { password, ...accountWithoutPassword } = account
     const token = this.tokenGenerator.generate(accountWithoutPassword)
-    await this.updateAccessTokenRepository.update(account.id, token)
     return token
   }
 
