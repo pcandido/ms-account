@@ -12,6 +12,7 @@
     "test:verbose": "jest --passWithNoTests --runInBand --watch",
     "test:unit": "npm test -- --projects ./jest/jest-unit.config.js --watch",
     "test:integration": "npm test -- --projects ./jest/jest-int.config.js --watch",
+    "test:e2e": "npm test -- --projects ./jest/jest-e2e.config.js --watch",
     "test:staged": "npm test -- --findRelatedTests",
     "test:ci": "npm test -- --coverage",
     "lint": "eslint src",
