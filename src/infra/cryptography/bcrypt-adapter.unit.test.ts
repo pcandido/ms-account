@@ -19,14 +19,14 @@ describe('BCryptAdapter', () => {
     const givenValue = 'some_value'
     const hashSpy = jest.spyOn(bcrypt, 'hash')
     const sut = makeSut()
-    await sut.encrypt(givenValue)
+    await sut.hash(givenValue)
     expect(hashSpy).toBeCalledWith(givenValue, givenSalt)
   })
 
   it('should return the generated hash on success', async () => {
     const givenValue = 'some_value'
     const sut = makeSut()
-    const hash = await sut.encrypt(givenValue)
+    const hash = await sut.hash(givenValue)
     expect(hash).toBe(givenGeneratedHash)
   })
 
@@ -35,7 +35,7 @@ describe('BCryptAdapter', () => {
     const givenError = new Error('some_error')
     const sut = makeSut()
     jest.spyOn(bcrypt, 'hash').mockRejectedValue(givenError)
-    await expect(() => sut.encrypt(givenValue)).rejects.toThrow(givenError)
+    await expect(() => sut.hash(givenValue)).rejects.toThrow(givenError)
   })
 
 })

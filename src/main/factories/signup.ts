@@ -10,9 +10,9 @@ import { signupValidator } from '@presentation/controllers/signup/signup-validat
 
 export const makeSignUpController = (): Controller => {
   const emailValidator = new EmailValidatorAdapter()
-  const encrypter = new BCryptAdapter()
+  const hasher = new BCryptAdapter()
   const addAccountRepository = new AccountMongoRepository()
-  const addAccount = new DbAddAccount(encrypter, addAccountRepository)
+  const addAccount = new DbAddAccount(hasher, addAccountRepository)
   const validator = signupValidator(emailValidator)
   const signupController = new SignUpController(addAccount, validator)
   const consoleLoggerAdapter = new ConsoleLoggerAdapter()
