@@ -20,9 +20,10 @@ describe('AccountMongoRepository', () => {
   })
 
   const makeSut = () => new AccountMongoRepository()
+  const givenEmail = 'any_email@mail.com'
   const makeAccount = () => ({
     name: 'any name',
-    email: 'any_email@mail.com',
+    email: givenEmail,
     password: 'any_password',
   })
 
@@ -35,11 +36,16 @@ describe('AccountMongoRepository', () => {
 
   it('should return an account on loadByEmail success', async () => {
     const sut = makeSut()
-    const givenEmail = 'any_email@mail.com'
     accountsCollection.insertOne(makeAccount())
 
     const account = await sut.loadByEmail(givenEmail)
     expect(account).toEqual({ ...makeAccount(), id: expect.anything() })
+  })
+
+  it('should return null if loadByEmail fails', async () => {
+    const sut = makeSut()
+    const account = await sut.loadByEmail('unexistent_email@mail.com')
+    expect(account).toBeNull()
   })
 
 })
