@@ -7,6 +7,9 @@ jest.mock('bcrypt', () => ({
   hash() {
     return Promise.resolve(givenGeneratedHash)
   },
+  compare() {
+    return Promise.resolve(true)
+  },
 }))
 
 describe('BCryptAdapter', () => {
@@ -15,27 +18,39 @@ describe('BCryptAdapter', () => {
 
   const makeSut = () => new BCryptAdapter(givenSalt)
 
-  it('should call BCrypt with correct values', async () => {
-    const givenValue = 'some_value'
-    const hashSpy = jest.spyOn(bcrypt, 'hash')
-    const sut = makeSut()
-    await sut.hash(givenValue)
-    expect(hashSpy).toBeCalledWith(givenValue, givenSalt)
+  describe('hash method', () => {
+    it('should call BCrypt with correct values', async () => {
+      const givenValue = 'some_value'
+      const hashSpy = jest.spyOn(bcrypt, 'hash')
+      const sut = makeSut()
+      await sut.hash(givenValue)
+      expect(hashSpy).toBeCalledWith(givenValue, givenSalt)
+    })
+
+    it('should return the generated hash on success', async () => {
+      const givenValue = 'some_value'
+      const sut = makeSut()
+      const hash = await sut.hash(givenValue)
+      expect(hash).toBe(givenGeneratedHash)
+    })
+
+    it('should not handle BCrypt errors', async () => {
+      const givenValue = 'some_value'
+      const givenError = new Error('some_error')
+      const sut = makeSut()
+      jest.spyOn(bcrypt, 'hash').mockRejectedValueOnce(givenError)
+      await expect(() => sut.hash(givenValue)).rejects.toThrow(givenError)
+    })
   })
 
-  it('should return the generated hash on success', async () => {
-    const givenValue = 'some_value'
-    const sut = makeSut()
-    const hash = await sut.hash(givenValue)
-    expect(hash).toBe(givenGeneratedHash)
+  describe('compare method', () => {
+    it('should call BCrypt with correct values', async () => {
+      const givenValue = 'some_value'
+      const givenHash = 'some_hash'
+      const hashSpy = jest.spyOn(bcrypt, 'compare')
+      const sut = makeSut()
+      await sut.compare(givenValue, givenHash)
+      expect(hashSpy).toBeCalledWith(givenValue, givenHash)
+    })
   })
-
-  it('should not handle BCrypt errors', async () => {
-    const givenValue = 'some_value'
-    const givenError = new Error('some_error')
-    const sut = makeSut()
-    jest.spyOn(bcrypt, 'hash').mockRejectedValue(givenError)
-    await expect(() => sut.hash(givenValue)).rejects.toThrow(givenError)
-  })
-
 })
