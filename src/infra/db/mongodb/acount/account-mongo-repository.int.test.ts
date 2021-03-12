@@ -20,7 +20,7 @@ describe('AccountMongoRepository', () => {
   })
 
   const makeSut = () => new AccountMongoRepository()
-  const givenEmail = 'any_email@mail.com'
+  const givenEmail = 'account-mongo-repository@mail.com'
   const makeAccount = () => ({
     name: 'any name',
     email: givenEmail,
@@ -36,10 +36,9 @@ describe('AccountMongoRepository', () => {
 
   it('should return an account on loadByEmail success', async () => {
     const sut = makeSut()
-    accountsCollection.insertOne(makeAccount())
+    await accountsCollection.insertOne(makeAccount())
 
     const account = await sut.loadByEmail(givenEmail)
-    console.log(await accountsCollection.find({}).count())
     expect(account).toEqual({ ...makeAccount(), id: expect.anything() })
   })
 

@@ -14,7 +14,7 @@ describe('SignUp Routes', () => {
 
     const givenAccount = {
       name: 'any name',
-      email: 'any_email@mail.com',
+      email: 'signup-routes@mail.com',
       password: 'any password',
       passwordConfirmation: 'any password',
     }
