@@ -86,4 +86,12 @@ describe('Refresh Token Controller', () => {
     expect(response).toEqual(unauthorized(new AuthenticationError('Refresh Token is expired or invalid')))
   })
 
+  it('should not handle RefreshToken errors', async () => {
+    const { sut, refreshTokenStub } = makeSut()
+    const givenError = new Error('any error')
+    jest.spyOn(refreshTokenStub, 'refresh').mockRejectedValueOnce(givenError)
+    const response = await sut.handle({ body: { refreshToken: 'token' } })
+    expect(response).toEqual(serverError(givenError))
+  })
+
 })
