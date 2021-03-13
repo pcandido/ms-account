@@ -5,13 +5,14 @@ import { Controller } from '@presentation/protocols/controllers'
 export const adaptRoute = (controller: Controller) => {
 
   return async (req: ExpressRequest, res: ExpressResponse): Promise<void> => {
-    const request: Request = {
-      body: req.body,
-    }
+    const request: Request = { body: req.body }
 
-    const response = await controller.handle(request)
+    const { statusCode, body } = await controller.handle(request)
+    const resBody = body instanceof Error ? body.message : body
 
-    res.status(response.statusCode).json(response.body)
+    res
+      .status(statusCode)
+      .json(resBody)
   }
 
 }
