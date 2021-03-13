@@ -15,10 +15,10 @@ interface SutTypes {
 const givenGeneratedAccessToken = 'access-token'
 const givenGeneratedRefreshToken = 'refresh-token'
 
-const givenTokenSet = {
+const makeTokenSet = () => ({
   accessToken: givenGeneratedAccessToken,
   refreshToken: givenGeneratedRefreshToken,
-}
+})
 
 const makeValidatorStub = () => {
   class ValidatorStub implements Validator {
@@ -33,7 +33,7 @@ const makeValidatorStub = () => {
 const makeRefreshTokenStub = () => {
   class RefreshTokenStub implements RefreshToken {
     async refresh(): Promise<TokenSet> {
-      return givenTokenSet
+      return makeTokenSet()
     }
   }
 
@@ -99,7 +99,7 @@ describe('Refresh Token Controller', () => {
   it('should return the new generated token set', async () => {
     const { sut } = makeSut()
     const response = await sut.handle({ body: { refreshToken: 'token' } })
-    expect(response).toEqual(ok(givenTokenSet))
+    expect(response).toEqual(ok(makeTokenSet()))
   })
 
 })
