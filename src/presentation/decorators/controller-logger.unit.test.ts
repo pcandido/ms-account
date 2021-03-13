@@ -1,5 +1,5 @@
 import { serverError } from '@presentation/helpers/http-helper'
-import { Controller, HttpResponse } from '@presentation/protocols'
+import { Controller, Response } from '@presentation/protocols'
 import { Logger } from '@utils/logger'
 import { ControllerLogger } from './controller-logger'
 import { ok } from '@presentation/helpers/http-helper'
@@ -10,13 +10,13 @@ interface SutTypes {
   loggerStub: Logger
 }
 
-const makeHttpRequest = () => ({
+const makeRequest = () => ({
   body: {
     field: 'field',
   },
 })
 
-const makeHttpResponse = () => ok({ ok: true })
+const makeResponse = () => ok({ ok: true })
 
 const makeLoggerStub = () => {
   class LoggerStub implements Logger {
@@ -31,8 +31,8 @@ const makeLoggerStub = () => {
 
 const makeControllerStub = () => {
   class ControllerStub implements Controller {
-    async handle(): Promise<HttpResponse> {
-      return makeHttpResponse()
+    async handle(): Promise<Response> {
+      return makeResponse()
     }
   }
   return new ControllerStub()
@@ -51,15 +51,15 @@ describe('ControllerLogger Decorator', () => {
     const { sut, controllerStub } = makeSut()
     const handleSpy = jest.spyOn(controllerStub, 'handle')
 
-    await sut.handle(makeHttpRequest())
-    expect(handleSpy).toBeCalledWith(makeHttpRequest())
+    await sut.handle(makeRequest())
+    expect(handleSpy).toBeCalledWith(makeRequest())
   })
 
   it('should return the controller return', async () => {
     const { sut } = makeSut()
 
-    const response = await sut.handle(makeHttpRequest())
-    expect(response).toEqual(makeHttpResponse())
+    const response = await sut.handle(makeRequest())
+    expect(response).toEqual(makeResponse())
   })
 
   it('should call the logger.error if controller returns an internal error', async () => {
@@ -69,14 +69,14 @@ describe('ControllerLogger Decorator', () => {
     jest.spyOn(controllerStub, 'handle').mockResolvedValueOnce(serverError(givenError))
     const errorSpy = jest.spyOn(loggerStub, 'error')
 
-    await sut.handle(makeHttpRequest())
+    await sut.handle(makeRequest())
     expect(errorSpy).toBeCalledWith(givenError)
   })
 
   it('should not call the logger.error if controller does not return an internal error', async () => {
     const { sut, loggerStub } = makeSut()
     const errorSpy = jest.spyOn(loggerStub, 'error')
-    await sut.handle(makeHttpRequest())
+    await sut.handle(makeRequest())
     expect(errorSpy).not.toBeCalled()
   })
 

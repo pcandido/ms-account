@@ -23,5 +23,6 @@ module.exports = {
     '@data/(.*)': '<rootDir>/src/data/$1',
     '@infra/(.*)': '<rootDir>/src/infra/$1',
     '@utils/(.*)': '<rootDir>/src/utils/$1',
+    '@errors/(.*)': '<rootDir>/src/errors/$1',
   },
 }

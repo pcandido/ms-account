@@ -1,31 +1,31 @@
 import { AccountModel } from '@domain/models/account'
 import { AddAccountModel } from '@domain/usecases/add-account'
-import { AddAccountRepository } from '@data/protocols/add-account-repository'
-import { Encrypter } from '@data/protocols/encrypter'
+import { AddAccountRepository } from '@data/protocols/db/account/add-account-repository'
+import { Hasher } from '@data/protocols/cryptography/hasher'
 import { DbAddAccount } from './db-add-account'
 
 interface SutTypes {
   sut: DbAddAccount,
-  encrypterStub: Encrypter,
+  hasherStub: Hasher,
   addAccountRepositoryStub: AddAccountRepository,
 }
 
 const givenGeneratedId = 'generatedId'
 const givenHashedPassword = 'hashed_password'
 
-const makeEncrypter = (): Encrypter => {
-  class EncrypterStub implements Encrypter {
-    async encrypt(): Promise<string> {
+const makeHasher = (): Hasher => {
+  class HasherStub implements Hasher {
+    async hash(): Promise<string> {
       return Promise.resolve(givenHashedPassword)
     }
   }
 
-  return new EncrypterStub()
+  return new HasherStub()
 }
 
 const makeAddAccountRepository = (): AddAccountRepository => {
   class AddAccountRepositoryStub implements AddAccountRepository {
-    async add(account: AddAccountModel): Promise<AccountModel> {
+    async addAccount(account: AddAccountModel): Promise<AccountModel> {
       const addedAccount = { ...account, id: givenGeneratedId }
       return Promise.resolve(addedAccount)
     }
@@ -35,10 +35,10 @@ const makeAddAccountRepository = (): AddAccountRepository => {
 }
 
 const makeSut = (): SutTypes => {
-  const encrypterStub = makeEncrypter()
+  const hasherStub = makeHasher()
   const addAccountRepositoryStub = makeAddAccountRepository()
-  const sut = new DbAddAccount(encrypterStub, addAccountRepositoryStub)
-  return { sut, encrypterStub, addAccountRepositoryStub }
+  const sut = new DbAddAccount(hasherStub, addAccountRepositoryStub)
+  return { sut, hasherStub: hasherStub, addAccountRepositoryStub }
 }
 
 const makeAccount = () => ({
@@ -58,21 +58,21 @@ const makeAccount = () => ({
 
 describe('DbAddAccount', () => {
 
-  it('should call Encrypter with correct password', async () => {
-    const { sut, encrypterStub } = makeSut()
+  it('should call Hasher with correct password', async () => {
+    const { sut, hasherStub } = makeSut()
     const givenPassword = 'any_password'
     const givenAccount = makeAccount().with('password', givenPassword).build()
-    const encryptSpy = jest.spyOn(encrypterStub, 'encrypt')
+    const hashSpy = jest.spyOn(hasherStub, 'hash')
 
     await sut.add(givenAccount)
-    expect(encryptSpy).toHaveBeenCalledWith(givenPassword)
+    expect(hashSpy).toHaveBeenCalledWith(givenPassword)
   })
 
-  it('should not handle Encrypter errors', async () => {
-    const { sut, encrypterStub } = makeSut()
+  it('should not handle Hasher errors', async () => {
+    const { sut, hasherStub } = makeSut()
     const givenAccount = makeAccount().build()
     const givenError = new Error('some error')
-    jest.spyOn(encrypterStub, 'encrypt').mockRejectedValueOnce(givenError)
+    jest.spyOn(hasherStub, 'hash').mockRejectedValueOnce(givenError)
 
     await expect(() => sut.add(givenAccount)).rejects.toThrow(givenError)
   })
@@ -80,7 +80,7 @@ describe('DbAddAccount', () => {
   it('should call AddAccountRepository with correct data', async () => {
     const { sut, addAccountRepositoryStub } = makeSut()
     const givenAccount = makeAccount().build()
-    const addSpy = jest.spyOn(addAccountRepositoryStub, 'add')
+    const addSpy = jest.spyOn(addAccountRepositoryStub, 'addAccount')
 
     await sut.add(givenAccount)
     expect(addSpy).toHaveBeenCalledWith({ ...givenAccount, password: givenHashedPassword })
@@ -90,7 +90,7 @@ describe('DbAddAccount', () => {
     const { sut, addAccountRepositoryStub } = makeSut()
     const givenAccount = makeAccount().build()
     const givenError = new Error('some error')
-    jest.spyOn(addAccountRepositoryStub, 'add').mockRejectedValueOnce(givenError)
+    jest.spyOn(addAccountRepositoryStub, 'addAccount').mockRejectedValueOnce(givenError)
 
     await expect(() => sut.add(givenAccount)).rejects.toThrow(givenError)
   })
