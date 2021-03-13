@@ -1,5 +1,4 @@
 import { Authentication } from '@domain/usecases'
-import { AuthenticationError } from '@presentation/errors/authentication-error'
 import { ValidationError } from '@presentation/errors/validation-error'
 import { badRequest, ok, serverError, unauthorized } from '@presentation/helpers/http-helper'
 import { Controller, Request, Response, Validator } from '@presentation/protocols'
@@ -16,13 +15,13 @@ export class LoginController implements Controller {
       this.validator.validate(request.body)
 
       const { email, password } = request.body
-      const token = await this.authentication.auth({ email, password })
+      const tokens = await this.authentication.auth({ email, password })
 
-      if(!token){
+      if (!tokens) {
         return unauthorized()
       }
 
-      return ok({ accessToken: token })
+      return ok(tokens)
     } catch (error) {
       if (error instanceof ValidationError)
         return badRequest(error)

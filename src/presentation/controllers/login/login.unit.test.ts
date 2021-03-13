@@ -11,7 +11,7 @@ interface SutTypes {
   validatorStub: Validator
 }
 
-const givenToken: AuthenticatedTokens = { accessToken: 'accessToken', refreshToken: 'refreshToken' }
+const givenTokens: AuthenticatedTokens = { accessToken: 'accessToken', refreshToken: 'refreshToken' }
 
 const makeValidator = () => {
   class ValidatorStub implements Validator {
@@ -26,7 +26,7 @@ const makeValidator = () => {
 const makeAuthentication = () => {
   class AuthenticationStub implements Authentication {
     async auth(): Promise<AuthenticatedTokens> {
-      return givenToken
+      return givenTokens
     }
   }
 
@@ -114,7 +114,7 @@ describe('Login Controller', () => {
     const givenRequest = makeRequest()
 
     const response = await sut.handle(givenRequest)
-    expect(response).toEqual(ok({ accessToken: givenToken }))
+    expect(response).toEqual(ok(givenTokens))
   })
 
 })
