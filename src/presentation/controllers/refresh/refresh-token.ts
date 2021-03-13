@@ -1,5 +1,6 @@
 import { Controller, Request, Response, Validator } from '@presentation/protocols'
-import { badRequest, ok } from '@presentation/helpers/http-helper'
+import { badRequest, ok, serverError } from '@presentation/helpers/http-helper'
+import { ValidationError } from '@presentation/errors/validation-error'
 
 export class RefreshTokenController implements Controller {
 
@@ -12,7 +13,11 @@ export class RefreshTokenController implements Controller {
       this.validator.validate(request.body)
       return ok({})
     } catch (error) {
-      return badRequest(error)
+      if (error instanceof ValidationError) {
+        return badRequest(error)
+      } else {
+        return serverError(error)
+      }
     }
   }
 
