@@ -1,9 +1,10 @@
 import { RefreshTokenController } from './refresh-token'
 import { Validator } from '@presentation/protocols'
-import { badRequest, serverError } from '@presentation/helpers/http-helper'
+import { badRequest, serverError, unauthorized } from '@presentation/helpers/http-helper'
 import { ValidationError } from '@presentation/errors/validation-error'
 import { RefreshToken } from '@domain/usecases'
 import { TokenSet } from '@domain/models'
+import { AuthenticationError } from '@presentation/errors/authentication-error'
 
 interface SutTypes {
   sut: RefreshTokenController
@@ -76,6 +77,13 @@ describe('Refresh Token Controller', () => {
     const givenToken = 'token'
     sut.handle({ body: { refreshToken: givenToken } })
     expect(refreshSpy).toBeCalledWith(givenToken)
+  })
+
+  it('should return 401 if RefreshToken returns null', async () => {
+    const { sut, refreshTokenStub } = makeSut()
+    jest.spyOn(refreshTokenStub, 'refresh').mockResolvedValueOnce(null)
+    const response = await sut.handle({ body: { refreshToken: 'token' } })
+    expect(response).toEqual(unauthorized(new AuthenticationError('Refresh Token is expired or invalid')))
   })
 
 })
