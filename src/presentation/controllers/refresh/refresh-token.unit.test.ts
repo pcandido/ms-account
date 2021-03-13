@@ -2,11 +2,16 @@ import { RefreshTokenController } from './refresh-token'
 import { Validator } from '@presentation/protocols'
 import { badRequest, serverError } from '@presentation/helpers/http-helper'
 import { ValidationError } from '@presentation/errors/validation-error'
+import { AuthenticatedTokens, RefreshToken } from '@domain/usecases'
 
 interface SutTypes {
   sut: RefreshTokenController
   validatorStub: Validator
+  refreshTokenStub: RefreshToken
 }
+
+const givenGeneratedAccessToken = 'access-token'
+const givenGeneratedRefreshToken = 'refresh-token'
 
 const makeValidatorStub = () => {
   class ValidatorStub implements Validator {
@@ -18,10 +23,24 @@ const makeValidatorStub = () => {
   return new ValidatorStub()
 }
 
+const makeRefreshTokenStub = () => {
+  class RefreshTokenStub implements RefreshToken {
+    async refresh(): Promise<AuthenticatedTokens> {
+      return {
+        accessToken: givenGeneratedAccessToken,
+        refreshToken: givenGeneratedRefreshToken,
+      }
+    }
+  }
+
+  return new RefreshTokenStub()
+}
+
 const makeSut = (): SutTypes => {
   const validatorStub = makeValidatorStub()
-  const sut = new RefreshTokenController(validatorStub)
-  return { sut, validatorStub }
+  const refreshTokenStub = makeRefreshTokenStub()
+  const sut = new RefreshTokenController(validatorStub, refreshTokenStub)
+  return { sut, validatorStub, refreshTokenStub }
 }
 
 describe('Refresh Token Controller', () => {
@@ -48,6 +67,14 @@ describe('Refresh Token Controller', () => {
     jest.spyOn(validatorStub, 'validate').mockImplementationOnce(() => { throw givenError })
     const response = await sut.handle({ body: {} })
     expect(response).toEqual(serverError(givenError))
+  })
+
+  it('should call RefreshToken with correct values', async () => {
+    const { sut, refreshTokenStub } = makeSut()
+    const refreshSpy = jest.spyOn(refreshTokenStub, 'refresh')
+    const givenToken = 'token'
+    sut.handle({ body: { refreshToken: givenToken } })
+    expect(refreshSpy).toBeCalledWith(givenToken)
   })
 
 })
