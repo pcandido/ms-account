@@ -1,6 +1,6 @@
 import { RefreshTokenController } from './refresh-token'
 import { Validator } from '@presentation/protocols'
-import { badRequest, serverError, unauthorized } from '@presentation/helpers/http-helper'
+import { badRequest, ok, serverError, unauthorized } from '@presentation/helpers/http-helper'
 import { ValidationError } from '@presentation/errors/validation-error'
 import { RefreshToken } from '@domain/usecases'
 import { TokenSet } from '@domain/models'
@@ -15,6 +15,11 @@ interface SutTypes {
 const givenGeneratedAccessToken = 'access-token'
 const givenGeneratedRefreshToken = 'refresh-token'
 
+const givenTokenSet = {
+  accessToken: givenGeneratedAccessToken,
+  refreshToken: givenGeneratedRefreshToken,
+}
+
 const makeValidatorStub = () => {
   class ValidatorStub implements Validator {
     validate(): void {
@@ -28,10 +33,7 @@ const makeValidatorStub = () => {
 const makeRefreshTokenStub = () => {
   class RefreshTokenStub implements RefreshToken {
     async refresh(): Promise<TokenSet> {
-      return {
-        accessToken: givenGeneratedAccessToken,
-        refreshToken: givenGeneratedRefreshToken,
-      }
+      return givenTokenSet
     }
   }
 
@@ -92,6 +94,12 @@ describe('Refresh Token Controller', () => {
     jest.spyOn(refreshTokenStub, 'refresh').mockRejectedValueOnce(givenError)
     const response = await sut.handle({ body: { refreshToken: 'token' } })
     expect(response).toEqual(serverError(givenError))
+  })
+
+  it('should return the new generated token set', async () => {
+    const { sut } = makeSut()
+    const response = await sut.handle({ body: { refreshToken: 'token' } })
+    expect(response).toEqual(ok(givenTokenSet))
   })
 
 })
