@@ -16,7 +16,7 @@ export class RefreshTokenController implements Controller {
       this.validator.validate(request.body)
       const tokens = await this.refreshToken.refresh(request.body.refreshToken)
       if (!tokens) return unauthorized(new AuthenticationError('Refresh Token is expired or invalid'))
-      return ok({})
+      return ok(tokens)
     } catch (error) {
       if (error instanceof ValidationError) {
         return badRequest(error)
