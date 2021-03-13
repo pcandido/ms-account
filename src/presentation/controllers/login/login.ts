@@ -1,4 +1,5 @@
 import { Authentication } from '@domain/usecases'
+import { AuthenticationError } from '@presentation/errors/authentication-error'
 import { ValidationError } from '@presentation/errors/validation-error'
 import { badRequest, ok, serverError, unauthorized } from '@presentation/helpers/http-helper'
 import { Controller, Request, Response, Validator } from '@presentation/protocols'
@@ -18,7 +19,7 @@ export class LoginController implements Controller {
       const tokens = await this.authentication.auth({ email, password })
 
       if (!tokens) {
-        return unauthorized()
+        return unauthorized(new AuthenticationError())
       }
 
       return ok(tokens)

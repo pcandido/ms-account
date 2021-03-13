@@ -2,6 +2,6 @@ import { TokenSet } from '@domain/models'
 
 export interface RefreshToken {
 
-  refresh(refreshToken: string): Promise<TokenSet>
+  refresh(refreshToken: string): Promise<TokenSet | null>
 
 }

@@ -1,7 +1,7 @@
 export class AuthenticationError extends Error {
 
-  constructor() {
-    super('Provided credentials are invalid')
+  constructor(message = 'Provided credentials are invalid') {
+    super(message)
     this.name = this.constructor.name
   }
 

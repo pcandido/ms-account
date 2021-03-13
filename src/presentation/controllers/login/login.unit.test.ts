@@ -1,5 +1,6 @@
 import { TokenSet } from '@domain/models'
 import { Authentication } from '@domain/usecases'
+import { AuthenticationError } from '@presentation/errors/authentication-error'
 import { ValidationError } from '@presentation/errors/validation-error'
 import { badRequest, serverError, unauthorized, ok } from '@presentation/helpers/http-helper'
 import { Validator } from '@presentation/protocols'
@@ -96,7 +97,7 @@ describe('Login Controller', () => {
     jest.spyOn(authenticationStub, 'auth').mockResolvedValue(null)
 
     const response = await sut.handle(givenRequest)
-    expect(response).toEqual(unauthorized())
+    expect(response).toEqual(unauthorized(new AuthenticationError()))
   })
 
   it('should return 500 if Authentication throws', async () => {
