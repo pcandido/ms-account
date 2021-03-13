@@ -20,7 +20,9 @@ export class SignUpController implements Controller {
         password: request.body.password,
       })
 
-      return created(account)
+      const {password, ...response} = account
+
+      return created(response)
     } catch (error) {
       if (error instanceof ValidationError) {
         return badRequest(error)

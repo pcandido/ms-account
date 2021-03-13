@@ -121,7 +121,6 @@ describe('SingUpController', () => {
       id: givenGeneratedId,
       name: givenName,
       email: givenEmail,
-      password: givenPassword,
     }))
   })
 
