@@ -1,5 +1,5 @@
 {
-  "name": "survey-api",
+  "name": "ms-account",
   "version": "1.0.0",
   "description": "Training project",
   "main": "index.js",
@@ -21,15 +21,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pcandido/survey-api.git"
+    "url": "git+https://github.com/pcandido/ms-account.git"
   },
   "keywords": [],
   "author": "Paulo Cândido",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/pcandido/survey-api/issues"
+    "url": "https://github.com/pcandido/ms-account/issues"
   },
-  "homepage": "https://github.com/pcandido/survey-api#readme",
+  "homepage": "https://github.com/pcandido/ms-account#readme",
   "devDependencies": {
     "@shelf/jest-mongodb": "^1.2.3",
     "@types/bcrypt": "^3.0.0",

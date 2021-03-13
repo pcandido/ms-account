@@ -6,6 +6,6 @@
     }
   },
   "mongodb": {
-    "url": "mongodb://localhost:27017/survey-api"
+    "url": "mongodb://localhost:27017/ms-account"
   }
 }
