@@ -3,8 +3,13 @@ export interface AuthenticationModel {
   password: string
 }
 
+export interface AuthenticatedTokens {
+  accessToken: string
+  refreshToken: string
+}
+
 export interface Authentication {
 
-  auth(credentials: AuthenticationModel): Promise<string | null>
+  auth(credentials: AuthenticationModel): Promise<AuthenticatedTokens | null>
 
 }

@@ -1,5 +1,7 @@
+import { AuthenticatedTokens } from '@domain/usecases'
+
 export interface TokenGenerator {
 
-  generate(data: any): string
+  generate(data: any): AuthenticatedTokens
 
 }

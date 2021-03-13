@@ -1,4 +1,4 @@
-import { Authentication } from '@domain/usecases'
+import { AuthenticatedTokens, Authentication } from '@domain/usecases'
 import { AuthenticationError } from '@presentation/errors/authentication-error'
 import { ValidationError } from '@presentation/errors/validation-error'
 import { badRequest, serverError, unauthorized, ok } from '@presentation/helpers/http-helper'
@@ -11,7 +11,7 @@ interface SutTypes {
   validatorStub: Validator
 }
 
-const givenToken = 'any_token'
+const givenToken: AuthenticatedTokens = { accessToken: 'accessToken', refreshToken: 'refreshToken' }
 
 const makeValidator = () => {
   class ValidatorStub implements Validator {
@@ -25,7 +25,7 @@ const makeValidator = () => {
 
 const makeAuthentication = () => {
   class AuthenticationStub implements Authentication {
-    async auth(): Promise<string> {
+    async auth(): Promise<AuthenticatedTokens> {
       return givenToken
     }
   }

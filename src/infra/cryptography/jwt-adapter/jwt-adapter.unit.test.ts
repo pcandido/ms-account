@@ -19,13 +19,24 @@ describe('JwtAdapter', () => {
     const sut = makeSut()
     const signSpy = jest.spyOn(jwt, 'sign')
     sut.generate(givenPayload)
-    expect(signSpy).toBeCalledWith(givenPayload, givenSecretPhrase)
+    expect(signSpy).toHaveBeenNthCalledWith(1, { ...givenPayload, token_type: 'access' }, givenSecretPhrase, { expiresIn: expect.anything() })
+    expect(signSpy).toHaveBeenNthCalledWith(2, { ...givenPayload, token_type: 'refresh' }, givenSecretPhrase, { expiresIn: expect.anything() })
   })
 
   it('should return the jwt result', () => {
     const sut = makeSut()
+    const generatedAccessToken = 'accessToken'
+    const generatedRefreshToken = 'refreshToken'
+    jest.spyOn(jwt, 'sign')
+      .mockImplementationOnce(() => generatedAccessToken)
+      .mockImplementationOnce(() => generatedRefreshToken)
+
     const token = sut.generate(givenPayload)
-    expect(token).toBe(generatedToken)
+
+    expect(token).toEqual({
+      accessToken: generatedAccessToken,
+      refreshToken: generatedRefreshToken,
+    })
   })
 
   it('should not handle Jwt errors', () => {
