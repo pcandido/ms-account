@@ -1,7 +1,7 @@
-import { AuthenticatedTokens } from '@domain/usecases'
+import { TokenSet } from '@domain/models'
 
 export interface TokenGenerator {
 
-  generate(data: any): AuthenticatedTokens
+  generate(data: any): TokenSet
 
 }

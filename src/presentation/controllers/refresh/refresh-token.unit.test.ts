@@ -2,7 +2,8 @@ import { RefreshTokenController } from './refresh-token'
 import { Validator } from '@presentation/protocols'
 import { badRequest, serverError } from '@presentation/helpers/http-helper'
 import { ValidationError } from '@presentation/errors/validation-error'
-import { AuthenticatedTokens, RefreshToken } from '@domain/usecases'
+import { RefreshToken } from '@domain/usecases'
+import { TokenSet } from '@domain/models'
 
 interface SutTypes {
   sut: RefreshTokenController
@@ -25,7 +26,7 @@ const makeValidatorStub = () => {
 
 const makeRefreshTokenStub = () => {
   class RefreshTokenStub implements RefreshToken {
-    async refresh(): Promise<AuthenticatedTokens> {
+    async refresh(): Promise<TokenSet> {
       return {
         accessToken: givenGeneratedAccessToken,
         refreshToken: givenGeneratedRefreshToken,

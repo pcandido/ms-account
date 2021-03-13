@@ -1,7 +1,8 @@
 import { HashComparer } from '@data/protocols/cryptography/hash-comparer'
 import { TokenGenerator } from '@data/protocols/cryptography/token-generator'
 import { LoadAccountByEmailRepository } from '@data/protocols/db/account/load-account-by-email-repository'
-import { AuthenticatedTokens, Authentication, AuthenticationModel } from '@domain/usecases'
+import { TokenSet } from '@domain/models'
+import { Authentication, AuthenticationModel } from '@domain/usecases'
 
 export class DbAuthentication implements Authentication {
 
@@ -11,7 +12,7 @@ export class DbAuthentication implements Authentication {
     private tokenGenerator: TokenGenerator,
   ) { }
 
-  async auth(credentials: AuthenticationModel): Promise<AuthenticatedTokens | null> {
+  async auth(credentials: AuthenticationModel): Promise<TokenSet | null> {
     const account = await this.loadAccountByEmailRepository.loadByEmail(credentials.email)
     if (!account)
       return null
