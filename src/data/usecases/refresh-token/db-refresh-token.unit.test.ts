@@ -1,12 +1,15 @@
+import { TokenDecoder } from '@data/protocols/cryptography/token-decoder'
 import { TokenVerifier } from '@data/protocols/cryptography/token-verifier'
 import { DbRefreshToken } from './db-refresh-token'
 
 interface SutTypes {
   sut: DbRefreshToken
   tokenVerifierStub: TokenVerifier
+  tokenDecoderStub: TokenDecoder
 }
 
 const givenRefreshToken = 'refresh_token'
+const givenEmail = 'valid@email.com'
 
 const makeTokenVerifierStub = (): TokenVerifier => {
   class TokenVerifierStub implements TokenVerifier {
@@ -18,10 +21,23 @@ const makeTokenVerifierStub = (): TokenVerifier => {
   return new TokenVerifierStub()
 }
 
+const makeTokenDecoderStub = (): TokenDecoder => {
+  class TokenDecoderStub implements TokenDecoder {
+    decode(): any {
+      return {
+        email: givenEmail,
+      }
+    }
+  }
+
+  return new TokenDecoderStub()
+}
+
 const makeSut = (): SutTypes => {
   const tokenVerifierStub = makeTokenVerifierStub()
-  const sut = new DbRefreshToken(tokenVerifierStub)
-  return { sut, tokenVerifierStub }
+  const tokenDecoderStub = makeTokenDecoderStub()
+  const sut = new DbRefreshToken(tokenVerifierStub, tokenDecoderStub)
+  return { sut, tokenVerifierStub, tokenDecoderStub }
 }
 
 describe('DbAuthentication UseCase', () => {
@@ -47,6 +63,12 @@ describe('DbAuthentication UseCase', () => {
     await expect(() => sut.refresh(givenRefreshToken)).rejects.toThrow(givenError)
   })
 
+  it('should call TokenDecoder with correct value', async () => {
+    const { sut, tokenDecoderStub } = makeSut()
+    const decodeSpy = jest.spyOn(tokenDecoderStub, 'decode')
+    await sut.refresh(givenRefreshToken)
+    expect(decodeSpy).toBeCalledWith(givenRefreshToken)
+  })
 
 
 })
