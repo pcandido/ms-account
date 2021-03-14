@@ -17,8 +17,9 @@ export class DbRefreshToken implements RefreshToken {
     if (!isValid) return null
 
     const { email } = this.tokenDecoder.decode(refreshToken)
-    const account = await this.loadAccountByEmailRepository.loadByEmail(email)
 
+    const account = await this.loadAccountByEmailRepository.loadByEmail(email)
+    if (!account) return null
 
 
 
