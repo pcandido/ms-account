@@ -33,6 +33,13 @@ describe('DbAuthentication UseCase', () => {
     expect(verifySpy).toBeCalledWith(givenRefreshToken)
   })
 
+  it('should return null if TokenVerifier returns false', async () => {
+    const { sut, tokenVerifierStub } = makeSut()
+    jest.spyOn(tokenVerifierStub, 'verify').mockReturnValue(false)
+    const result = await sut.refresh(givenRefreshToken)
+    expect(result).toBeNull()
+  })
+
 
 
 })
