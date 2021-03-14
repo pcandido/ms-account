@@ -35,6 +35,7 @@ const makeTokenDecoderStub = (): TokenDecoder => {
     decode(): any {
       return {
         email: givenEmail,
+        tokenType: 'refresh',
       }
     }
   }
@@ -93,6 +94,13 @@ describe('DbAuthentication UseCase', () => {
     const givenError = new Error('any error')
     jest.spyOn(tokenDecoderStub, 'decode').mockImplementationOnce(() => { throw givenError })
     await expect(() => sut.refresh(givenRefreshToken)).rejects.toThrow(givenError)
+  })
+
+  it('should return null if the token is not of type refresh', async () => {
+    const { sut, tokenDecoderStub } = makeSut()
+    jest.spyOn(tokenDecoderStub, 'decode').mockReturnValueOnce({ tokenType: 'access' })
+    const result = await sut.refresh(givenRefreshToken)
+    expect(result).toBeNull()
   })
 
   it('should call LoadAccountByEmailRepository with correct email', async () => {
