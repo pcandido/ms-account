@@ -9,15 +9,15 @@ export class DbRefreshToken implements RefreshToken {
   ) { }
 
   async refresh(refreshToken: string): Promise<TokenSet | null> {
-    this.tokenVerifier.verify(refreshToken)
+    const isValid = this.tokenVerifier.verify(refreshToken)
+    if (!isValid) return null
 
 
 
 
 
 
-
-    return null
+    return { accessToken: '', refreshToken: '' }
   }
 
 }
