@@ -102,4 +102,11 @@ describe('DbAuthentication UseCase', () => {
     expect(loadSpy).toBeCalledWith(givenEmail)
   })
 
+  it('should return null if no account is found', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut()
+    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockResolvedValueOnce(null)
+    const response = await sut.refresh(givenRefreshToken)
+    expect(response).toBeNull()
+  })
+
 })
