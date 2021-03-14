@@ -1,7 +1,8 @@
 import { TokenDecoder } from '@data/protocols/cryptography/token-decoder'
+import { TokenGenerator } from '@data/protocols/cryptography/token-generator'
 import { TokenVerifier } from '@data/protocols/cryptography/token-verifier'
 import { LoadAccountByEmailRepository } from '@data/protocols/db/account/load-account-by-email-repository'
-import { AccountModel } from '@domain/models'
+import { AccountModel, TokenSet } from '@domain/models'
 import { DbRefreshToken } from './db-refresh-token'
 
 interface SutTypes {
@@ -9,14 +10,17 @@ interface SutTypes {
   tokenVerifierStub: TokenVerifier
   tokenDecoderStub: TokenDecoder
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
+  tokenGeneratorStub: TokenGenerator
 }
 
 const givenRefreshToken = 'refresh_token'
 const givenEmail = 'valid@email.com'
+const givenId = 'any_id'
+const givenName = 'any_name'
 
 const makeAccount = (): AccountModel => ({
-  id: 'any_id',
-  name: 'any_name',
+  id: givenId,
+  name: givenName,
   email: givenEmail,
   password: 'hashed_password',
 })
@@ -51,12 +55,25 @@ const makeLoadAccountByEmailRepositoryStub = (): LoadAccountByEmailRepository =>
   return new LoadAccountByEmailRepositoryStub()
 }
 
+const makeTokenGeneratorStub = (): TokenGenerator => {
+  class TokenGeneratorStub implements TokenGenerator {
+    generate(): TokenSet {
+      return {
+        accessToken: 'accessToken',
+        refreshToken: 'refreshToken',
+      }
+    }
+  }
+  return new TokenGeneratorStub()
+}
+
 const makeSut = (): SutTypes => {
   const tokenVerifierStub = makeTokenVerifierStub()
   const tokenDecoderStub = makeTokenDecoderStub()
   const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepositoryStub()
-  const sut = new DbRefreshToken(tokenVerifierStub, tokenDecoderStub, loadAccountByEmailRepositoryStub)
-  return { sut, tokenVerifierStub, tokenDecoderStub, loadAccountByEmailRepositoryStub }
+  const tokenGeneratorStub = makeTokenGeneratorStub()
+  const sut = new DbRefreshToken(tokenVerifierStub, tokenDecoderStub, loadAccountByEmailRepositoryStub, tokenGeneratorStub)
+  return { sut, tokenVerifierStub, tokenDecoderStub, loadAccountByEmailRepositoryStub, tokenGeneratorStub }
 }
 
 describe('DbAuthentication UseCase', () => {
@@ -122,6 +139,17 @@ describe('DbAuthentication UseCase', () => {
     const givenError = new Error('any error')
     jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockImplementationOnce(() => { throw givenError })
     await expect(() => sut.refresh(givenRefreshToken)).rejects.toThrow(givenError)
+  })
+
+  it('should call TokenGenerator with correct values', async () => {
+    const { sut, tokenGeneratorStub } = makeSut()
+    const generateSpy = jest.spyOn(tokenGeneratorStub, 'generate')
+    await sut.refresh(givenRefreshToken)
+    expect(generateSpy).toBeCalledWith({
+      id: givenId,
+      name: givenName,
+      email: givenEmail,
+    })
   })
 
 })
