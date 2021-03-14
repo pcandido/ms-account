@@ -40,6 +40,13 @@ describe('DbAuthentication UseCase', () => {
     expect(result).toBeNull()
   })
 
+  it('should not handle TokenVerifier internal errors', async () => {
+    const { sut, tokenVerifierStub } = makeSut()
+    const givenError = new Error('any error')
+    jest.spyOn(tokenVerifierStub, 'verify').mockImplementationOnce(() => { throw givenError })
+    await expect(() => sut.refresh(givenRefreshToken)).rejects.toThrow(givenError)
+  })
+
 
 
 })
