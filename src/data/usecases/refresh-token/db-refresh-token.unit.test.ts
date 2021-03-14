@@ -109,4 +109,11 @@ describe('DbAuthentication UseCase', () => {
     expect(response).toBeNull()
   })
 
+  it('should not handle LoadAccountByEmailRepository internal errors', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut()
+    const givenError = new Error('any error')
+    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockImplementationOnce(() => { throw givenError })
+    await expect(() => sut.refresh(givenRefreshToken)).rejects.toThrow(givenError)
+  })
+
 })
