@@ -82,7 +82,7 @@ describe('DbAuthentication UseCase', () => {
     await expect(() => sut.auth(makeCredentials())).rejects.toThrow(givenError)
   })
 
-  it('should throw AuthenticationError if no account is found', async () => {
+  it('should return null if no account is found', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
     jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockResolvedValueOnce(null)
     const response = await sut.auth(makeCredentials())
