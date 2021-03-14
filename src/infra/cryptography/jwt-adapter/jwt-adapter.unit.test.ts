@@ -19,8 +19,8 @@ describe('JwtAdapter', () => {
     const sut = makeSut()
     const signSpy = jest.spyOn(jwt, 'sign')
     sut.generate(givenPayload)
-    expect(signSpy).toHaveBeenNthCalledWith(1, { ...givenPayload, token_type: 'access' }, givenSecretPhrase, { expiresIn: expect.anything() })
-    expect(signSpy).toHaveBeenNthCalledWith(2, { ...givenPayload, token_type: 'refresh' }, givenSecretPhrase, { expiresIn: expect.anything() })
+    expect(signSpy).toHaveBeenNthCalledWith(1, { ...givenPayload, tokenType: 'access' }, givenSecretPhrase, { expiresIn: expect.anything() })
+    expect(signSpy).toHaveBeenNthCalledWith(2, { ...givenPayload, tokenType: 'refresh' }, givenSecretPhrase, { expiresIn: expect.anything() })
   })
 
   it('should return the jwt result', () => {
