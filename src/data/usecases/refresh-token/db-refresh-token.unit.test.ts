@@ -70,5 +70,12 @@ describe('DbAuthentication UseCase', () => {
     expect(decodeSpy).toBeCalledWith(givenRefreshToken)
   })
 
+  it('should not handle TokenDecoder internal errors', async () => {
+    const { sut, tokenDecoderStub } = makeSut()
+    const givenError = new Error('any error')
+    jest.spyOn(tokenDecoderStub, 'decode').mockImplementationOnce(() => { throw givenError })
+    await expect(() => sut.refresh(givenRefreshToken)).rejects.toThrow(givenError)
+  })
+
 
 })
