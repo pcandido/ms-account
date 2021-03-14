@@ -1,15 +1,25 @@
 import { TokenDecoder } from '@data/protocols/cryptography/token-decoder'
 import { TokenVerifier } from '@data/protocols/cryptography/token-verifier'
+import { LoadAccountByEmailRepository } from '@data/protocols/db/account/load-account-by-email-repository'
+import { AccountModel } from '@domain/models'
 import { DbRefreshToken } from './db-refresh-token'
 
 interface SutTypes {
   sut: DbRefreshToken
   tokenVerifierStub: TokenVerifier
   tokenDecoderStub: TokenDecoder
+  loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
 }
 
 const givenRefreshToken = 'refresh_token'
 const givenEmail = 'valid@email.com'
+
+const makeAccount = (): AccountModel => ({
+  id: 'any_id',
+  name: 'any_name',
+  email: givenEmail,
+  password: 'hashed_password',
+})
 
 const makeTokenVerifierStub = (): TokenVerifier => {
   class TokenVerifierStub implements TokenVerifier {
@@ -17,7 +27,6 @@ const makeTokenVerifierStub = (): TokenVerifier => {
       return true
     }
   }
-
   return new TokenVerifierStub()
 }
 
@@ -29,15 +38,24 @@ const makeTokenDecoderStub = (): TokenDecoder => {
       }
     }
   }
-
   return new TokenDecoderStub()
+}
+
+const makeLoadAccountByEmailRepositoryStub = (): LoadAccountByEmailRepository => {
+  class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
+    async loadByEmail(): Promise<AccountModel> {
+      return makeAccount()
+    }
+  }
+  return new LoadAccountByEmailRepositoryStub()
 }
 
 const makeSut = (): SutTypes => {
   const tokenVerifierStub = makeTokenVerifierStub()
   const tokenDecoderStub = makeTokenDecoderStub()
-  const sut = new DbRefreshToken(tokenVerifierStub, tokenDecoderStub)
-  return { sut, tokenVerifierStub, tokenDecoderStub }
+  const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepositoryStub()
+  const sut = new DbRefreshToken(tokenVerifierStub, tokenDecoderStub, loadAccountByEmailRepositoryStub)
+  return { sut, tokenVerifierStub, tokenDecoderStub, loadAccountByEmailRepositoryStub }
 }
 
 describe('DbAuthentication UseCase', () => {
@@ -77,5 +95,11 @@ describe('DbAuthentication UseCase', () => {
     await expect(() => sut.refresh(givenRefreshToken)).rejects.toThrow(givenError)
   })
 
+  it('should call LoadAccountByEmailRepository with correct email', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut()
+    const loadSpy = jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
+    await sut.refresh(givenRefreshToken)
+    expect(loadSpy).toBeCalledWith(givenEmail)
+  })
 
 })
