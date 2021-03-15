@@ -25,13 +25,9 @@ export class DbRefreshToken implements RefreshToken {
     if (!account) return null
 
     const { password, ...accountWithoutPaassword } = account
-    this.tokenGenerator.generate(accountWithoutPaassword)
+    const tokenSet = this.tokenGenerator.generate(accountWithoutPaassword)
 
-
-
-
-
-    return { accessToken: '', refreshToken: '' }
+    return tokenSet
   }
 
 }
