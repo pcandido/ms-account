@@ -25,6 +25,11 @@ const makeAccount = (): AccountModel => ({
   password: 'hashed_password',
 })
 
+const makeTokenSet = () => ({
+  accessToken: 'accessToken',
+  refreshToken: 'refreshToken',
+})
+
 const makeTokenVerifierStub = (): TokenVerifier => {
   class TokenVerifierStub implements TokenVerifier {
     verify(): boolean {
@@ -58,10 +63,7 @@ const makeLoadAccountByEmailRepositoryStub = (): LoadAccountByEmailRepository =>
 const makeTokenGeneratorStub = (): TokenGenerator => {
   class TokenGeneratorStub implements TokenGenerator {
     generate(): TokenSet {
-      return {
-        accessToken: 'accessToken',
-        refreshToken: 'refreshToken',
-      }
+      return makeTokenSet()
     }
   }
   return new TokenGeneratorStub()
@@ -157,6 +159,12 @@ describe('DbAuthentication UseCase', () => {
     const givenError = new Error('any error')
     jest.spyOn(tokenGeneratorStub, 'generate').mockImplementationOnce(() => { throw givenError })
     await expect(() => sut.refresh(givenRefreshToken)).rejects.toThrow(givenError)
+  })
+
+  it('should return the generated tokens on success', async () => {
+    const { sut } = makeSut()
+    const result = await sut.refresh(givenRefreshToken)
+    expect(result).toEqual(makeTokenSet())
   })
 
 })
