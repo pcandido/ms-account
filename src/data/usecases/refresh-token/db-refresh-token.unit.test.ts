@@ -152,4 +152,11 @@ describe('DbAuthentication UseCase', () => {
     })
   })
 
+  it('should not handle TokenGenerator internal errors', async () => {
+    const { sut, tokenGeneratorStub } = makeSut()
+    const givenError = new Error('any error')
+    jest.spyOn(tokenGeneratorStub, 'generate').mockImplementationOnce(() => { throw givenError })
+    await expect(() => sut.refresh(givenRefreshToken)).rejects.toThrow(givenError)
+  })
+
 })
