@@ -8,7 +8,7 @@ import { DbRefreshToken } from '@data/usecases/refresh-token/db-refresh-token'
 import { refreshTokenValidator } from '@presentation/controllers/refresh/refresh-token-validator'
 import { RefreshTokenController } from '@presentation/controllers/refresh/refresh-token'
 
-export const makeLoginController = (): Controller => {
+export const makeRefreshTokenController = (): Controller => {
   const loadByEmailRepository = new AccountMongoRepository()
   const jwtSecretPhrase = config.get<string>('app.jwt.secret')
   const tokenGeneratorAndDecoder = new JwtAdapter(jwtSecretPhrase)

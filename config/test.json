@@ -1,1 +1,7 @@
-{}
+{
+  "app": {
+    "jwt": {
+      "secret": "secret_phrase"
+    }
+  }
+}

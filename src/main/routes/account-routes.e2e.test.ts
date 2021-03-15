@@ -97,5 +97,53 @@ describe('SignUp Routes', () => {
     })
   })
 
+  describe('POST /refresh-token', () => {
+    const givenRoute = '/api/refresh-token'
+
+    const givenAccount = {
+      name: 'any name',
+      email: 'valid@mail.com',
+      password: '$2b$12$BQwxpEG4DiXrJIj7EvTiFOzbRlkctrKB9pgajOmhyqY1uXYfV4mAu',
+    }
+
+    beforeEach(async () => {
+      await accountsCollection.insertOne(givenAccount)
+    })
+
+    it('should return 400 if no refresh-token is provided', async () => {
+      await request(app)
+        .post(givenRoute)
+        .send({})
+        .expect(400)
+    })
+
+    it('should return 401 if provided token is invalid', async () => {
+      await request(app)
+        .post(givenRoute)
+        .send({ refreshToken: 'invalid_token' })
+        .expect(401)
+    })
+
+    it('should return 401 if provided token is expired', async () => {
+      const givenExpiredToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlblR5cGUiOiJyZWZyZXNoIiwiZW1haWwiOiJ2YWxpZEBtYWlsLmNvbSIsImlhdCI6OTQ2NjkyMDAwLCJleHAiOjk0NjY5MjAwMX0.hmzpNx5SAR6o7XY7TdJzjXHm10yFuGWC_h3HHj4tCcA'
+
+      await request(app)
+        .post(givenRoute)
+        .send({ refreshToken: givenExpiredToken })
+        .expect(401)
+    })
+
+    it('should return 200 and new tokens on success', async () => {
+      const givenRefreshToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlblR5cGUiOiJyZWZyZXNoIiwiZW1haWwiOiJ2YWxpZEBtYWlsLmNvbSIsImlhdCI6OTQ2NjkyMDAwLCJleHAiOjk1NjE3NTk0ODAwfQ.qR_SIX4vnwP7m6cY5G4cGjxueZdpbGjc_geuAmtWt_k'
+
+      await request(app)
+        .post(givenRoute)
+        .send({ refreshToken: givenRefreshToken })
+        .expect(200)
+        .expect(/"accessToken" *: *"[a-zA-Z0-9-_.]+"/)
+        .expect(/"refreshToken" *: *"[a-zA-Z0-9-_.]+"/)
+    })
+  })
+
 })
 
