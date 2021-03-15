@@ -59,6 +59,15 @@ describe('JwtAdapter', () => {
       sut.verify(givenRefreshToken)
       expect(verifySpy).toBeCalledWith(givenRefreshToken, givenSecretPhrase)
     })
+
+    it('should return false if jwt throws any error', () => {
+      const sut = makeSut()
+      jest.spyOn(jwt, 'verify').mockImplementationOnce(() => { throw new Error()})
+      const result = sut.verify(givenRefreshToken)
+      expect(result).toBe(false)
+    })
+
+
   })
 
 })
