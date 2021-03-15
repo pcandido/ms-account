@@ -16,9 +16,12 @@ export class JwtAdapter implements TokenGenerator, TokenVerifier {
   }
 
   verify(token: string): boolean {
-    jwt.verify(token, this.secretPhrase)
-
-    return true
+    try{
+      jwt.verify(token, this.secretPhrase)
+      return true
+    }catch(error){
+      return false
+    }
   }
 
 }
