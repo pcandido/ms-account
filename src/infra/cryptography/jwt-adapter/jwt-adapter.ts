@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken'
 import { TokenGenerator } from '@data/protocols/cryptography/token-generator'
 import { TokenSet } from '@domain/models'
-import { TokenVerifier } from '@data/protocols/cryptography/token-verifier'
+import { TokenDecoder } from '@data/protocols/cryptography/token-decoder'
 
-export class JwtAdapter implements TokenGenerator, TokenVerifier {
+export class JwtAdapter implements TokenGenerator, TokenDecoder {
 
   constructor(
     private secretPhrase: string,
@@ -15,12 +15,11 @@ export class JwtAdapter implements TokenGenerator, TokenVerifier {
     return { accessToken, refreshToken }
   }
 
-  verify(token: string): boolean {
+  decode(token: string): any {
     try {
-      jwt.verify(token, this.secretPhrase)
-      return true
+      return jwt.verify(token, this.secretPhrase)
     } catch (error) {
-      return false
+      return null
     }
   }
 

@@ -10,8 +10,8 @@ jest.mock('jsonwebtoken', () => ({
   sign(): string {
     return generatedToken
   },
-  verify(): boolean {
-    return true
+  verify(): any {
+    return givenPayload
   },
 }))
 
@@ -52,25 +52,25 @@ describe('JwtAdapter', () => {
     })
   })
 
-  describe('verify method', () => {
+  describe('decode method', () => {
     it('should call jwt.verify with correct value', () => {
       const sut = makeSut()
       const verifySpy = jest.spyOn(jwt, 'verify')
-      sut.verify(givenRefreshToken)
+      sut.decode(givenRefreshToken)
       expect(verifySpy).toBeCalledWith(givenRefreshToken, givenSecretPhrase)
     })
 
-    it('should return false if jwt throws any error', () => {
+    it('should return null if jwt throws any error', () => {
       const sut = makeSut()
-      jest.spyOn(jwt, 'verify').mockImplementationOnce(() => { throw new Error()})
-      const result = sut.verify(givenRefreshToken)
-      expect(result).toBeFalsy()
+      jest.spyOn(jwt, 'verify').mockImplementationOnce(() => { throw new Error() })
+      const result = sut.decode(givenRefreshToken)
+      expect(result).toBeNull()
     })
 
-    it('should return true if no error is thrown by jwt', () => {
+    it('should return payload on success', () => {
       const sut = makeSut()
-      const result = sut.verify(givenRefreshToken)
-      expect(result).toBeTruthy()
+      const result = sut.decode(givenRefreshToken)
+      expect(result).toEqual(givenPayload)
     })
   })
 })
