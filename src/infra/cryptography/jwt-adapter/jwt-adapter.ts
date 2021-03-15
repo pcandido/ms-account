@@ -16,10 +16,10 @@ export class JwtAdapter implements TokenGenerator, TokenVerifier {
   }
 
   verify(token: string): boolean {
-    try{
+    try {
       jwt.verify(token, this.secretPhrase)
       return true
-    }catch(error){
+    } catch (error) {
       return false
     }
   }
