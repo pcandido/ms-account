@@ -1,12 +1,12 @@
 import { HashComparer } from '@usecases/protocols/cryptography/hash-comparer'
 import { TokenGenerator } from '@usecases/protocols/cryptography/token-generator'
-import { LoadAccountByEmailRepository } from '@usecases/protocols/db/account/load-account-by-email-repository'
+import { LoadAccountByEmailRepository } from '@usecases/protocols/account/load-account-by-email-repository'
 import { AccountModel, TokenSet } from '@domain/models'
 import { AuthenticationModel } from '@domain/usecases'
-import { DbAuthentication } from './db-authentication'
+import { AuthenticationUseCase } from './authentication-usecase'
 
 interface SutTypes {
-  sut: DbAuthentication
+  sut: AuthenticationUseCase
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
   hashComparerStub: HashComparer
   tokenGeneratorStub: TokenGenerator
@@ -62,11 +62,11 @@ const makeSut = (): SutTypes => {
   const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepositoryStub()
   const hashComparerStub = makeHashComparatorStub()
   const tokenGeneratorStub = makeTokenGeneratorStub()
-  const sut = new DbAuthentication(loadAccountByEmailRepositoryStub, hashComparerStub, tokenGeneratorStub)
+  const sut = new AuthenticationUseCase(loadAccountByEmailRepositoryStub, hashComparerStub, tokenGeneratorStub)
   return { sut, loadAccountByEmailRepositoryStub, hashComparerStub, tokenGeneratorStub }
 }
 
-describe('DbAuthentication UseCase', () => {
+describe('AuthenticationUseCase', () => {
 
   it('should call LoadAccountByEmailRepository with correct email', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()

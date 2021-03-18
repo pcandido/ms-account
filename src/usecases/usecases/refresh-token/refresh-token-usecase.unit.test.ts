@@ -1,11 +1,11 @@
 import { TokenDecoder } from '@usecases/protocols/cryptography/token-decoder'
 import { TokenGenerator } from '@usecases/protocols/cryptography/token-generator'
-import { LoadAccountByEmailRepository } from '@usecases/protocols/db/account/load-account-by-email-repository'
+import { LoadAccountByEmailRepository } from '@usecases/protocols/account/load-account-by-email-repository'
 import { AccountModel, TokenSet } from '@domain/models'
-import { DbRefreshToken } from './db-refresh-token'
+import { RefreshTokenUseCase } from './refresh-token-usecase'
 
 interface SutTypes {
-  sut: DbRefreshToken
+  sut: RefreshTokenUseCase
   tokenDecoderStub: TokenDecoder
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
   tokenGeneratorStub: TokenGenerator
@@ -62,11 +62,11 @@ const makeSut = (): SutTypes => {
   const tokenDecoderStub = makeTokenDecoderStub()
   const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepositoryStub()
   const tokenGeneratorStub = makeTokenGeneratorStub()
-  const sut = new DbRefreshToken(tokenDecoderStub, loadAccountByEmailRepositoryStub, tokenGeneratorStub)
+  const sut = new RefreshTokenUseCase(tokenDecoderStub, loadAccountByEmailRepositoryStub, tokenGeneratorStub)
   return { sut, tokenDecoderStub, loadAccountByEmailRepositoryStub, tokenGeneratorStub }
 }
 
-describe('DbAuthentication UseCase', () => {
+describe('RefreshTokenUseCase', () => {
 
   it('should call TokenDecoder with correct value', async () => {
     const { sut, tokenDecoderStub } = makeSut()

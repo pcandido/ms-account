@@ -1,10 +1,10 @@
 import { HashComparer } from '@usecases/protocols/cryptography/hash-comparer'
 import { TokenGenerator } from '@usecases/protocols/cryptography/token-generator'
-import { LoadAccountByEmailRepository } from '@usecases/protocols/db/account/load-account-by-email-repository'
+import { LoadAccountByEmailRepository } from '@usecases/protocols/account/load-account-by-email-repository'
 import { TokenSet } from '@domain/models'
 import { Authentication, AuthenticationModel } from '@domain/usecases'
 
-export class DbAuthentication implements Authentication {
+export class AuthenticationUseCase implements Authentication {
 
   constructor(
     private loadAccountByEmailRepository: LoadAccountByEmailRepository,

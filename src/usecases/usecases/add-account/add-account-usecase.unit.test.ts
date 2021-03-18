@@ -1,11 +1,11 @@
 import { AccountModel } from '@domain/models/account'
 import { AddAccountModel } from '@domain/usecases/add-account'
-import { AddAccountRepository } from '@usecases/protocols/db/account/add-account-repository'
+import { AddAccountRepository } from '@usecases/protocols/account/add-account-repository'
 import { Hasher } from '@usecases/protocols/cryptography/hasher'
-import { DbAddAccount } from './db-add-account'
+import { AddAccountUseCase } from './add-account-usecase'
 
 interface SutTypes {
-  sut: DbAddAccount,
+  sut: AddAccountUseCase,
   hasherStub: Hasher,
   addAccountRepositoryStub: AddAccountRepository,
 }
@@ -37,7 +37,7 @@ const makeAddAccountRepository = (): AddAccountRepository => {
 const makeSut = (): SutTypes => {
   const hasherStub = makeHasher()
   const addAccountRepositoryStub = makeAddAccountRepository()
-  const sut = new DbAddAccount(hasherStub, addAccountRepositoryStub)
+  const sut = new AddAccountUseCase(hasherStub, addAccountRepositoryStub)
   return { sut, hasherStub: hasherStub, addAccountRepositoryStub }
 }
 
@@ -56,7 +56,7 @@ const makeAccount = () => ({
   },
 })
 
-describe('DbAddAccount', () => {
+describe('AddAccountUseCase', () => {
 
   it('should call Hasher with correct password', async () => {
     const { sut, hasherStub } = makeSut()

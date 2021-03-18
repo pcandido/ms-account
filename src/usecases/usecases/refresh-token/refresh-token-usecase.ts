@@ -1,10 +1,10 @@
 import { TokenDecoder } from '@usecases/protocols/cryptography/token-decoder'
 import { TokenGenerator } from '@usecases/protocols/cryptography/token-generator'
-import { LoadAccountByEmailRepository } from '@usecases/protocols/db/account/load-account-by-email-repository'
+import { LoadAccountByEmailRepository } from '@usecases/protocols/account/load-account-by-email-repository'
 import { TokenSet } from '@domain/models'
 import { RefreshToken } from '@domain/usecases'
 
-export class DbRefreshToken implements RefreshToken {
+export class RefreshTokenUseCase implements RefreshToken {
 
   constructor(
     private tokenDecoder: TokenDecoder,

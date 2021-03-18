@@ -15,8 +15,8 @@ package domain {
 }
 
 package usecase {
-    () AddAccountRepository <-- [DbAddAccount]
-    () Hasher <-- [DbAddAccount]
+    () AddAccountRepository <-- [AddAccountUseCase]
+    () Hasher <-- [AddAccountUseCase]
 }
 
 package gateway {
@@ -26,7 +26,7 @@ package gateway {
 
 EmailValidatorAdapter -.-> EmailValidator
 SignUpController --> AddAccount
-DbAddAccount -.-> AddAccount
+AddAccountUseCase -.-> AddAccount
 AccountMongoRepository -.-> AddAccountRepository
 BCryptAdapter -.-> Hasher
 

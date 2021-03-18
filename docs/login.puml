@@ -15,9 +15,9 @@ package domain {
 }
 
 package usecase {
-    () LoadAccountByEmailRepository <-- [DbAuthentication]
-    () HashComparer <-- [DbAuthentication]
-    () TokenGenerator <-- [DbAuthentication]
+    () LoadAccountByEmailRepository <-- [AuthenticationUseCase]
+    () HashComparer <-- [AuthenticationUseCase]
+    () TokenGenerator <-- [AuthenticationUseCase]
 }
 
 package gateway {
@@ -28,7 +28,7 @@ package gateway {
 
 EmailValidatorAdapter -.-> EmailValidator
 LoginController --> Authentication
-DbAuthentication -.-> Authentication
+AuthenticationUseCase -.-> Authentication
 AccountMongoRepository -.-> LoadAccountByEmailRepository
 BCryptAdapter -.-> HashComparer
 JwtAdapter -.-> TokenGenerator
