@@ -1,0 +1,36 @@
+@startuml login
+
+package controllers {
+    [LoginController] -> () Validator
+    [loginValidator] -.-> () Validator
+    [loginValidator] -> () EmailValidator
+}
+
+package utils {
+    [EmailValidatorAdapter]
+}
+
+package domain {
+    () Authentication
+}
+
+package usecase {
+    () LoadAccountByEmailRepository <-- [DbAuthentication]
+    () HashComparer <-- [DbAuthentication]
+    () TokenGenerator <-- [DbAuthentication]
+}
+
+package gateway {
+    [AccountMongoRepository]
+    [BCryptAdapter]
+    [JwtAdapter]
+}
+
+EmailValidatorAdapter -.-> EmailValidator
+LoginController --> Authentication
+DbAuthentication -.-> Authentication
+AccountMongoRepository -.-> LoadAccountByEmailRepository
+BCryptAdapter -.-> HashComparer
+JwtAdapter -.-> TokenGenerator
+
+@enduml

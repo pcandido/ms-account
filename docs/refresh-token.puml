@@ -1,0 +1,29 @@
+@startuml "refresh-token"
+
+package controllers {
+    [RefreshTokenController] -up-> () Validator
+    [refreshTokenValidator] -.-> () Validator
+}
+
+package domain {
+    () RefreshToken
+}
+
+package usecase {
+    () LoadAccountByEmailRepository <-- [DbRefreshToken]
+    () TokenDecoder <-- [DbRefreshToken]
+    () TokenGenerator <-- [DbRefreshToken]
+}
+
+package gateway {
+    [AccountMongoRepository]
+    [JwtAdapter]
+}
+
+RefreshTokenController --> RefreshToken
+DbRefreshToken -.-> RefreshToken
+AccountMongoRepository -.-> LoadAccountByEmailRepository
+JwtAdapter -.-> TokenDecoder
+JwtAdapter -.-> TokenGenerator
+
+@enduml

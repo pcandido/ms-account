@@ -1,0 +1,33 @@
+@startuml signup
+
+package controllers {
+  [SignUpController] -> () Validator
+  [signUpValidator] -.-> () Validator
+  [signUpValidator] -> () EmailValidator
+}
+
+package utils {
+    [EmailValidatorAdapter]
+}
+
+package domain {
+    () AddAccount
+}
+
+package usecase {
+    () AddAccountRepository <-- [DbAddAccount]
+    () Hasher <-- [DbAddAccount]
+}
+
+package gateway {
+    [AccountMongoRepository]
+    [BCryptAdapter]
+}
+
+EmailValidatorAdapter -.-> EmailValidator
+SignUpController --> AddAccount
+DbAddAccount -.-> AddAccount
+AccountMongoRepository -.-> AddAccountRepository
+BCryptAdapter -.-> Hasher
+
+@enduml
