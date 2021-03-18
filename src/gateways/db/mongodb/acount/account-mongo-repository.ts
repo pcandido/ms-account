@@ -1,8 +1,8 @@
 import { MongoHelper } from '@gateways/db/mongodb/helpers/mogodb-helper'
-import { AddAccountRepository } from '@usecases/protocols/db/account/add-account-repository'
+import { AddAccountRepository } from '@usecases/protocols/account/add-account-repository'
 import { AddAccountModel } from '@domain/usecases/add-account'
 import { AccountModel } from '@domain/models'
-import { LoadAccountByEmailRepository } from '@usecases/protocols/db/account/load-account-by-email-repository'
+import { LoadAccountByEmailRepository } from '@usecases/protocols/account/load-account-by-email-repository'
 
 export class AccountMongoRepository implements AddAccountRepository, LoadAccountByEmailRepository {
 
