@@ -13,7 +13,7 @@ describe('SignUp Routes', () => {
   })
 
   describe('POST /signup', () => {
-    const givenRoute = '/api/signup'
+    const givenRoute = '/signup'
 
     it('should fail on any error', async () => {
       const givenAccount = {
@@ -44,7 +44,7 @@ describe('SignUp Routes', () => {
   })
 
   describe('POST /login', () => {
-    const givenRoute = '/api/login'
+    const givenRoute = '/login'
 
     const givenEmail = 'valid@mail.com'
     const givenPassword = 'password'
@@ -98,7 +98,7 @@ describe('SignUp Routes', () => {
   })
 
   describe('POST /refresh-token', () => {
-    const givenRoute = '/api/refresh-token'
+    const givenRoute = '/refresh-token'
 
     const givenAccount = {
       name: 'any name',

@@ -8,7 +8,7 @@ export default (app: Express): void => {
   })
     .forEach(async route => {
       const routeModule = await import(`@main/${route}`)
-      app.use('/api', routeModule.default())
+      app.use(routeModule.default())
     })
 
 }
