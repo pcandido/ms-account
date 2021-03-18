@@ -1,6 +1,6 @@
-import { Request } from '@presentation/protocols/http'
+import { Request } from '@controllers/protocols/http'
 import { Request as ExpressRequest, Response as ExpressResponse } from 'express'
-import { Controller } from '@presentation/protocols/controllers'
+import { Controller } from '@controllers/protocols/controllers'
 
 export const adaptRoute = (controller: Controller) => {
 

@@ -1,12 +1,12 @@
-import { AccountMongoRepository } from '@infra/db/mongodb/acount/account-mongo-repository'
-import { BCryptAdapter } from '@infra/cryptography/bcrypt-adapter/bcrypt-adapter'
-import { DbAddAccount } from '@data/usecases/add-account/db-add-account'
+import { AccountMongoRepository } from '@gateways/db/mongodb/acount/account-mongo-repository'
+import { BCryptAdapter } from '@gateways/cryptography/bcrypt-adapter/bcrypt-adapter'
+import { DbAddAccount } from '@usecases/usecases/add-account/db-add-account'
 import { EmailValidatorAdapter } from '@utils/email-validator-adapter'
 import { ConsoleLoggerAdapter } from '@utils/console-logger-adapter'
-import { SignUpController } from '@presentation/controllers/signup/signup'
-import { Controller } from '@presentation/protocols'
-import { ControllerLogger } from '@presentation/decorators/controller-logger'
-import { signupValidator } from '@presentation/controllers/signup/signup-validator'
+import { SignUpController } from '@controllers/controllers/signup/signup'
+import { Controller } from '@controllers/protocols'
+import { ControllerLogger } from '@controllers/decorators/controller-logger'
+import { signupValidator } from '@controllers/controllers/signup/signup-validator'
 
 export const makeSignUpController = (): Controller => {
   const emailValidator = new EmailValidatorAdapter()

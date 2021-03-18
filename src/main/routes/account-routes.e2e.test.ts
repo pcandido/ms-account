@@ -1,6 +1,6 @@
 import request from 'supertest'
 import app from '@main/config/app'
-import { MongoHelper } from '@infra/db/mongodb/helpers/mogodb-helper'
+import { MongoHelper } from '@gateways/db/mongodb/helpers/mogodb-helper'
 import { Collection } from 'mongodb'
 
 describe('SignUp Routes', () => {

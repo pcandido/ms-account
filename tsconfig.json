@@ -12,17 +12,17 @@
       "@main/*": [
         "./src/main/*"
       ],
-      "@presentation/*": [
-        "./src/presentation/*"
+      "@controllers/*": [
+        "src/controllers/*"
       ],
       "@domain/*": [
         "./src/domain/*"
       ],
-      "@data/*": [
-        "./src/data/*"
+      "@usecases/*": [
+        "src/usecases/*"
       ],
-      "@infra/*": [
-        "./src/infra/*"
+      "@gateways/*": [
+        "src/gateways/*"
       ],
       "@utils/*": [
         "./src/utils/*"

@@ -1,4 +1,4 @@
-import { MongoHelper } from '../src/infra/db/mongodb/helpers/mogodb-helper'
+import { MongoHelper } from '../src/gateways/db/mongodb/helpers/mogodb-helper'
 
 beforeAll(async () => {
   await MongoHelper.connect(process.env.MONGO_URL)

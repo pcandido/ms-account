@@ -5,10 +5,10 @@ const files = path.resolve(__dirname, '..', '..')
 
 moduleAlias.addAliases({
   '@main': path.join(files, 'src', 'main'),
-  '@presentation': path.join(files, 'src', 'presentation'),
+  '@controllers': path.join(files, 'src', 'controllers'),
   '@domain': path.join(files, 'src', 'domain'),
-  '@data': path.join(files, 'src', 'data'),
-  '@infra': path.join(files, 'src', 'infra'),
+  '@usecases': path.join(files, 'src', 'usecases'),
+  '@gateways': path.join(files, 'src', 'gateways'),
   '@utils': path.join(files, 'src', 'utils'),
   '@errors': path.join(files, 'src', 'errors'),
 })
