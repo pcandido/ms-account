@@ -76,4 +76,4 @@ Before run, you must have a MongoDB database available to be used. Take its URL 
 * `npm start`
 
 ### ➡ from docker
-* `docker --name ms-account -p 3000:3000 -e MONGO_URL=database_connection pcandido/ms=account`
+* `docker --name ms-account -p 3000:3000 -e MONGO_URL=database_connection pcandido/ms-account`
