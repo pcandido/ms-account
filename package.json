@@ -6,8 +6,9 @@
   "private": true,
   "scripts": {
     "postinstall": "husky install",
+    "start": "node dist/main/server.js",
     "build": "tsc",
-    "start": "ts-node-dev src/main/server.ts",
+    "dev": "ts-node-dev src/main/server.ts",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand --watch",
     "test:unit": "npm test -- --projects ./jest/jest-unit.config.js --watch",
