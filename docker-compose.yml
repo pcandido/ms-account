@@ -1,0 +1,49 @@
+version: "3"
+
+volumes:
+    volume_mongo:
+
+secrets:
+    MONGO_PASSWORD:
+        file: secrets/mongo-password
+    MONGO_URL:
+        file: secrets/mongo-url
+    JWT_SECRET_PHRASE:
+        file: secrets/jwt-secret
+
+networks:
+    network_database:
+          
+services:
+
+    mongo:
+        image: mongo
+        restart: always
+        volumes:
+            - volume_mongo:/data/db
+        ports:
+            - 27017:27017
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/MONGO_PASSWORD
+        secrets:
+            - MONGO_PASSWORD
+        networks:
+            - network_database
+
+    api:
+        image: pcandido/ms-account
+        build: .
+        restart: always
+        depends_on:
+            - mongo
+        ports: 
+            - 3000:3000
+        environment:
+            PORT: 3000
+        secrets:
+            - MONGO_URL
+            - JWT_SECRET_PHRASE
+        networks:
+            - network_database
+          
