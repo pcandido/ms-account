@@ -1,7 +1,8 @@
 version: "3"
 
 volumes:
-    volume_mongo:
+    volume_account_mongo:
+    volume_account_s3:
 
 secrets:
     MONGO_PASSWORD:
@@ -12,31 +13,43 @@ secrets:
         file: secrets/jwt-secret
 
 networks:
-    network_database:
+    network_account_database:
+    network_account_s3:
           
 services:
 
-    mongo:
+    account-mongo:
         image: mongo
         restart: always
-        volumes:
-            - volume_mongo:/data/db
         ports:
             - 27017:27017
+        volumes:
+            - volume_account_mongo:/data/db
         environment:
             MONGO_INITDB_ROOT_USERNAME: root
             MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/MONGO_PASSWORD
         secrets:
             - MONGO_PASSWORD
         networks:
-            - network_database
+            - network_account_database
 
-    api:
+    account-s3:
+        image: lphoward/fake-s3
+        restart: always
+        ports:
+            - 4569:4569
+        volumes:
+            - volume_account_s3:/fakes3_root
+        networks:
+            - network_account_s3
+
+    account-api:
         image: pcandido/ms-account
         build: .
         restart: always
         depends_on:
-            - mongo
+            - account-mongo
+            - account-s3
         ports: 
             - 3000:3000
         environment:
@@ -45,5 +58,6 @@ services:
             - MONGO_URL
             - JWT_SECRET_PHRASE
         networks:
-            - network_database
+            - network_account_database
+            - network_account_s3
           
