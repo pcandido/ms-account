@@ -12,8 +12,8 @@ describe('SignUp Routes', () => {
     await accountsCollection.deleteMany({})
   })
 
-  describe('POST /signup', () => {
-    const givenRoute = '/signup'
+  describe('POST /public/signup', () => {
+    const givenRoute = '/public/signup'
 
     it('should fail on any error', async () => {
       const givenAccount = {
@@ -43,8 +43,8 @@ describe('SignUp Routes', () => {
     })
   })
 
-  describe('POST /login', () => {
-    const givenRoute = '/login'
+  describe('POST /public/login', () => {
+    const givenRoute = '/public/login'
 
     const givenEmail = 'valid@mail.com'
     const givenPassword = 'password'
@@ -100,6 +100,7 @@ describe('SignUp Routes', () => {
   describe('POST /refresh-token', () => {
     const givenRoute = '/refresh-token'
 
+    const givenAuthorization = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlblR5cGUiOiJhY2Nlc3MiLCJlbWFpbCI6InZhbGlkQG1haWwuY29tIiwiaWF0Ijo5NDY2OTIwMDAsImV4cCI6MzI0NzIxNDQwMDB9.mMETHx3ChcoqsD7_piWoGrJZ88eACPXlJJqC84Z415k'
     const givenAccount = {
       name: 'any name',
       email: 'valid@mail.com',
@@ -113,6 +114,7 @@ describe('SignUp Routes', () => {
     it('should return 400 if no refresh-token is provided', async () => {
       await request(app)
         .post(givenRoute)
+        .set('authorization', givenAuthorization)
         .send({})
         .expect(400)
     })
@@ -120,6 +122,7 @@ describe('SignUp Routes', () => {
     it('should return 401 if provided token is invalid', async () => {
       await request(app)
         .post(givenRoute)
+        .set('authorization', givenAuthorization)
         .send({ refreshToken: 'invalid_token' })
         .expect(401)
     })
@@ -129,6 +132,7 @@ describe('SignUp Routes', () => {
 
       await request(app)
         .post(givenRoute)
+        .set('authorization', givenAuthorization)
         .send({ refreshToken: givenExpiredToken })
         .expect(401)
     })
@@ -138,6 +142,7 @@ describe('SignUp Routes', () => {
 
       await request(app)
         .post(givenRoute)
+        .set('authorization', givenAuthorization)
         .send({ refreshToken: givenRefreshToken })
         .expect(200)
         .expect(/"accessToken" *: *"[a-zA-Z0-9-_.]+"/)

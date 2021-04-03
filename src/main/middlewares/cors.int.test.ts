@@ -4,7 +4,7 @@ import app from '@main/config/app'
 describe('Cors Middleware', () => {
 
   it('should enable CORS', async () => {
-    const givenRoute = '/cors_route'
+    const givenRoute = '/public/cors_route'
 
     app.get(givenRoute, (req, res) => {
       res.send()

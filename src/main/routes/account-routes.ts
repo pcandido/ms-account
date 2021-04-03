@@ -7,8 +7,8 @@ import { makeRefreshTokenController } from '@main/factories/refresh-token'
 export default (): Router => {
   const router = Router()
 
-  router.route('/signup').post(adaptRoute(makeSignUpController()))
-  router.route('/login').post(adaptRoute(makeLoginController()))
+  router.route('/public/signup').post(adaptRoute(makeSignUpController()))
+  router.route('/public/login').post(adaptRoute(makeLoginController()))
   router.route('/refresh-token').post(adaptRoute(makeRefreshTokenController()))
 
   return router
