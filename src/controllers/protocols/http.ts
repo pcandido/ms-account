@@ -1,9 +1,16 @@
+export interface RequestAccount {
+  id: string
+  name: string
+  email: string
+}
+
 export interface Response {
   statusCode: number
   body: any
 }
 
 export interface Request {
+  account?: RequestAccount
   body?: any
 }
 

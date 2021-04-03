@@ -5,7 +5,7 @@ import { Controller } from '@controllers/protocols/controllers'
 export const adaptRoute = (controller: Controller) => {
 
   return async (req: ExpressRequest, res: ExpressResponse): Promise<void> => {
-    const request: Request = { body: req.body }
+    const request: Request = { body: req.body, account: req.account }
 
     const { statusCode, body } = await controller.handle(request)
     const resBody = body instanceof Error ? body.message : body
