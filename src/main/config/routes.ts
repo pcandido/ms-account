@@ -1,13 +1,13 @@
 import { Express } from 'express'
-import fg from 'fast-glob'
+import { readdirSync } from 'fs'
+import path from 'path'
 
 export default (app: Express): void => {
 
-  fg.sync('routes/**-routes.ts', {
-    cwd: 'src/main',
-  })
+  readdirSync(path.join(__dirname, '..', 'routes'))
+    .filter(a => a.match(/-routes.[tj]s$/))
     .forEach(async route => {
-      const routeModule = await import(`@main/${route}`)
+      const routeModule = await import(`@main/routes/${route}`)
       app.use(routeModule.default())
     })
 
