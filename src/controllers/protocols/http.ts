@@ -1,8 +1,4 @@
-export interface RequestAccount {
-  id: string
-  name: string
-  email: string
-}
+import { PublicAccountModel } from '@domain/models'
 
 export interface Response {
   statusCode: number
@@ -10,8 +6,8 @@ export interface Response {
 }
 
 export interface Request {
-  account?: RequestAccount
   body?: any
+  account?: PublicAccountModel
 }
 
 export interface MultiPartFile {

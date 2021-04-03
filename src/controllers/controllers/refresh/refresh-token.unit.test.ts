@@ -1,5 +1,5 @@
 import { RefreshTokenController } from './refresh-token'
-import { Validator } from '@controllers/protocols'
+import { Validator, Request } from '@controllers/protocols'
 import { badRequest, ok, serverError, unauthorized } from '@controllers/helpers/http-helper'
 import { ValidationError } from '@controllers/errors/validation-error'
 import { RefreshToken } from '@domain/usecases'
@@ -15,11 +15,17 @@ interface SutTypes {
 const givenRefreshToken = 'refreshToken'
 const generatedAccessToken = 'access-token'
 const generatedRefreshToken = 'refresh-token'
+const givenAccount = {
+  id: '123',
+  name: 'any name',
+  email: 'valid@email.com',
+}
 
-const makeRequest = () => ({
+const makeRequest = (): Request => ({
   body: {
     refreshToken: givenRefreshToken,
   },
+  account: givenAccount,
 })
 
 const makeTokenSet = () => ({
@@ -60,7 +66,7 @@ describe('Refresh Token Controller', () => {
     const { sut, validatorStub } = makeSut()
     const validateSpy = jest.spyOn(validatorStub, 'validate')
     const givenBody = { refreshToken: givenRefreshToken }
-    await sut.handle({ body: givenBody })
+    await sut.handle({ body: givenBody, account: givenAccount })
     expect(validateSpy).toBeCalledWith(givenBody)
   })
 
@@ -68,7 +74,7 @@ describe('Refresh Token Controller', () => {
     const { sut, validatorStub } = makeSut()
     const givenError = new ValidationError('any error')
     jest.spyOn(validatorStub, 'validate').mockImplementationOnce(() => { throw givenError })
-    const response = await sut.handle({ body: {} })
+    const response = await sut.handle({ body: {}, account: givenAccount })
     expect(response).toEqual(badRequest(givenError))
   })
 
@@ -84,7 +90,7 @@ describe('Refresh Token Controller', () => {
     const { sut, refreshTokenStub } = makeSut()
     const refreshSpy = jest.spyOn(refreshTokenStub, 'refresh')
     sut.handle(makeRequest())
-    expect(refreshSpy).toBeCalledWith(givenRefreshToken)
+    expect(refreshSpy).toBeCalledWith(givenAccount, givenRefreshToken)
   })
 
   it('should return 401 if RefreshToken returns null', async () => {

@@ -28,6 +28,12 @@ export const authentication = (req: Request, res: Response, next: NextFunction):
     const token = auth[1]
     const { tokenType, iat, exp, ...data } = jwt.verify(token, config.app.jwt.secret) as { [key: string]: string }
 
+    if (tokenType !== 'access')
+      throw new Error('invalid token type')
+
+    if (!data.id || !data.name || !data.email)
+      throw new Error('invalid token')
+
     req.account = data
 
     next()

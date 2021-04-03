@@ -100,7 +100,7 @@ describe('SignUp Routes', () => {
   describe('POST /refresh-token', () => {
     const givenRoute = '/refresh-token'
 
-    const givenAuthorization = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlblR5cGUiOiJhY2Nlc3MiLCJlbWFpbCI6InZhbGlkQG1haWwuY29tIiwiaWF0Ijo5NDY2OTIwMDAsImV4cCI6MzI0NzIxNDQwMDB9.mMETHx3ChcoqsD7_piWoGrJZ88eACPXlJJqC84Z415k'
+    const givenAuthorization = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlblR5cGUiOiJhY2Nlc3MiLCJpZCI6IjEyMyIsIm5hbWUiOiJhbnkgbmFtZSIsImVtYWlsIjoidmFsaWRAbWFpbC5jb20iLCJpYXQiOjk0NjY5MjAwMCwiZXhwIjozMjQ3MjE0NDAwMH0.FVxr-iFByo3N59NxpPn7yWu4-7PZXpbh5_aIhKSHJ-g'
     const givenAccount = {
       name: 'any name',
       email: 'valid@mail.com',
@@ -138,7 +138,7 @@ describe('SignUp Routes', () => {
     })
 
     it('should return 200 and new tokens on success', async () => {
-      const givenRefreshToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlblR5cGUiOiJyZWZyZXNoIiwiZW1haWwiOiJ2YWxpZEBtYWlsLmNvbSIsImlhdCI6OTQ2NjkyMDAwLCJleHAiOjk1NjE3NTk0ODAwfQ.qR_SIX4vnwP7m6cY5G4cGjxueZdpbGjc_geuAmtWt_k'
+      const givenRefreshToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlblR5cGUiOiJyZWZyZXNoIiwiaWQiOiIxMjMiLCJuYW1lIjoiYW55IG5hbWUiLCJlbWFpbCI6InZhbGlkQG1haWwuY29tIiwiaWF0Ijo5NDY2OTIwMDAsImV4cCI6OTU2MTc1OTQ4MDB9.5XhqpjOs6JIBrxGwGq7r-nTxkzqrJnO52KgpfK3XdJU'
 
       await request(app)
         .post(givenRoute)

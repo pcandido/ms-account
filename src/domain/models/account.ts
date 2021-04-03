@@ -4,3 +4,9 @@ export interface AccountModel {
   email: string
   password: string
 }
+
+export interface PublicAccountModel {
+  id: string
+  name: string
+  email: string
+}

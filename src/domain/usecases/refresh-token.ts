@@ -1,7 +1,7 @@
-import { TokenSet } from '@domain/models'
+import { PublicAccountModel, TokenSet } from '@domain/models'
 
 export interface RefreshToken {
 
-  refresh(refreshToken: string): Promise<TokenSet | null>
+  refresh(account: PublicAccountModel, efreshToken: string): Promise<TokenSet | null>
 
 }

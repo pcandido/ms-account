@@ -16,6 +16,12 @@ const givenEmail = 'valid@email.com'
 const givenId = 'any_id'
 const givenName = 'any_name'
 
+const givenTokenAccount = {
+  id: givenId,
+  name: givenName,
+  email: givenEmail,
+}
+
 const makeAccount = (): AccountModel => ({
   id: givenId,
   name: givenName,
@@ -32,6 +38,7 @@ const makeTokenDecoderStub = (): TokenDecoder => {
   class TokenDecoderStub implements TokenDecoder {
     decode(): any {
       return {
+        id: 'any_id',
         email: givenEmail,
         tokenType: 'refresh',
       }
@@ -71,7 +78,7 @@ describe('RefreshTokenUseCase', () => {
   it('should call TokenDecoder with correct value', async () => {
     const { sut, tokenDecoderStub } = makeSut()
     const decodeSpy = jest.spyOn(tokenDecoderStub, 'decode')
-    await sut.refresh(givenRefreshToken)
+    await sut.refresh(givenTokenAccount, givenRefreshToken)
     expect(decodeSpy).toBeCalledWith(givenRefreshToken)
   })
 
@@ -79,34 +86,42 @@ describe('RefreshTokenUseCase', () => {
     const { sut, tokenDecoderStub } = makeSut()
     const givenError = new Error('any error')
     jest.spyOn(tokenDecoderStub, 'decode').mockImplementationOnce(() => { throw givenError })
-    await expect(() => sut.refresh(givenRefreshToken)).rejects.toThrow(givenError)
+    await expect(() => sut.refresh(givenTokenAccount, givenRefreshToken)).rejects.toThrow(givenError)
   })
 
   it('should return null if TokenDecoder returns null', async () => {
     const { sut, tokenDecoderStub } = makeSut()
     jest.spyOn(tokenDecoderStub, 'decode').mockReturnValueOnce(null)
-    const result = await sut.refresh(givenRefreshToken)
+    const result = await sut.refresh(givenTokenAccount, givenRefreshToken)
     expect(result).toBeNull()
   })
 
   it('should return null if the token is not of type refresh', async () => {
     const { sut, tokenDecoderStub } = makeSut()
     jest.spyOn(tokenDecoderStub, 'decode').mockReturnValueOnce({ tokenType: 'access' })
-    const result = await sut.refresh(givenRefreshToken)
+    const result = await sut.refresh(givenTokenAccount, givenRefreshToken)
+    expect(result).toBeNull()
+  })
+
+  it('should return null if the refresh and access tokens user ids are not equal', async () => {
+    const { sut, tokenDecoderStub } = makeSut()
+    jest.spyOn(tokenDecoderStub, 'decode').mockReturnValueOnce({ tokenType: 'refresh' })
+    const givenIncorrectTokenAccount = { ...givenTokenAccount, id: 'other_id' }
+    const result = await sut.refresh(givenIncorrectTokenAccount, givenRefreshToken)
     expect(result).toBeNull()
   })
 
   it('should call LoadAccountByEmailRepository with correct email', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
     const loadSpy = jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
-    await sut.refresh(givenRefreshToken)
+    await sut.refresh(givenTokenAccount, givenRefreshToken)
     expect(loadSpy).toBeCalledWith(givenEmail)
   })
 
   it('should return null if no account is found', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
     jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockResolvedValueOnce(null)
-    const response = await sut.refresh(givenRefreshToken)
+    const response = await sut.refresh(givenTokenAccount, givenRefreshToken)
     expect(response).toBeNull()
   })
 
@@ -114,13 +129,13 @@ describe('RefreshTokenUseCase', () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
     const givenError = new Error('any error')
     jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockImplementationOnce(() => { throw givenError })
-    await expect(() => sut.refresh(givenRefreshToken)).rejects.toThrow(givenError)
+    await expect(() => sut.refresh(givenTokenAccount, givenRefreshToken)).rejects.toThrow(givenError)
   })
 
   it('should call TokenGenerator with correct values', async () => {
     const { sut, tokenGeneratorStub } = makeSut()
     const generateSpy = jest.spyOn(tokenGeneratorStub, 'generate')
-    await sut.refresh(givenRefreshToken)
+    await sut.refresh(givenTokenAccount, givenRefreshToken)
     expect(generateSpy).toBeCalledWith({
       id: givenId,
       name: givenName,
@@ -132,12 +147,12 @@ describe('RefreshTokenUseCase', () => {
     const { sut, tokenGeneratorStub } = makeSut()
     const givenError = new Error('any error')
     jest.spyOn(tokenGeneratorStub, 'generate').mockImplementationOnce(() => { throw givenError })
-    await expect(() => sut.refresh(givenRefreshToken)).rejects.toThrow(givenError)
+    await expect(() => sut.refresh(givenTokenAccount, givenRefreshToken)).rejects.toThrow(givenError)
   })
 
   it('should return the generated tokens on success', async () => {
     const { sut } = makeSut()
-    const result = await sut.refresh(givenRefreshToken)
+    const result = await sut.refresh(givenTokenAccount, givenRefreshToken)
     expect(result).toEqual(makeTokenSet())
   })
 

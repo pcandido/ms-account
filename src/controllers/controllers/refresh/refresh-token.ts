@@ -13,8 +13,10 @@ export class RefreshTokenController implements Controller {
 
   async handle(request: Request): Promise<Response> {
     try {
+      if (!request.account) throw new Error('Unauthorized')
+
       this.validator.validate(request.body)
-      const tokens = await this.refreshToken.refresh(request.body.refreshToken)
+      const tokens = await this.refreshToken.refresh(request.account, request.body.refreshToken)
       if (!tokens) return unauthorized(new AuthenticationError('Refresh Token is expired or invalid'))
       return ok(tokens)
     } catch (error) {
