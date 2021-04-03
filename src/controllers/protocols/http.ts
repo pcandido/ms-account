@@ -6,3 +6,11 @@ export interface Response {
 export interface Request {
   body?: any
 }
+
+export interface MultiPartFile {
+  originalName: string
+  size: number
+  encoding: string
+  mimeType: string
+  buffer: Buffer
+}
