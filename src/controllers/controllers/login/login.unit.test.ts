@@ -51,7 +51,7 @@ const makeRequest = () => ({
   },
 })
 
-describe('Login Controller', () => {
+describe('LoginController', () => {
 
   it('should call validator with correct values', async () => {
     const { sut, validatorStub } = makeSut()
