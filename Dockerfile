@@ -1,8 +1,7 @@
 FROM node:14
 
-WORKDIR /api
+WORKDIR /usr/app
 COPY package*.json ./
 RUN npm ci --production
-COPY config config
 COPY dist dist
-CMD [ "node", "dist/main/server.js" ]
+CMD [ "npm", "start" ]

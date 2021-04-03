@@ -1,4 +1,4 @@
-import config from 'config'
+import config from '@utils/config'
 import { Controller } from '@controllers/protocols'
 import { ControllerLogger } from '@controllers/decorators/controller-logger'
 import { JwtAdapter } from '@gateways/cryptography/jwt-adapter/jwt-adapter'
@@ -10,7 +10,7 @@ import { RefreshTokenController } from '@controllers/controllers/refresh/refresh
 
 export const makeRefreshTokenController = (): Controller => {
   const loadByEmailRepository = new AccountMongoRepository()
-  const jwtSecretPhrase = config.get<string>('app.jwt.secret')
+  const jwtSecretPhrase = config.app.jwt.secret
   const tokenGeneratorAndDecoder = new JwtAdapter(jwtSecretPhrase)
   const refreshToken = new RefreshTokenUseCase(tokenGeneratorAndDecoder, loadByEmailRepository, tokenGeneratorAndDecoder)
   const validator = refreshTokenValidator()

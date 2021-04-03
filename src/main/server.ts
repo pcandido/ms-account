@@ -1,14 +1,14 @@
 import '../utils/module-aliases'
-import config from 'config'
+import config from '@utils/config'
 import { MongoHelper } from '@gateways/db/mongodb/helpers/mogodb-helper'
 
 
 async function start() {
 
-  const mongodbUrl = config.get<string>('mongodb.url')
+  const mongodbUrl = config.mongodb.url
   await MongoHelper.connect(mongodbUrl)
 
-  const port = config.get('app.port')
+  const port = config.app.port
   const app = (await import('@main/config/app')).default
 
   app.listen(port, () => {

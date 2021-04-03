@@ -1,4 +1,4 @@
-import config from 'config'
+import config from '@utils/config'
 import { Controller } from '@controllers/protocols'
 import { LoginController } from '@controllers/controllers/login/login'
 import { loginValidator } from '@controllers/controllers/login/login-validator'
@@ -13,7 +13,7 @@ import { EmailValidatorAdapter } from '@utils/email-validator-adapter'
 export const makeLoginController = (): Controller => {
   const loadByEmailRepository = new AccountMongoRepository()
   const hashComparer = new BCryptAdapter()
-  const jwtSecretPhrase = config.get<string>('app.jwt.secret')
+  const jwtSecretPhrase = config.app.jwt.secret
   const tokenGenerator = new JwtAdapter(jwtSecretPhrase)
   const authentication = new AuthenticationUseCase(loadByEmailRepository, hashComparer, tokenGenerator)
   const emailValidator = new EmailValidatorAdapter()
