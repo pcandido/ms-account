@@ -1,4 +1,4 @@
-import { PublicAccountModel } from '@domain/models'
+import { AccountPublicModel } from '@domain/models'
 
 export interface Response {
   statusCode: number
@@ -7,7 +7,7 @@ export interface Response {
 
 export interface Request {
   body?: any
-  account?: PublicAccountModel
+  account?: AccountPublicModel
 }
 
 export interface MultiPartFile {

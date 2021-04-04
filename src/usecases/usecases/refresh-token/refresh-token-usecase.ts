@@ -1,7 +1,7 @@
 import { TokenDecoder } from '@usecases/protocols/cryptography/token-decoder'
 import { TokenGenerator } from '@usecases/protocols/cryptography/token-generator'
 import { LoadAccountByEmailRepository } from '@usecases/protocols/account/load-account-by-email-repository'
-import { PublicAccountModel, TokenSet } from '@domain/models'
+import { AccountPublicModel, TokenSet } from '@domain/models'
 import { RefreshToken } from '@domain/usecases'
 
 export class RefreshTokenUseCase implements RefreshToken {
@@ -12,7 +12,7 @@ export class RefreshTokenUseCase implements RefreshToken {
     private tokenGenerator: TokenGenerator,
   ) { }
 
-  async refresh(account: PublicAccountModel, refreshToken: string): Promise<TokenSet | null> {
+  async refresh(account: AccountPublicModel, refreshToken: string): Promise<TokenSet | null> {
     const payload = this.tokenDecoder.decode(refreshToken)
     if (!payload) return null
 

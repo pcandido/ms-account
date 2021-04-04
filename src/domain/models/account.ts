@@ -5,7 +5,7 @@ export interface AccountModel {
   password: string
 }
 
-export interface PublicAccountModel {
+export interface AccountPublicModel {
   id: string
   name: string
   email: string
