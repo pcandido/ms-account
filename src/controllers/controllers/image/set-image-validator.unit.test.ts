@@ -1,5 +1,5 @@
 import { MissingParamError, InvalidParamError } from '@controllers/errors'
-import { Validator, MultPartFile } from '@controllers/protocols'
+import { Validator, MultiPartFile } from '@controllers/protocols'
 import { setImageValidator } from './set-image-validator'
 
 interface SutTypes {
@@ -11,7 +11,7 @@ const makeSut = (): SutTypes => {
   return { sut }
 }
 
-const makeImage = (): MultPartFile => ({
+const makeImage = (): MultiPartFile => ({
   originalName: 'any_name',
   size: 500,
   encoding: 'utf-8',
