@@ -101,7 +101,7 @@ describe('SetImageController', () => {
     const setImageSpy = jest.spyOn(setImageStub, 'setImage')
 
     await sut.handle(givenRequest)
-    expect(setImageSpy).toBeCalledWith(makeImage().buffer, givenAccount)
+    expect(setImageSpy).toBeCalledWith(givenAccount, makeImage().buffer)
   })
 
   it('should return 500 if SetImage throws', async () => {

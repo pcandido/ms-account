@@ -13,7 +13,7 @@ export class SetImageController implements AuthenticatedController {
   async handle(request: AuthenticatedRequest): Promise<Response> {
     try {
       this.validator.validate(request.body)
-      const setted = await this.setImage.setImage(request.body.image.buffer, request.account)
+      const setted = await this.setImage.setImage(request.account, request.body.image.buffer)
       return ok(setted)
     } catch (error) {
       if (error instanceof ValidationError)
