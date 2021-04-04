@@ -1,4 +1,4 @@
-import { Validator, Request } from '@controllers/protocols'
+import { Validator, Request, MultiPartFile } from '@controllers/protocols'
 import { ValidationError } from '@controllers/errors/validation-error'
 import { SetImageController } from './set-image-controller'
 import { badRequest, serverError } from '@controllers/helpers/http-helper'
@@ -24,10 +24,25 @@ const makeSut = (): SutTypes => {
   return { sut, validatorStub }
 }
 
+const givenAccount = {
+  id: '123',
+  name: 'any name',
+  email: 'any@email.com',
+}
+
+const makeImage = (): MultiPartFile => ({
+  originalName: 'any_name',
+  size: 500,
+  encoding: 'utf-8',
+  mimeType: 'image/jpg',
+  buffer: Buffer.from('any_image', 'utf-8'),
+})
+
 const makeRequest = (): Request => ({
   body: {
-    image: Buffer.from('any_image', 'utf-8'),
+    image: makeImage(),
   },
+  account: givenAccount,
 })
 
 describe('SetImageController', () => {

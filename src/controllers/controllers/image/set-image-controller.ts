@@ -1,14 +1,14 @@
 import { ValidationError } from '@controllers/errors/validation-error'
 import { badRequest, ok, serverError } from '@controllers/helpers/http-helper'
-import { Controller, Request, Response, Validator } from '@controllers/protocols'
+import { AuthenticatedController, AuthenticatedRequest, Response, Validator } from '@controllers/protocols'
 
-export class SetImageController implements Controller {
+export class SetImageController implements AuthenticatedController {
 
   constructor(
     private validator: Validator,
   ) { }
 
-  async handle(request: Request): Promise<Response> {
+  async handle(request: AuthenticatedRequest): Promise<Response> {
     try {
       this.validator.validate(request.body)
       return ok({})
