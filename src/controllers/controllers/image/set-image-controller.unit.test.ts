@@ -1,27 +1,20 @@
-import { Validator, Request, MultiPartFile } from '@controllers/protocols'
+import { Validator, AuthenticatedRequest, MultiPartFile } from '@controllers/protocols'
 import { ValidationError } from '@controllers/errors/validation-error'
 import { SetImageController } from './set-image-controller'
-import { badRequest, serverError } from '@controllers/helpers/http-helper'
+import { badRequest, serverError, ok } from '@controllers/helpers/http-helper'
+import { SetImage } from '@domain/usecases'
+import { ImageSet } from '@domain/models'
 
 interface SutTypes {
   sut: SetImageController
   validatorStub: Validator
+  setImageStub: SetImage
 }
 
-const makeValidator = () => {
-  class ValidatorStub implements Validator {
-    validate(): void {
-      /* do nothing */
-    }
-  }
-
-  return new ValidatorStub()
-}
-
-const makeSut = (): SutTypes => {
-  const validatorStub = makeValidator()
-  const sut = new SetImageController(validatorStub)
-  return { sut, validatorStub }
+const givenImageSet = {
+  uri64: 'http://image.com/64',
+  uri256: 'http://image.com/256',
+  uri: 'http://image.com/',
 }
 
 const givenAccount = {
@@ -38,12 +31,38 @@ const makeImage = (): MultiPartFile => ({
   buffer: Buffer.from('any_image', 'utf-8'),
 })
 
-const makeRequest = (): Request => ({
+const makeRequest = (): AuthenticatedRequest => ({
   body: {
     image: makeImage(),
   },
   account: givenAccount,
 })
+
+const makeValidator = () => {
+  class ValidatorStub implements Validator {
+    validate(): void {
+      /* do nothing */
+    }
+  }
+
+  return new ValidatorStub()
+}
+
+const makeSetImageStub = () => {
+  class SetImageStub implements SetImage {
+    async setImage(): Promise<ImageSet> {
+      return givenImageSet
+    }
+  }
+  return new SetImageStub()
+}
+
+const makeSut = (): SutTypes => {
+  const validatorStub = makeValidator()
+  const setImageStub = makeSetImageStub()
+  const sut = new SetImageController(validatorStub, setImageStub)
+  return { sut, validatorStub, setImageStub }
+}
 
 describe('SetImageController', () => {
 
@@ -76,5 +95,26 @@ describe('SetImageController', () => {
     expect(response).toEqual(serverError(givenError))
   })
 
+  it('should call SetImage with correct params', async () => {
+    const { sut, setImageStub } = makeSut()
+    const givenRequest = makeRequest()
+    const setImageSpy = jest.spyOn(setImageStub, 'setImage')
+
+    await sut.handle(givenRequest)
+    expect(setImageSpy).toBeCalledWith(makeImage().buffer, givenAccount)
+  })
+
+  it('should return 500 if SetImage throws', async () => {
+    const { sut, setImageStub } = makeSut()
+    jest.spyOn(setImageStub, 'setImage').mockRejectedValueOnce(new Error('any error'))
+    const result = await sut.handle(makeRequest())
+    expect(result).toEqual(serverError())
+  })
+
+  it('should return 200 and image set on success', async () => {
+    const { sut } = makeSut()
+    const result = await sut.handle(makeRequest())
+    expect(result).toEqual(ok(givenImageSet))
+  })
 
 })
