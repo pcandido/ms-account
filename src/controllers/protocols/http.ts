@@ -10,6 +10,11 @@ export interface Request {
   account?: AccountPublicModel
 }
 
+export interface AuthenticatedRequest {
+  body?: any
+  account: AccountPublicModel
+}
+
 export interface MultiPartFile {
   originalName: string
   size: number

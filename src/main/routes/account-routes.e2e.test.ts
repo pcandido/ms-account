@@ -12,8 +12,8 @@ describe('SignUp Routes', () => {
     await accountsCollection.deleteMany({})
   })
 
-  describe('POST /public/signup', () => {
-    const givenRoute = '/public/signup'
+  describe('POST /signup', () => {
+    const givenRoute = '/signup'
 
     it('should fail on any error', async () => {
       const givenAccount = {
@@ -43,8 +43,8 @@ describe('SignUp Routes', () => {
     })
   })
 
-  describe('POST /public/login', () => {
-    const givenRoute = '/public/login'
+  describe('POST /login', () => {
+    const givenRoute = '/login'
 
     const givenEmail = 'valid@mail.com'
     const givenPassword = 'password'

@@ -4,7 +4,7 @@ import app from '@main/config/app'
 describe('BodyParser Middleware', () => {
 
   it('should parser body as json', async () => {
-    const givenRoute = '/public/body_parser_route'
+    const givenRoute = '/body_parser_route'
     const givenBody = {
       field1: 1,
       field2: '2',

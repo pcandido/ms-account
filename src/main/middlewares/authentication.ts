@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 
 import { NextFunction, Request, Response } from 'express'
-import jwt from 'jsonwebtoken'
+import { verify, JsonWebTokenError } from 'jsonwebtoken'
 import config from '@utils/config'
 
 declare global {
@@ -12,32 +12,25 @@ declare global {
   }
 }
 
-
 export const authentication = (req: Request, res: Response, next: NextFunction): void => {
-  if (req.originalUrl.match(/^\/public\//g)) {
-    next()
-    return
-  }
-
   try {
     const auth = req.headers.authorization?.match(/^Bearer (.+)/)
 
-    if (!auth)
-      throw new Error('Authorization header not provided')
+    if (auth) {
+      const token = auth[1]
+      const { tokenType, iat, exp, ...data } = verify(token, config.app.jwt.secret) as { [key: string]: string }
 
-    const token = auth[1]
-    const { tokenType, iat, exp, ...data } = jwt.verify(token, config.app.jwt.secret) as { [key: string]: string }
-
-    if (tokenType !== 'access')
-      throw new Error('invalid token type')
-
-    if (!data.id || !data.name || !data.email)
-      throw new Error('invalid token')
-
-    req.account = data
-
-    next()
+      if (tokenType === 'access') {
+        if (data.id && data.name && data.email) {
+          req.account = data
+        }
+      }
+    }
   } catch (error) {
-    res.status(401).send(error.message)
+    if (!(error instanceof JsonWebTokenError)) {
+      throw error
+    }
   }
+
+  next()
 }

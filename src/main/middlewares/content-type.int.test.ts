@@ -4,7 +4,7 @@ import app from '@main/config/app'
 describe('ContentType Middleware', () => {
 
   it('should return default ContentType as json', async () => {
-    const givenRoute = '/public/content_type_route'
+    const givenRoute = '/content_type_route'
 
     app.get(givenRoute, (req, res) => {
       res.send('')
@@ -16,7 +16,7 @@ describe('ContentType Middleware', () => {
   })
 
   it('should return ContentType as text when forced', async () => {
-    const givenRoute = '/public/content_type_text_route'
+    const givenRoute = '/content_type_text_route'
 
     app.get(givenRoute, (req, res) => {
       res.type('text')

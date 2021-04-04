@@ -1,6 +1,6 @@
 import config from '@utils/config'
-import { Controller } from '@controllers/protocols'
-import { ControllerLogger } from '@controllers/decorators/controller-logger'
+import { AuthenticatedController } from '@controllers/protocols'
+import { AuthenticatedControllerLogger } from '@controllers/decorators/controller-logger'
 import { JwtAdapter } from '@gateways/cryptography/jwt-adapter/jwt-adapter'
 import { AccountMongoRepository } from '@gateways/db/mongodb/acount/account-mongo-repository'
 import { ConsoleLoggerAdapter } from '@utils/console-logger-adapter'
@@ -8,7 +8,7 @@ import { RefreshTokenUseCase } from '@usecases/usecases/refresh-token/refresh-to
 import { refreshTokenValidator } from '@controllers/controllers/refresh/refresh-token-validator'
 import { RefreshTokenController } from '@controllers/controllers/refresh/refresh-token'
 
-export const makeRefreshTokenController = (): Controller => {
+export const makeRefreshTokenController = (): AuthenticatedController => {
   const loadByEmailRepository = new AccountMongoRepository()
   const jwtSecretPhrase = config.app.jwt.secret
   const tokenGeneratorAndDecoder = new JwtAdapter(jwtSecretPhrase)
@@ -16,5 +16,5 @@ export const makeRefreshTokenController = (): Controller => {
   const validator = refreshTokenValidator()
   const refreshTokenController = new RefreshTokenController(validator, refreshToken)
   const consoleLoggerAdapter = new ConsoleLoggerAdapter()
-  return new ControllerLogger(refreshTokenController, consoleLoggerAdapter)
+  return new AuthenticatedControllerLogger(refreshTokenController, consoleLoggerAdapter)
 }
