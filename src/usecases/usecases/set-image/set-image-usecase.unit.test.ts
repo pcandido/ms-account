@@ -38,10 +38,8 @@ const makeImagePersisterStub = (): ImagePersister => {
 
 const makeUpdateAccountRepositoryStub = (): UpdateAccountRepository => {
   class UpdateAccountRepositoryStub implements UpdateAccountRepository {
-    async updateAccount(): Promise<AccountModel> {
-      return {
-        ...makeAccount(),
-      }
+    async updateAccount(): Promise<void> {
+      /* do nothing */
     }
   }
   return new UpdateAccountRepositoryStub()

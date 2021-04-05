@@ -11,7 +11,7 @@ describe('AccountMongoRepository', () => {
   })
 
   beforeEach(async () => {
-    accountsCollection = await MongoHelper.getCollection('collections')
+    accountsCollection = await MongoHelper.getCollection('accounts')
     await accountsCollection.deleteMany({})
   })
 
@@ -33,6 +33,19 @@ describe('AccountMongoRepository', () => {
       const added = await sut.addAccount(makeAccount())
 
       expect(added).toEqual({ ...makeAccount(), id: expect.anything() })
+    })
+  })
+
+  describe('updateAccount', () => {
+    it('should update account on database', async () => {
+      const sut = makeSut()
+      const id = await (await accountsCollection.insertOne(makeAccount())).insertedId
+
+      const givenNewName = 'updated name'
+      await sut.updateAccount(id, { name: givenNewName })
+      const updated = await accountsCollection.findOne({ _id: id })
+
+      expect(updated).toEqual({ ...makeAccount(), _id: id, name: givenNewName })
     })
   })
 
