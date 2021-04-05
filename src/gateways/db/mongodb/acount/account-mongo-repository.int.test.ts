@@ -27,25 +27,29 @@ describe('AccountMongoRepository', () => {
     password: 'any_password',
   })
 
-  it('should return an account on success', async () => {
-    const sut = makeSut()
-    const added = await sut.addAccount(makeAccount())
+  describe('addAcount', () => {
+    it('should return an account on success', async () => {
+      const sut = makeSut()
+      const added = await sut.addAccount(makeAccount())
 
-    expect(added).toEqual({ ...makeAccount(), id: expect.anything() })
+      expect(added).toEqual({ ...makeAccount(), id: expect.anything() })
+    })
   })
 
-  it('should return an account on loadByEmail success', async () => {
-    const sut = makeSut()
-    await accountsCollection.insertOne(makeAccount())
+  describe('loadByEmail', () => {
+    it('should return an account on loadByEmail success', async () => {
+      const sut = makeSut()
+      await accountsCollection.insertOne(makeAccount())
 
-    const account = await sut.loadByEmail(givenEmail)
-    expect(account).toEqual({ ...makeAccount(), id: expect.anything() })
-  })
+      const account = await sut.loadByEmail(givenEmail)
+      expect(account).toEqual({ ...makeAccount(), id: expect.anything() })
+    })
 
-  it('should return null if loadByEmail fails', async () => {
-    const sut = makeSut()
-    const account = await sut.loadByEmail('unexistent_email@mail.com')
-    expect(account).toBeNull()
+    it('should return null if loadByEmail fails', async () => {
+      const sut = makeSut()
+      const account = await sut.loadByEmail('unexistent_email@mail.com')
+      expect(account).toBeNull()
+    })
   })
 
 })
