@@ -1,5 +1,5 @@
 import { RefreshTokenController } from './refresh-token'
-import { Validator, Request } from '@controllers/protocols'
+import { Validator, AuthenticatedRequest } from '@controllers/protocols'
 import { badRequest, ok, serverError, unauthorized } from '@controllers/helpers/http-helper'
 import { ValidationError } from '@controllers/errors/validation-error'
 import { RefreshToken } from '@domain/usecases'
@@ -21,7 +21,7 @@ const givenAccount = {
   email: 'valid@email.com',
 }
 
-const makeRequest = (): Request => ({
+const makeRequest = (): AuthenticatedRequest => ({
   body: {
     refreshToken: givenRefreshToken,
   },
