@@ -37,6 +37,12 @@ function genConfig() {
     mongodb: {
       url: getConfig('MONGO_URL', 'mongodb://localhost:27017/ms-account'),
     },
+    s3: {
+      accessKeyId: getConfig('S3_ACCESS_KEY_ID', 'accessKeyId'),
+      secretAccessKey: getConfig('S3_SECRET_ACCESS_KEY', 'secretAccessKey'),
+      endpoint: getConfig('S3_ENDPOINT', 'http://localhost:4569'),
+      bucketName: getConfig('S3_ACCOUNT_IMAGE_BUCKET', 'account-image'),
+    },
   }
 }
 
