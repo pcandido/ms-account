@@ -21,8 +21,8 @@ export class SetImageUsecase implements SetImage {
 
     const [uri, uri64, uri256] = await Promise.all([
       this.imagePersister.persist(account.id, image),
-      this.imagePersister.persist(account.id, img64),
-      this.imagePersister.persist(account.id, img256),
+      this.imagePersister.persist(`${account.id}_64`, img64),
+      this.imagePersister.persist(`${account.id}_256`, img256),
     ])
 
     const imageSet: ImageSet = { uri, uri64, uri256 }

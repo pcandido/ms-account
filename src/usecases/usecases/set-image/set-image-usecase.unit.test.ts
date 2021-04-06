@@ -75,8 +75,8 @@ describe('SetImageUsecase', () => {
     const persistSpy = jest.spyOn(imagePersisterStub, 'persist')
     await sut.setImage(makeAccount(), makeImageBuffer())
     expect(persistSpy).toBeCalledWith(givenAccountId, makeImageBuffer())
-    expect(persistSpy).toBeCalledWith(givenAccountId, makeResizedBuffer(64, 64))
-    expect(persistSpy).toBeCalledWith(givenAccountId, makeResizedBuffer(256, 256))
+    expect(persistSpy).toBeCalledWith(givenAccountId + '_64', makeResizedBuffer(64, 64))
+    expect(persistSpy).toBeCalledWith(givenAccountId + '_256', makeResizedBuffer(256, 256))
   })
 
   it('should not handle ImagePersister internal errors', async () => {

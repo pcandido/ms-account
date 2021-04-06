@@ -1,5 +1,5 @@
 export interface ImagePersister {
 
-  persist(accountId: string, imageBuffer: Buffer): Promise<string>
-  
+  persist(fileName: string, imageBuffer: Buffer): Promise<string>
+
 }
