@@ -1,0 +1,30 @@
+@startuml "set-image"
+
+package controllers {
+    [SetImageController] -up-> () Validator
+    [setImageValidator] -.-> () Validator
+}
+
+package domain {
+    () SetImage
+}
+
+package usecase {
+    () UpdateAccountRepository <-- [SetImageUsecase]
+    () ImageResizer <-- [SetImageUsecase]
+    () ImagePersister <-- [SetImageUsecase]
+}
+
+package gateway {
+    [AccountMongoRepository]
+    [JimpAdapter]
+    [S3Adapter]
+}
+
+SetImageController --> SetImage
+SetImageUsecase -.-> SetImage
+AccountMongoRepository -.-> UpdateAccountRepository
+JimpAdapter -.-> ImageResizer
+S3Adapter -.-> ImagePersister
+
+@enduml

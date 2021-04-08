@@ -65,6 +65,18 @@ Provide the mandatory field refresh-token (from [login](#login) or last [refresh
 }
 ```
 
+## set-image
+
+By using this endpoint, the user is able to set his/her account image (avatar). The sent image is scaled to 64x64 and 256x256 and all of them (including the original one) are stored into S3 (this project uses fake-s3, an AWS S3 compatible API). Finally, their locations are stored in the account document.
+
+`POST /set-image`
+```
+FormData
++----------+---------------------+
+| image    | Image file          |
++----------+---------------------+
+```
+
 ---
 ## 🚀 How to run
 
