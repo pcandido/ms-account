@@ -8,7 +8,7 @@ export const adaptRoute = (controller: Controller) => {
     const request: Request = { body: req.body, account: req.account }
 
     const { statusCode, body } = await controller.handle(request)
-    const resBody = body instanceof Error ? body.message : body
+    const resBody = body instanceof Error ? { message: body.message } : body
 
     res
       .status(statusCode)
@@ -21,14 +21,14 @@ export const adaptAuthenticatedRoute = (controller: AuthenticatedController) => 
 
   return async (req: ExpressRequest, res: ExpressResponse): Promise<void> => {
     if (!req.account) {
-      res.status(401).send('Unauthorized')
+      res.status(401).type('text').send('Unauthorized')
       return
     }
 
     const request: AuthenticatedRequest = { body: req.body, account: req.account }
 
     const { statusCode, body } = await controller.handle(request)
-    const resBody = body instanceof Error ? body.message : body
+    const resBody = body instanceof Error ? { message: body.message } : body
 
     res
       .status(statusCode)
