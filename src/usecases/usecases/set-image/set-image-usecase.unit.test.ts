@@ -15,7 +15,7 @@ interface SutTypes {
 const givenAccountId = '123'
 const makeImageBuffer = (): Buffer => Buffer.from('original', 'utf-8')
 const makeAccount = (): AccountPublicModel => ({ id: givenAccountId, name: 'any name', email: 'any@email.com' })
-const makeResizedBuffer = (width, height) => Buffer.from(`${width}x${height}`)
+const makeResizedBuffer = (width: number, height: number) => Buffer.from(`${width}x${height}`)
 const makePersistedImageSet = (): ImageSet => ({ uri: 'https://original', uri64: 'https://64x64', uri256: 'https://256x256' })
 
 const makeImageResizerStub = (): ImageResizer => {

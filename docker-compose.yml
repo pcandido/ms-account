@@ -54,6 +54,7 @@ services:
             - 3000:3000
         environment:
             PORT: 3000
+            S3_ENDPOINT: http://account-s3:4569
         secrets:
             - MONGO_URL
             - JWT_SECRET_PHRASE

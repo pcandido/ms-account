@@ -26,7 +26,6 @@ const givenAccount = {
 const makeImage = (): MultiPartFile => ({
   originalName: 'any_name',
   size: 500,
-  encoding: 'utf-8',
   mimeType: 'image/jpg',
   buffer: Buffer.from('any_image', 'utf-8'),
 })
@@ -106,9 +105,10 @@ describe('SetImageController', () => {
 
   it('should return 500 if SetImage throws', async () => {
     const { sut, setImageStub } = makeSut()
-    jest.spyOn(setImageStub, 'setImage').mockRejectedValueOnce(new Error('any error'))
+    const givenError = new Error('any error')
+    jest.spyOn(setImageStub, 'setImage').mockRejectedValueOnce(givenError)
     const result = await sut.handle(makeRequest())
-    expect(result).toEqual(serverError())
+    expect(result).toEqual(serverError(givenError))
   })
 
   it('should return 200 and image set on success', async () => {

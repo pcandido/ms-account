@@ -18,7 +18,6 @@ export interface AuthenticatedRequest {
 export interface MultiPartFile {
   originalName: string
   size: number
-  encoding: string
   mimeType: string
   buffer: Buffer
 }

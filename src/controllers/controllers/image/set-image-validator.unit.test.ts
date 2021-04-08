@@ -14,7 +14,6 @@ const makeSut = (): SutTypes => {
 const makeImage = (): MultiPartFile => ({
   originalName: 'any_name',
   size: 500,
-  encoding: 'utf-8',
   mimeType: 'image/jpg',
   buffer: Buffer.from('any_image', 'utf-8'),
 })
