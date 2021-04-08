@@ -1,5 +1,6 @@
 import request from 'supertest'
 import app from '@main/config/app'
+import path from 'path'
 import { MongoHelper } from '@gateways/db/mongodb/helpers/mogodb-helper'
 import { Collection } from 'mongodb'
 
@@ -149,8 +150,6 @@ describe('SignUp Routes', () => {
         .expect(/"refreshToken" *: *"[a-zA-Z0-9-_.]+"/)
     })
   })
-
-
 
 })
 

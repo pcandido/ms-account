@@ -8,7 +8,7 @@ const root = path.resolve(__dirname, '..')
 
 module.exports = {
   rootDir: root,
-  roots: ['<rootDir>/src'],
+  roots: ['<rootDir>/src', '<rootDir>/test'],
 
   ...tsPreset,
   ...jestMongoPreset,
