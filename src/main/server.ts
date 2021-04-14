@@ -1,6 +1,6 @@
 import '../utils/module-aliases'
 import config from '@utils/config'
-import { MongoHelper } from '@gateways/db/mongodb/helpers/mogodb-helper'
+import { MongoHelper } from '@gateways/helpers/mogodb-helper'
 
 
 async function start() {

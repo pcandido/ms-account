@@ -1,7 +1,7 @@
 import request from 'supertest'
 import app from '@main/config/app'
 import path from 'path'
-import { MongoHelper } from '@gateways/db/mongodb/helpers/mogodb-helper'
+import { MongoHelper } from '@gateways/helpers/mogodb-helper'
 import { Collection, ObjectId } from 'mongodb'
 
 describe('SignUp Routes', () => {
@@ -151,7 +151,7 @@ describe('SignUp Routes', () => {
     })
   })
 
-  describe.only('POST /set-image', () => {
+  describe('POST /set-image', () => {
     const givenRoute = '/set-image'
 
     const givenAuthorization = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlblR5cGUiOiJhY2Nlc3MiLCJpZCI6IjYwNmU2ODcwYzZiNDdiYzQ5ZjU1MWYxZSIsIm5hbWUiOiJhbnkgbmFtZSIsImVtYWlsIjoidmFsaWRAbWFpbC5jb20iLCJpYXQiOjk0NjY5MjAwMCwiZXhwIjozMjQ3MjE0NDAwMH0.BEyDozhXPI7ZleJPJU9P1RRj7CppGZpw_6pMCBx5gso'

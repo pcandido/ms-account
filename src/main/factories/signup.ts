@@ -1,5 +1,5 @@
-import { AccountMongoRepository } from '@gateways/db/mongodb/acount/account-mongo-repository'
-import { BCryptAdapter } from '@gateways/cryptography/bcrypt-adapter/bcrypt-adapter'
+import { AccountMongoRepository } from '@gateways/repositories/acount/account-mongo-repository'
+import { BCryptAdapter } from '@gateways/adapters/bcrypt-adapter/bcrypt-adapter'
 import { AddAccountUseCase } from '@usecases/usecases/add-account/add-account-usecase'
 import { EmailValidatorAdapter } from '@utils/email-validator-adapter'
 import { ConsoleLoggerAdapter } from '@utils/console-logger-adapter'
