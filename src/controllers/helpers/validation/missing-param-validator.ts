@@ -8,7 +8,7 @@ export class MissingParamValidator implements Validator {
   ) { }
 
   validate(input: any): void {
-    if (!input[this.fieldName])
+    if (!Object.prototype.hasOwnProperty.call(input, this.fieldName))
       throw new MissingParamError(this.fieldName)
   }
 

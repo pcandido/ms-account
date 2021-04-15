@@ -3,7 +3,7 @@ import { EmailValidator, Validator } from '@controllers/protocols'
 
 export const loginValidator = (emailValidator: EmailValidator): Validator => {
 
-  const requiredFields = ['email', 'password']
+  const requiredFields = ['email', 'password', 'remember']
 
   return new ValidatorComposite([
     ...requiredFields.map(a => new MissingParamValidator(a)),
