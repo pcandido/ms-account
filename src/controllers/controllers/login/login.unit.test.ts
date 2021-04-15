@@ -43,11 +43,13 @@ const makeSut = (): SutTypes => {
 
 const givenEmail = 'any_mail@main.com'
 const givenPassword = 'password'
+const givenRemember = false
 
 const makeRequest = () => ({
   body: {
     email: givenEmail,
     password: givenPassword,
+    remember: givenRemember,
   },
 })
 
@@ -88,7 +90,7 @@ describe('LoginController', () => {
     const authSpy = jest.spyOn(authenticationStub, 'auth')
 
     await sut.handle(givenRequest)
-    expect(authSpy).toBeCalledWith({ email: givenEmail, password: givenPassword })
+    expect(authSpy).toBeCalledWith({ email: givenEmail, password: givenPassword, remember: givenRemember })
   })
 
   it('should return 401 if invalid credentials are provided', async () => {
