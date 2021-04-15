@@ -22,6 +22,7 @@ const givenToken: TokenSet = { accessToken: 'accessToken', refreshToken: 'refres
 const makeCredentials = (): AuthenticationModel => ({
   email: givenEmail,
   password: givenPassword,
+  remember: true,
 })
 
 const makeAccount = (): AccountModel => ({
@@ -118,7 +119,7 @@ describe('AuthenticationUseCase', () => {
       id: givenId,
       name: givenName,
       email: givenEmail,
-    })
+    }, true)
   })
 
   it('should not handle TokenGenerator errors', async () => {

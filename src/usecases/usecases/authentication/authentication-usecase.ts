@@ -22,7 +22,7 @@ export class AuthenticationUseCase implements Authentication {
       return null
 
     const { password, ...accountWithoutPassword } = account
-    const token = this.tokenGenerator.generate(accountWithoutPassword)
+    const token = this.tokenGenerator.generate(accountWithoutPassword, credentials.remember)
     return token
   }
 
