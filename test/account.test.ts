@@ -65,6 +65,7 @@ describe('SignUp Routes', () => {
       const givenCredentials = {
         email: 'unexistent@mail.com',
         password: givenPassword,
+        remember: false,
       }
 
       await request(app)
@@ -77,6 +78,7 @@ describe('SignUp Routes', () => {
       const givenCredentials = {
         email: givenEmail,
         password: 'invalid_password',
+        remember: false,
       }
 
       await request(app)
@@ -89,6 +91,7 @@ describe('SignUp Routes', () => {
       const givenCredentials = {
         email: givenEmail,
         password: givenPassword,
+        remember: false,
       }
 
       await request(app)
