@@ -20,12 +20,22 @@ const makeSut = (): JwtAdapter => new JwtAdapter(givenSecretPhrase)
 describe('JwtAdapter', () => {
 
   describe('generate method', () => {
-    it('should call sign with correct values', () => {
+
+    it('should call sign to access token with correct values', () => {
       const sut = makeSut()
       const signSpy = jest.spyOn(jwt, 'sign')
-      sut.generate(givenPayload)
-      expect(signSpy).toHaveBeenNthCalledWith(1, { ...givenPayload, tokenType: 'access' }, givenSecretPhrase, { expiresIn: expect.anything() })
-      expect(signSpy).toHaveBeenNthCalledWith(2, { ...givenPayload, tokenType: 'refresh' }, givenSecretPhrase, { expiresIn: expect.anything() })
+      sut.generate(givenPayload, false)
+      expect(signSpy).toHaveBeenNthCalledWith(1, { ...givenPayload, tokenType: 'access' }, givenSecretPhrase, { expiresIn: '10 minutes' })
+    })
+
+    it.each([
+      [false, '1 hour'],
+      [true, '10 days'],
+    ])('should call sign to refresh token with correct values, and when remember is %s, set expiration to %s', (remember, refreshTokenExpiration) => {
+      const sut = makeSut()
+      const signSpy = jest.spyOn(jwt, 'sign')
+      sut.generate(givenPayload, remember)
+      expect(signSpy).toHaveBeenNthCalledWith(2, { ...givenPayload, tokenType: 'refresh' }, givenSecretPhrase, { expiresIn: refreshTokenExpiration })
     })
 
     it('should return the jwt result', () => {
@@ -36,7 +46,7 @@ describe('JwtAdapter', () => {
         .mockImplementationOnce(() => generatedAccessToken)
         .mockImplementationOnce(() => generatedRefreshToken)
 
-      const token = sut.generate(givenPayload)
+      const token = sut.generate(givenPayload, true)
 
       expect(token).toEqual({
         accessToken: generatedAccessToken,
@@ -48,7 +58,7 @@ describe('JwtAdapter', () => {
       const sut = makeSut()
       const givenError = new Error('any_error')
       jest.spyOn(jwt, 'sign').mockImplementationOnce(() => { throw givenError })
-      expect(() => sut.generate(givenPayload)).toThrow(givenError)
+      expect(() => sut.generate(givenPayload, true)).toThrow(givenError)
     })
   })
 

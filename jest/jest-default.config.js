@@ -15,6 +15,7 @@ module.exports = {
 
   collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
   coverageDirectory: 'coverage',
+  clearMocks: true,
   testEnvironment: 'node',
   moduleNameMapper: {
     '@main/(.*)': '<rootDir>/src/main/$1',
