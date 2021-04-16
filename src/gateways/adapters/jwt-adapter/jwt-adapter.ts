@@ -22,8 +22,8 @@ export class JwtAdapter implements TokenGenerator, TokenDecoder {
 
   generate(data: any, remember: boolean): TokenSet {
     const refreshTokenExpiration = remember ? this.expiration.longRefreshToken : this.expiration.shortRefreshToken
-    const accessToken = jwt.sign({ ...data, tokenType: 'access' }, this.secretPhrase, { expiresIn: '10 minutes' })
-    const refreshToken = jwt.sign({ ...data, tokenType: 'refresh' }, this.secretPhrase, { expiresIn: refreshTokenExpiration })
+    const accessToken = jwt.sign({ ...data, tokenType: 'access', remember }, this.secretPhrase, { expiresIn: '10 minutes' })
+    const refreshToken = jwt.sign({ ...data, tokenType: 'refresh', remember }, this.secretPhrase, { expiresIn: refreshTokenExpiration })
     return { accessToken, refreshToken }
   }
 
