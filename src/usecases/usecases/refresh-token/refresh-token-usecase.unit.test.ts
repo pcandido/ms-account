@@ -15,6 +15,7 @@ const givenRefreshToken = 'refresh_token'
 const givenEmail = 'valid@email.com'
 const givenId = 'any_id'
 const givenName = 'any_name'
+const givenRemember = true
 
 const givenTokenAccount = {
   id: givenId,
@@ -41,6 +42,7 @@ const makeTokenDecoderStub = (): TokenDecoder => {
         id: 'any_id',
         email: givenEmail,
         tokenType: 'refresh',
+        remember: givenRemember,
       }
     }
   }
@@ -132,15 +134,27 @@ describe('RefreshTokenUseCase', () => {
     await expect(() => sut.refresh(givenTokenAccount, givenRefreshToken)).rejects.toThrow(givenError)
   })
 
-  it('should call TokenGenerator with correct values', async () => {
-    const { sut, tokenGeneratorStub } = makeSut()
+  it.each([
+    [true],
+    [false],
+  ])('should call TokenGenerator with correct values, including remember option %s', async (remember) => {
+    const { sut, tokenDecoderStub, tokenGeneratorStub } = makeSut()
+
     const generateSpy = jest.spyOn(tokenGeneratorStub, 'generate')
+    jest.spyOn(tokenDecoderStub, 'decode').mockReturnValueOnce({
+      id: 'any_id',
+      email: givenEmail,
+      tokenType: 'refresh',
+      remember,
+    })
+
     await sut.refresh(givenTokenAccount, givenRefreshToken)
+
     expect(generateSpy).toBeCalledWith({
       id: givenId,
       name: givenName,
       email: givenEmail,
-    })
+    }, remember)
   })
 
   it('should not handle TokenGenerator internal errors', async () => {

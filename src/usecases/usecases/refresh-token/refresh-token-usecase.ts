@@ -16,7 +16,7 @@ export class RefreshTokenUseCase implements RefreshToken {
     const payload = this.tokenDecoder.decode(refreshToken)
     if (!payload) return null
 
-    const { id, email, tokenType } = payload
+    const { id, email, tokenType, remember = false } = payload
     if (tokenType !== 'refresh') return null
 
     if (id !== account.id) return null
@@ -25,7 +25,7 @@ export class RefreshTokenUseCase implements RefreshToken {
     if (!loadedAccount) return null
 
     const { password, ...accountWithoutPaassword } = loadedAccount
-    const tokenSet = this.tokenGenerator.generate(accountWithoutPaassword)
+    const tokenSet = this.tokenGenerator.generate(accountWithoutPaassword, remember)
 
     return tokenSet
   }
