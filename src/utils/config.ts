@@ -32,6 +32,11 @@ function genConfig() {
       port: getIntConfig('PORT', 5000),
       jwt: {
         secret: getConfig('JWT_SECRET_PHRASE', 'secret_phrase'),
+        expiration:{
+          accessToken: getConfig('JWT_ACCESS_TOKEN_EXPIRATION', '10 minutes'),
+          shortRefreshToken: getConfig('JWT_SHORT_REFRESH_TOKEN_EXPIRATION', '1 hour'),
+          longRefreshToken: getConfig('JWT_LONG_REFRESH_TOKEN_EXPIRATION', '10 days'),
+        },
       },
     },
     mongodb: {
