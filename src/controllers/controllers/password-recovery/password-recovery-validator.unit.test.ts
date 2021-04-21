@@ -38,4 +38,10 @@ describe('passwordRecoveryValidator', () => {
     expect(() => sut.validate(givenRequest)).toThrow(new InvalidParamError('email'))
   })
 
+  it('should not throw if a valid email is provided', () => {
+    const { sut } = makeSut()
+    const givenRequest = { email: 'valid@email.com' }
+    expect(() => sut.validate(givenRequest)).not.toThrow()
+  })
+  
 })
