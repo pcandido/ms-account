@@ -1,6 +1,6 @@
 import { Response } from '@controllers/protocols'
 import { AuthenticationError } from '@controllers/errors/authentication-error'
-import { ServerError } from '@controllers/errors/server-error'
+import { ServerError } from '@errors/server-error'
 
 export const ok = <T>(body: T): Response => ({
   statusCode: 200,

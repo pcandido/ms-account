@@ -1,7 +1,8 @@
 
 import { PasswordRecoveryController } from './password-recovery-controller'
 import { Validator, Request } from '@controllers/protocols'
-import { ValidationError, ServerError } from '@controllers/errors'
+import { ValidationError } from '@controllers/errors'
+import { ServerError } from '@errors/server-error'
 import { PasswordRecovery } from '@domain/usecases'
 
 interface SutTypes {
