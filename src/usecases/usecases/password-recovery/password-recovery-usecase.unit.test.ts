@@ -128,7 +128,7 @@ describe('PasswordRecoveryUseCase', () => {
     await expect(() => sut.recover(givenEmail)).rejects.toThrow(givenError)
   })
 
-  it('should call emailSender with correct params', async () => {
+  it('should call EmailSender with correct params', async () => {
     const { sut, emailSenderStub } = makeSut()
     const link = `${givenRecoveryLink}?token=${generatedToken}`
     const sendSpy = jest.spyOn(emailSenderStub, 'send')
@@ -142,5 +142,12 @@ describe('PasswordRecoveryUseCase', () => {
     })
   })
 
+  it('should not handle EmailSender internal errors', async () => {
+    const { sut, emailSenderStub } = makeSut()
+    const givenError = new Error('any error')
+    jest.spyOn(emailSenderStub, 'send').mockRejectedValueOnce(givenError)
+
+    await expect(() => sut.recover(givenEmail)).rejects.toThrow(givenError)
+  })
 
 })
