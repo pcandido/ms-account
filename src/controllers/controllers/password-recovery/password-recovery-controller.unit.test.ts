@@ -2,10 +2,12 @@
 import { PasswordRecoveryController } from './password-recovery-controller'
 import { Validator, Request } from '@controllers/protocols'
 import { ValidationError, ServerError } from '@controllers/errors'
+import { PasswordRecovery } from '@domain/usecases'
 
 interface SutTypes {
-  sut: PasswordRecoveryController,
+  sut: PasswordRecoveryController
   validatorStub: Validator
+  passwordRecoveryStub: PasswordRecovery
 }
 
 
@@ -19,15 +21,27 @@ const makeValidatorStub = (): Validator => {
   return new ValidatorStub()
 }
 
-const makeSut = (): SutTypes => {
-  const validatorStub = makeValidatorStub()
-  const sut = new PasswordRecoveryController(validatorStub)
-  return { sut, validatorStub }
+const makePasswordRecoveryStub = (): PasswordRecovery => {
+  class PasswordRecoveryStub implements PasswordRecovery {
+    async recovery(email: string): Promise<void> {
+      /* do nothing */
+    }
+  }
+
+  return new PasswordRecoveryStub()
 }
 
+const makeSut = (): SutTypes => {
+  const validatorStub = makeValidatorStub()
+  const passwordRecoveryStub = makePasswordRecoveryStub()
+  const sut = new PasswordRecoveryController(validatorStub, passwordRecoveryStub)
+  return { sut, validatorStub, passwordRecoveryStub }
+}
+
+const givenEmail = 'any@email.com'
 const makeRequest = (): Request => ({
   body: {
-    email: 'any@email.com',
+    email: givenEmail,
   },
 })
 
@@ -60,6 +74,15 @@ describe('PasswordRecoveryController', () => {
     const response = await sut.handle(makeRequest())
 
     expect(response).toEqual({ statusCode: 500, body: new ServerError(givenError) })
+  })
+
+  it('should call PasswordRecoveryUseCase with correct params', async () => {
+    const { sut, passwordRecoveryStub } = makeSut()
+    const recoverySpy = jest.spyOn(passwordRecoveryStub, 'recovery')
+
+    await sut.handle(makeRequest())
+
+    expect(recoverySpy).toBeCalledWith(givenEmail)
   })
 
 })
