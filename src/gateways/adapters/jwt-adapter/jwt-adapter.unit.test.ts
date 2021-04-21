@@ -21,15 +21,22 @@ describe('JwtAdapter', () => {
 
   describe('generate method', () => {
 
+    const givenExpiresInMinutes = 50
+
     it('should call sign with correct params', () => {
       const sut = makeSut()
       const signSpy = jest.spyOn(jwt, 'sign')
-      const givenPayload = { field: 1 }
-      const givenExpiresInMinutes = 50
 
       sut.generate(givenPayload, givenExpiresInMinutes)
 
       expect(signSpy).toBeCalledWith(givenPayload, givenSecretPhrase, { expiresIn: `${givenExpiresInMinutes} minutes` })
+    })
+
+    it('should not handle Jwt errors', () => {
+      const sut = makeSut()
+      const givenError = new Error('any_error')
+      jest.spyOn(jwt, 'sign').mockImplementationOnce(() => { throw givenError })
+      expect(() => sut.generate(givenPayload, givenExpiresInMinutes)).toThrow(givenError)
     })
 
 
