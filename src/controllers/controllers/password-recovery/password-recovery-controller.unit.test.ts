@@ -95,4 +95,10 @@ describe('PasswordRecoveryController', () => {
     expect(response).toEqual({ statusCode: 500, body: new ServerError(givenError) })
   })
 
+  it('should return status code 200 on success', async () => {
+    const { sut } = makeSut()
+    const response = await sut.handle(makeRequest())
+    expect(response).toEqual({ statusCode: 200, body: {} })
+  })
+
 })
