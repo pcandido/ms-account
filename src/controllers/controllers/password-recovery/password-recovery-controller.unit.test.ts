@@ -76,13 +76,23 @@ describe('PasswordRecoveryController', () => {
     expect(response).toEqual({ statusCode: 500, body: new ServerError(givenError) })
   })
 
-  it('should call PasswordRecoveryUseCase with correct params', async () => {
+  it('should call PasswordRecovery usecase with correct params', async () => {
     const { sut, passwordRecoveryStub } = makeSut()
     const recoverySpy = jest.spyOn(passwordRecoveryStub, 'recovery')
 
     await sut.handle(makeRequest())
 
     expect(recoverySpy).toBeCalledWith(givenEmail)
+  })
+
+  it('should return server error if PasswordRecovery usecase throws internal error', async () => {
+    const { sut, passwordRecoveryStub } = makeSut()
+    const givenError = new Error('any errror')
+    jest.spyOn(passwordRecoveryStub, 'recovery').mockImplementationOnce(() => { throw givenError })
+
+    const response = await sut.handle(makeRequest())
+
+    expect(response).toEqual({ statusCode: 500, body: new ServerError(givenError) })
   })
 
 })
