@@ -33,12 +33,11 @@ export class PasswordRecoveryUseCase implements PasswordRecovery {
       .replace('{{name}}', account.name)
       .replace('{{link}}', link)
 
-    this.emailSender.send({
+    await this.emailSender.send({
       to: email,
       subject,
       body,
     })
-
   }
 
 }
