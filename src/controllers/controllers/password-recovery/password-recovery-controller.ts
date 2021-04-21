@@ -1,4 +1,5 @@
 import { Controller, Request, Response, Validator } from '@controllers/protocols'
+import { badRequest } from '@controllers/helpers/http-helper'
 
 export class PasswordRecoveryController implements Controller {
 
@@ -7,8 +8,11 @@ export class PasswordRecoveryController implements Controller {
   ) { }
 
   async handle(request: Request): Promise<Response> {
-    this.validator.validate(request.body)
-
+    try {
+      this.validator.validate(request.body)
+    } catch (error) {
+      return badRequest(error)
+    }
     return { statusCode: 200, body: {} }
   }
 
