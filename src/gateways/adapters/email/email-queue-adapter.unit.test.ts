@@ -1,4 +1,4 @@
-import { connect, sendToQueue } from 'amqplib'
+import { connect, createChannel, sendToQueue } from 'amqplib'
 import { EmailMessage } from '@usecases/protocols/email/email-sender'
 import { EmailQueueAdapter } from './email-queue-adapter'
 
@@ -26,10 +26,14 @@ describe('EmailQueueAdapter', () => {
 
   it('should call amqplib.connect with correct params', async () => {
     const sut = makeSut()
-
     await sut.send(makeEmailMessage())
-
     expect(connect).toBeCalledWith(givenRabbitmqHost)
+  })
+
+  it('should call connection.createChannel', async () => {
+    const sut = makeSut()
+    await sut.send(makeEmailMessage())
+    expect(createChannel).toBeCalled()
   })
 
   it.skip('should call amqplib with correct params', async () => {
