@@ -1,6 +1,7 @@
 import { LoadAccountByEmailRepository } from '@usecases/protocols/account/load-account-by-email-repository'
 import { AccountModel } from '@domain/models'
 import { PasswordRecoveryUseCase } from './password-recovery-usecase'
+import { UserError } from '@errors/user-error'
 
 interface SutTypes {
   sut: PasswordRecoveryUseCase
@@ -48,6 +49,14 @@ describe('PasswordRecoveryUseCase', () => {
     jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockRejectedValueOnce(givenError)
 
     await expect(() => sut.recover(givenEmail)).rejects.toThrow(givenError)
+  })
+
+  it('should throw an UserError if the account does not exists', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut()
+    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockResolvedValueOnce(null)
+
+    const expectedError = new UserError('There is no account with the provied Email')
+    await expect(() => sut.recover(givenEmail)).rejects.toThrow(expectedError)
   })
 
 
