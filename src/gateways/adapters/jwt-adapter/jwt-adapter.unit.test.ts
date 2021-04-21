@@ -39,6 +39,11 @@ describe('JwtAdapter', () => {
       expect(() => sut.generate(givenPayload, givenExpiresInMinutes)).toThrow(givenError)
     })
 
+    it('should return the generated token on success', () => {
+      const sut = makeSut()
+      const token = sut.generate(givenPayload, givenExpiresInMinutes)
+      expect(token).toBe(generatedToken)
+    })
 
   })
 
