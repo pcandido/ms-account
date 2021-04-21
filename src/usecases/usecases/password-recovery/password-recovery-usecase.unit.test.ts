@@ -1,4 +1,5 @@
 import { LoadAccountByEmailRepository } from '@usecases/protocols/account/load-account-by-email-repository'
+import { TokenGenerator } from '@usecases/protocols/cryptography/token-generator'
 import { AccountModel } from '@domain/models'
 import { PasswordRecoveryUseCase } from './password-recovery-usecase'
 import { UserError } from '@errors/user-error'
@@ -6,7 +7,11 @@ import { UserError } from '@errors/user-error'
 interface SutTypes {
   sut: PasswordRecoveryUseCase
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
+  tokenGeneratorStub: TokenGenerator
 }
+
+const expiresInMinutes = 60 * 24
+
 
 const makeLoadAccountByEmailRepositoryStub = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
@@ -23,10 +28,21 @@ const makeLoadAccountByEmailRepositoryStub = (): LoadAccountByEmailRepository =>
   return new LoadAccountByEmailRepositoryStub()
 }
 
+const makeTokenGeneratorStub = (): TokenGenerator => {
+  class TokenGeneratorStub implements TokenGenerator {
+    generate(data: any, expiresInMinutes: number): string {
+      return 'any_token'
+    }
+  }
+
+  return new TokenGeneratorStub()
+}
+
 const makeSut = (): SutTypes => {
   const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepositoryStub()
-  const sut = new PasswordRecoveryUseCase(loadAccountByEmailRepositoryStub)
-  return { sut, loadAccountByEmailRepositoryStub }
+  const tokenGeneratorStub = makeTokenGeneratorStub()
+  const sut = new PasswordRecoveryUseCase(loadAccountByEmailRepositoryStub, tokenGeneratorStub, expiresInMinutes)
+  return { sut, loadAccountByEmailRepositoryStub, tokenGeneratorStub }
 }
 
 
@@ -57,6 +73,15 @@ describe('PasswordRecoveryUseCase', () => {
 
     const expectedError = new UserError('There is no account with the provied Email')
     await expect(() => sut.recover(givenEmail)).rejects.toThrow(expectedError)
+  })
+
+  it('should call tokenGenerator with correct params', async () => {
+    const { sut, tokenGeneratorStub } = makeSut()
+    const generateSpy = jest.spyOn(tokenGeneratorStub, 'generate')
+
+    await sut.recover(givenEmail)
+
+    expect(generateSpy).toBeCalledWith({ email: givenEmail }, expiresInMinutes)
   })
 
 
