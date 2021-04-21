@@ -84,5 +84,13 @@ describe('PasswordRecoveryUseCase', () => {
     expect(generateSpy).toBeCalledWith({ email: givenEmail }, expiresInMinutes)
   })
 
+  it('should not handle TokenGenerator internal errors', async () => {
+    const { sut, tokenGeneratorStub } = makeSut()
+    const givenError = new Error('any error')
+    jest.spyOn(tokenGeneratorStub, 'generate').mockImplementationOnce(() => { throw givenError })
+
+    await expect(() => sut.recover(givenEmail)).rejects.toThrow(givenError)
+  })
+
 
 })
