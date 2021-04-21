@@ -13,7 +13,7 @@ export class PasswordRecoveryController implements Controller {
   async handle(request: Request): Promise<Response> {
     try {
       this.validator.validate(request.body)
-      await this.passwordRecovery.recovery(request.body.email)
+      await this.passwordRecovery.recover(request.body.email)
       return ok({})
     } catch (error) {
       if (error instanceof ValidationError)

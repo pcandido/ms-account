@@ -23,7 +23,7 @@ const makeValidatorStub = (): Validator => {
 
 const makePasswordRecoveryStub = (): PasswordRecovery => {
   class PasswordRecoveryStub implements PasswordRecovery {
-    async recovery(email: string): Promise<void> {
+    async recover(email: string): Promise<void> {
       /* do nothing */
     }
   }
@@ -78,7 +78,7 @@ describe('PasswordRecoveryController', () => {
 
   it('should call PasswordRecovery usecase with correct params', async () => {
     const { sut, passwordRecoveryStub } = makeSut()
-    const recoverySpy = jest.spyOn(passwordRecoveryStub, 'recovery')
+    const recoverySpy = jest.spyOn(passwordRecoveryStub, 'recover')
 
     await sut.handle(makeRequest())
 
@@ -88,7 +88,7 @@ describe('PasswordRecoveryController', () => {
   it('should return server error if PasswordRecovery usecase throws internal error', async () => {
     const { sut, passwordRecoveryStub } = makeSut()
     const givenError = new Error('any errror')
-    jest.spyOn(passwordRecoveryStub, 'recovery').mockImplementationOnce(() => { throw givenError })
+    jest.spyOn(passwordRecoveryStub, 'recover').mockImplementationOnce(() => { throw givenError })
 
     const response = await sut.handle(makeRequest())
 

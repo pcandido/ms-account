@@ -1,5 +1,5 @@
 export interface PasswordRecovery {
 
-  recovery(email: string): Promise<void>
+  recover(email: string): Promise<void>
 
 }
