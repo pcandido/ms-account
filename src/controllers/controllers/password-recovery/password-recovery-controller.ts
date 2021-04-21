@@ -1,5 +1,5 @@
 import { Controller, Request, Response, Validator } from '@controllers/protocols'
-import { badRequest, serverError } from '@controllers/helpers/http-helper'
+import { badRequest, ok, serverError } from '@controllers/helpers/http-helper'
 import { ValidationError } from '@controllers/errors'
 import { PasswordRecovery } from '@domain/usecases'
 
@@ -14,7 +14,7 @@ export class PasswordRecoveryController implements Controller {
     try {
       this.validator.validate(request.body)
       await this.passwordRecovery.recovery(request.body.email)
-      return { statusCode: 200, body: {} }
+      return ok({})
     } catch (error) {
       if (error instanceof ValidationError)
         return badRequest(error)
