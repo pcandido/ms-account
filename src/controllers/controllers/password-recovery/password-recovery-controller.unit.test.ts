@@ -1,7 +1,7 @@
 
 import { PasswordRecoveryController } from './password-recovery-controller'
 import { Validator } from '@controllers/protocols'
-import { ValidationError } from '@controllers/errors'
+import { ValidationError, ServerError } from '@controllers/errors'
 
 interface SutTypes {
   sut: PasswordRecoveryController,
@@ -53,6 +53,20 @@ describe('PasswordRecoveryController', () => {
     })
 
     expect(response).toEqual({ statusCode: 400, body: givenError })
+  })
+
+  it('should return server error if validator throws internal error', async () => {
+    const { sut, validatorStub } = makeSut()
+    const givenError = new Error('any errror')
+    jest.spyOn(validatorStub, 'validate').mockImplementationOnce(() => { throw givenError })
+
+    const response = await sut.handle({
+      body: {
+        email: 'any@email.com',
+      },
+    })
+
+    expect(response).toEqual({ statusCode: 500, body: new ServerError(givenError) })
   })
 
 })
