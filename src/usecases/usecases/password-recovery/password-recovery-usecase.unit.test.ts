@@ -42,5 +42,13 @@ describe('PasswordRecoveryUseCase', () => {
     expect(loadByEmailSpy).toBeCalledWith(givenEmail)
   })
 
+  it('should not handle LoadAccountByEmailRepository internal errors', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut()
+    const givenError = new Error('any error')
+    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockRejectedValueOnce(givenError)
+
+    await expect(() => sut.recover(givenEmail)).rejects.toThrow(givenError)
+  })
+
 
 })
