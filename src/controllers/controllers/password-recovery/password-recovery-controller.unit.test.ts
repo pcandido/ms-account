@@ -1,6 +1,6 @@
 
 import { PasswordRecoveryController } from './password-recovery-controller'
-import { Validator } from '@controllers/protocols'
+import { Validator, Request } from '@controllers/protocols'
 import { ValidationError, ServerError } from '@controllers/errors'
 
 interface SutTypes {
@@ -25,6 +25,11 @@ const makeSut = (): SutTypes => {
   return { sut, validatorStub }
 }
 
+const makeRequest = (): Request => ({
+  body: {
+    email: 'any@email.com',
+  },
+})
 
 describe('PasswordRecoveryController', () => {
 
@@ -32,11 +37,7 @@ describe('PasswordRecoveryController', () => {
     const { sut, validatorStub } = makeSut()
     const validateSpy = jest.spyOn(validatorStub, 'validate')
 
-    await sut.handle({
-      body: {
-        email: 'any@email.com',
-      },
-    })
+    await sut.handle(makeRequest())
 
     expect(validateSpy).toBeCalledWith({ email: 'any@email.com' })
   })
@@ -46,11 +47,7 @@ describe('PasswordRecoveryController', () => {
     const givenError = new ValidationError('any errror')
     jest.spyOn(validatorStub, 'validate').mockImplementationOnce(() => { throw givenError })
 
-    const response = await sut.handle({
-      body: {
-        email: 'any@email.com',
-      },
-    })
+    const response = await sut.handle(makeRequest())
 
     expect(response).toEqual({ statusCode: 400, body: givenError })
   })
@@ -60,11 +57,7 @@ describe('PasswordRecoveryController', () => {
     const givenError = new Error('any errror')
     jest.spyOn(validatorStub, 'validate').mockImplementationOnce(() => { throw givenError })
 
-    const response = await sut.handle({
-      body: {
-        email: 'any@email.com',
-      },
-    })
+    const response = await sut.handle(makeRequest())
 
     expect(response).toEqual({ statusCode: 500, body: new ServerError(givenError) })
   })
