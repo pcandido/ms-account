@@ -5,11 +5,13 @@ export class EmailQueueAdapter implements EmailSender {
 
   constructor(
     private rabbitmqHost: string,
+    private queueName:string,
   ) { }
 
   async send(message: EmailMessage): Promise<void> {
     const connection = await connect(this.rabbitmqHost)
-    await connection.createChannel()
+    const channel = await connection.createChannel()
+    await channel.assertQueue(this.queueName)
   }
 
 }
