@@ -3,22 +3,34 @@ import { PasswordRecoveryController } from './password-recovery-controller'
 import { Validator } from '@controllers/protocols'
 import { ValidationError } from '@controllers/errors'
 
+interface SutTypes {
+  sut: PasswordRecoveryController,
+  validatorStub: Validator
+}
+
+
+const makeValidatorStub = (): Validator => {
+  class ValidatorStub implements Validator {
+    validate(input: any) {
+      /* do nothing */
+    }
+  }
+
+  return new ValidatorStub()
+}
+
+const makeSut = (): SutTypes => {
+  const validatorStub = makeValidatorStub()
+  const sut = new PasswordRecoveryController(validatorStub)
+  return { sut, validatorStub }
+}
+
+
 describe('PasswordRecoveryController', () => {
 
   it('should call validator with correct values', async () => {
-
-    class ValidatorStub implements Validator {
-      validate(input: any) {
-        /* do nothing */
-      }
-    }
-
-    const validatorStub = new ValidatorStub()
-
+    const { sut, validatorStub } = makeSut()
     const validateSpy = jest.spyOn(validatorStub, 'validate')
-
-
-    const sut = new PasswordRecoveryController(validatorStub)
 
     await sut.handle({
       body: {
@@ -30,20 +42,9 @@ describe('PasswordRecoveryController', () => {
   })
 
   it('should return bad request if validator throws', async () => {
-    class ValidatorStub implements Validator {
-      validate(input: any) {
-        /* do nothing */
-      }
-    }
-
-    const validatorStub = new ValidatorStub()
-
+    const { sut, validatorStub } = makeSut()
     const givenError = new ValidationError('any errror')
-
     jest.spyOn(validatorStub, 'validate').mockImplementationOnce(() => { throw givenError })
-
-
-    const sut = new PasswordRecoveryController(validatorStub)
 
     const response = await sut.handle({
       body: {
