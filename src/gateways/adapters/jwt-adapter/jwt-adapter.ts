@@ -1,8 +1,9 @@
 import jwt from 'jsonwebtoken'
-import { TokenSetGenerator } from '@usecases/protocols/cryptography/token-set-generator'
-import { TokenSet } from '@domain/models'
-import { TokenDecoder } from '@usecases/protocols/cryptography/token-decoder'
 import config from '@utils/config'
+import { TokenSet } from '@domain/models'
+import { TokenSetGenerator } from '@usecases/protocols/cryptography/token-set-generator'
+import { TokenGenerator } from '@usecases/protocols/cryptography/token-generator'
+import { TokenDecoder } from '@usecases/protocols/cryptography/token-decoder'
 
 interface Expiration {
   accessToken: string
@@ -10,7 +11,7 @@ interface Expiration {
   longRefreshToken: string
 }
 
-export class JwtAdapter implements TokenSetGenerator, TokenDecoder {
+export class JwtAdapter implements TokenGenerator, TokenSetGenerator, TokenDecoder {
 
   private expiration: Expiration
 
@@ -18,6 +19,12 @@ export class JwtAdapter implements TokenSetGenerator, TokenDecoder {
     private secretPhrase: string,
   ) {
     this.expiration = config.app.jwt.expiration
+  }
+
+  generate(data: any, expiresInMinutes: number): string {
+    jwt.sign(data, this.secretPhrase, { expiresIn: `${expiresInMinutes} minutes` })
+
+    return ''
   }
 
   generateSet(data: any, remember: boolean): TokenSet {
