@@ -1,7 +1,5 @@
-import { TokenSet } from '@domain/models'
-
 export interface TokenGenerator {
 
-  generate(data: any, remember: boolean): TokenSet
+  generate(data: any, expiresInMinutes: number): string
 
 }
