@@ -12,7 +12,7 @@ package domain {
 package usecase {
     () LoadAccountByEmailRepository <-- [RefreshTokenUseCase]
     () TokenDecoder <-- [RefreshTokenUseCase]
-    () TokenGenerator <-- [RefreshTokenUseCase]
+    () TokenSetGenerator <-- [RefreshTokenUseCase]
 }
 
 package gateway {
@@ -24,6 +24,6 @@ RefreshTokenController --> RefreshToken
 RefreshTokenUseCase -.-> RefreshToken
 AccountMongoRepository -.-> LoadAccountByEmailRepository
 JwtAdapter -.-> TokenDecoder
-JwtAdapter -.-> TokenGenerator
+JwtAdapter -.-> TokenSetGenerator
 
 @enduml

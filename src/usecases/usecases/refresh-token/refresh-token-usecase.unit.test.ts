@@ -1,5 +1,5 @@
 import { TokenDecoder } from '@usecases/protocols/cryptography/token-decoder'
-import { TokenGenerator } from '@usecases/protocols/cryptography/token-generator'
+import { TokenSetGenerator } from '@usecases/protocols/cryptography/token-set-generator'
 import { LoadAccountByEmailRepository } from '@usecases/protocols/account/load-account-by-email-repository'
 import { AccountModel, TokenSet } from '@domain/models'
 import { RefreshTokenUseCase } from './refresh-token-usecase'
@@ -8,7 +8,7 @@ interface SutTypes {
   sut: RefreshTokenUseCase
   tokenDecoderStub: TokenDecoder
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
-  tokenGeneratorStub: TokenGenerator
+  tokenSetGeneratorStub: TokenSetGenerator
 }
 
 const givenRefreshToken = 'refresh_token'
@@ -58,21 +58,21 @@ const makeLoadAccountByEmailRepositoryStub = (): LoadAccountByEmailRepository =>
   return new LoadAccountByEmailRepositoryStub()
 }
 
-const makeTokenGeneratorStub = (): TokenGenerator => {
-  class TokenGeneratorStub implements TokenGenerator {
-    generate(): TokenSet {
+const makeTokenSetGeneratorStub = (): TokenSetGenerator => {
+  class TokenSetGeneratorStub implements TokenSetGenerator {
+    generateSet(): TokenSet {
       return makeTokenSet()
     }
   }
-  return new TokenGeneratorStub()
+  return new TokenSetGeneratorStub()
 }
 
 const makeSut = (): SutTypes => {
   const tokenDecoderStub = makeTokenDecoderStub()
   const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepositoryStub()
-  const tokenGeneratorStub = makeTokenGeneratorStub()
-  const sut = new RefreshTokenUseCase(tokenDecoderStub, loadAccountByEmailRepositoryStub, tokenGeneratorStub)
-  return { sut, tokenDecoderStub, loadAccountByEmailRepositoryStub, tokenGeneratorStub }
+  const tokenSetGeneratorStub = makeTokenSetGeneratorStub()
+  const sut = new RefreshTokenUseCase(tokenDecoderStub, loadAccountByEmailRepositoryStub, tokenSetGeneratorStub)
+  return { sut, tokenDecoderStub, loadAccountByEmailRepositoryStub, tokenSetGeneratorStub }
 }
 
 describe('RefreshTokenUseCase', () => {
@@ -137,10 +137,10 @@ describe('RefreshTokenUseCase', () => {
   it.each([
     [true],
     [false],
-  ])('should call TokenGenerator with correct values, including remember option %s', async (remember) => {
-    const { sut, tokenDecoderStub, tokenGeneratorStub } = makeSut()
+  ])('should call TokenSetGenerator with correct values, including remember option %s', async (remember) => {
+    const { sut, tokenDecoderStub, tokenSetGeneratorStub } = makeSut()
 
-    const generateSpy = jest.spyOn(tokenGeneratorStub, 'generate')
+    const generateSetSpy = jest.spyOn(tokenSetGeneratorStub, 'generateSet')
     jest.spyOn(tokenDecoderStub, 'decode').mockReturnValueOnce({
       id: 'any_id',
       email: givenEmail,
@@ -150,17 +150,17 @@ describe('RefreshTokenUseCase', () => {
 
     await sut.refresh(givenTokenAccount, givenRefreshToken)
 
-    expect(generateSpy).toBeCalledWith({
+    expect(generateSetSpy).toBeCalledWith({
       id: givenId,
       name: givenName,
       email: givenEmail,
     }, remember)
   })
 
-  it('should not handle TokenGenerator internal errors', async () => {
-    const { sut, tokenGeneratorStub } = makeSut()
+  it('should not handle TokenSetGenerator internal errors', async () => {
+    const { sut, tokenSetGeneratorStub } = makeSut()
     const givenError = new Error('any error')
-    jest.spyOn(tokenGeneratorStub, 'generate').mockImplementationOnce(() => { throw givenError })
+    jest.spyOn(tokenSetGeneratorStub, 'generateSet').mockImplementationOnce(() => { throw givenError })
     await expect(() => sut.refresh(givenTokenAccount, givenRefreshToken)).rejects.toThrow(givenError)
   })
 

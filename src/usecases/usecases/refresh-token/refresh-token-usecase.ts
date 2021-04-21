@@ -1,5 +1,5 @@
 import { TokenDecoder } from '@usecases/protocols/cryptography/token-decoder'
-import { TokenGenerator } from '@usecases/protocols/cryptography/token-generator'
+import { TokenSetGenerator } from '@usecases/protocols/cryptography/token-set-generator'
 import { LoadAccountByEmailRepository } from '@usecases/protocols/account/load-account-by-email-repository'
 import { AccountPublicModel, TokenSet } from '@domain/models'
 import { RefreshToken } from '@domain/usecases'
@@ -9,7 +9,7 @@ export class RefreshTokenUseCase implements RefreshToken {
   constructor(
     private tokenDecoder: TokenDecoder,
     private loadAccountByEmailRepository: LoadAccountByEmailRepository,
-    private tokenGenerator: TokenGenerator,
+    private tokenSetGenerator: TokenSetGenerator,
   ) { }
 
   async refresh(account: AccountPublicModel, refreshToken: string): Promise<TokenSet | null> {
@@ -25,7 +25,7 @@ export class RefreshTokenUseCase implements RefreshToken {
     if (!loadedAccount) return null
 
     const { password, ...accountWithoutPaassword } = loadedAccount
-    const tokenSet = this.tokenGenerator.generate(accountWithoutPaassword, remember)
+    const tokenSet = this.tokenSetGenerator.generateSet(accountWithoutPaassword, remember)
 
     return tokenSet
   }

@@ -19,12 +19,12 @@ const makeSut = (): JwtAdapter => new JwtAdapter(givenSecretPhrase)
 
 describe('JwtAdapter', () => {
 
-  describe('generate method', () => {
+  describe('generateSet method', () => {
 
     it('should call sign to access token with correct values', () => {
       const sut = makeSut()
       const signSpy = jest.spyOn(jwt, 'sign')
-      sut.generate(givenPayload, false)
+      sut.generateSet(givenPayload, false)
       expect(signSpy).toHaveBeenNthCalledWith(1, { ...givenPayload, tokenType: 'access', remember: false }, givenSecretPhrase, { expiresIn: '10 minutes' })
     })
 
@@ -34,7 +34,7 @@ describe('JwtAdapter', () => {
     ])('should call sign to refresh token with correct values, and when remember is %s, set expiration to %s', (remember, refreshTokenExpiration) => {
       const sut = makeSut()
       const signSpy = jest.spyOn(jwt, 'sign')
-      sut.generate(givenPayload, remember)
+      sut.generateSet(givenPayload, remember)
       expect(signSpy).toHaveBeenNthCalledWith(2, { ...givenPayload, tokenType: 'refresh', remember }, givenSecretPhrase, { expiresIn: refreshTokenExpiration })
     })
 
@@ -46,7 +46,7 @@ describe('JwtAdapter', () => {
         .mockImplementationOnce(() => generatedAccessToken)
         .mockImplementationOnce(() => generatedRefreshToken)
 
-      const token = sut.generate(givenPayload, true)
+      const token = sut.generateSet(givenPayload, true)
 
       expect(token).toEqual({
         accessToken: generatedAccessToken,
@@ -58,7 +58,7 @@ describe('JwtAdapter', () => {
       const sut = makeSut()
       const givenError = new Error('any_error')
       jest.spyOn(jwt, 'sign').mockImplementationOnce(() => { throw givenError })
-      expect(() => sut.generate(givenPayload, true)).toThrow(givenError)
+      expect(() => sut.generateSet(givenPayload, true)).toThrow(givenError)
     })
   })
 

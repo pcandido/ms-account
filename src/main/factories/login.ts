@@ -14,8 +14,8 @@ export const makeLoginController = (): Controller => {
   const loadByEmailRepository = new AccountMongoRepository()
   const hashComparer = new BCryptAdapter()
   const jwtSecretPhrase = config.app.jwt.secret
-  const tokenGenerator = new JwtAdapter(jwtSecretPhrase)
-  const authentication = new AuthenticationUseCase(loadByEmailRepository, hashComparer, tokenGenerator)
+  const tokenSetGenerator = new JwtAdapter(jwtSecretPhrase)
+  const authentication = new AuthenticationUseCase(loadByEmailRepository, hashComparer, tokenSetGenerator)
   const emailValidator = new EmailValidatorAdapter()
   const validator = loginValidator(emailValidator)
   const loginController = new LoginController(authentication, validator)

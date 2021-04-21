@@ -1,5 +1,5 @@
 import { HashComparer } from '@usecases/protocols/cryptography/hash-comparer'
-import { TokenGenerator } from '@usecases/protocols/cryptography/token-generator'
+import { TokenSetGenerator } from '@usecases/protocols/cryptography/token-set-generator'
 import { LoadAccountByEmailRepository } from '@usecases/protocols/account/load-account-by-email-repository'
 import { TokenSet } from '@domain/models'
 import { Authentication, AuthenticationModel } from '@domain/usecases'
@@ -9,7 +9,7 @@ export class AuthenticationUseCase implements Authentication {
   constructor(
     private loadAccountByEmailRepository: LoadAccountByEmailRepository,
     private hashComparer: HashComparer,
-    private tokenGenerator: TokenGenerator,
+    private tokenSetGenerator: TokenSetGenerator,
   ) { }
 
   async auth(credentials: AuthenticationModel): Promise<TokenSet | null> {
@@ -22,7 +22,7 @@ export class AuthenticationUseCase implements Authentication {
       return null
 
     const { password, ...accountWithoutPassword } = account
-    const token = this.tokenGenerator.generate(accountWithoutPassword, credentials.remember)
+    const token = this.tokenSetGenerator.generateSet(accountWithoutPassword, credentials.remember)
     return token
   }
 

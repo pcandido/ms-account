@@ -11,8 +11,8 @@ import { RefreshTokenController } from '@controllers/controllers/refresh/refresh
 export const makeRefreshTokenController = (): AuthenticatedController => {
   const loadByEmailRepository = new AccountMongoRepository()
   const jwtSecretPhrase = config.app.jwt.secret
-  const tokenGeneratorAndDecoder = new JwtAdapter(jwtSecretPhrase)
-  const refreshToken = new RefreshTokenUseCase(tokenGeneratorAndDecoder, loadByEmailRepository, tokenGeneratorAndDecoder)
+  const tokenSetGeneratorAndDecoder = new JwtAdapter(jwtSecretPhrase)
+  const refreshToken = new RefreshTokenUseCase(tokenSetGeneratorAndDecoder, loadByEmailRepository, tokenSetGeneratorAndDecoder)
   const validator = refreshTokenValidator()
   const refreshTokenController = new RefreshTokenController(validator, refreshToken)
   const consoleLoggerAdapter = new ConsoleLoggerAdapter()

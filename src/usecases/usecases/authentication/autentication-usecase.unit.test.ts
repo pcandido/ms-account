@@ -1,5 +1,5 @@
 import { HashComparer } from '@usecases/protocols/cryptography/hash-comparer'
-import { TokenGenerator } from '@usecases/protocols/cryptography/token-generator'
+import { TokenSetGenerator } from '@usecases/protocols/cryptography/token-set-generator'
 import { LoadAccountByEmailRepository } from '@usecases/protocols/account/load-account-by-email-repository'
 import { AccountModel, TokenSet } from '@domain/models'
 import { AuthenticationModel } from '@domain/usecases'
@@ -9,7 +9,7 @@ interface SutTypes {
   sut: AuthenticationUseCase
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
   hashComparerStub: HashComparer
-  tokenGeneratorStub: TokenGenerator
+  tokenSetGeneratorStub: TokenSetGenerator
 }
 
 const givenId = 'any_id'
@@ -50,21 +50,21 @@ const makeHashComparatorStub = (): HashComparer => {
   return new HashComparerStub()
 }
 
-const makeTokenGeneratorStub = (): TokenGenerator => {
-  class TokenGeneratorStub implements TokenGenerator {
-    generate(): TokenSet {
+const makeTokenSetGeneratorStub = (): TokenSetGenerator => {
+  class TokenSetGeneratorStub implements TokenSetGenerator {
+    generateSet(): TokenSet {
       return givenToken
     }
   }
-  return new TokenGeneratorStub()
+  return new TokenSetGeneratorStub()
 }
 
 const makeSut = (): SutTypes => {
   const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepositoryStub()
   const hashComparerStub = makeHashComparatorStub()
-  const tokenGeneratorStub = makeTokenGeneratorStub()
-  const sut = new AuthenticationUseCase(loadAccountByEmailRepositoryStub, hashComparerStub, tokenGeneratorStub)
-  return { sut, loadAccountByEmailRepositoryStub, hashComparerStub, tokenGeneratorStub }
+  const tokenSetGeneratorStub = makeTokenSetGeneratorStub()
+  const sut = new AuthenticationUseCase(loadAccountByEmailRepositoryStub, hashComparerStub, tokenSetGeneratorStub)
+  return { sut, loadAccountByEmailRepositoryStub, hashComparerStub, tokenSetGeneratorStub: tokenSetGeneratorStub }
 }
 
 describe('AuthenticationUseCase', () => {
@@ -111,21 +111,21 @@ describe('AuthenticationUseCase', () => {
     expect(response).toBeNull()
   })
 
-  it('should call TokenGenerator with correct values', async () => {
-    const { sut, tokenGeneratorStub } = makeSut()
-    const generateSpy = jest.spyOn(tokenGeneratorStub, 'generate')
+  it('should call TokenSetGenerator with correct values', async () => {
+    const { sut, tokenSetGeneratorStub: tokenSetGeneratorStub } = makeSut()
+    const generateSetSpy = jest.spyOn(tokenSetGeneratorStub, 'generateSet')
     await sut.auth(makeCredentials())
-    expect(generateSpy).toBeCalledWith({
+    expect(generateSetSpy).toBeCalledWith({
       id: givenId,
       name: givenName,
       email: givenEmail,
     }, true)
   })
 
-  it('should not handle TokenGenerator errors', async () => {
-    const { sut, tokenGeneratorStub } = makeSut()
+  it('should not handle TokenSetGenerator errors', async () => {
+    const { sut, tokenSetGeneratorStub: tokenSetGeneratorStub } = makeSut()
     const givenError = new Error('any error')
-    jest.spyOn(tokenGeneratorStub, 'generate').mockImplementationOnce(() => { throw givenError })
+    jest.spyOn(tokenSetGeneratorStub, 'generateSet').mockImplementationOnce(() => { throw givenError })
     await expect(() => sut.auth(makeCredentials())).rejects.toThrow(givenError)
   })
 
