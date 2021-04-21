@@ -22,9 +22,7 @@ export class JwtAdapter implements TokenGenerator, TokenSetGenerator, TokenDecod
   }
 
   generate(data: any, expiresInMinutes: number): string {
-    jwt.sign(data, this.secretPhrase, { expiresIn: `${expiresInMinutes} minutes` })
-
-    return ''
+    return jwt.sign(data, this.secretPhrase, { expiresIn: `${expiresInMinutes} minutes` })
   }
 
   generateSet(data: any, remember: boolean): TokenSet {
