@@ -1,4 +1,4 @@
-import { connect, createChannel, sendToQueue } from 'amqplib'
+import { connect, createChannel, sendToQueue, assertQueue } from 'amqplib'
 import { EmailMessage } from '@usecases/protocols/email/email-sender'
 import { EmailQueueAdapter } from './email-queue-adapter'
 
@@ -14,7 +14,7 @@ jest.mock('amqplib', () => {
 const givenRabbitmqHost = 'amqp://localhost'
 const givenQueue = 'any_queue'
 
-const makeSut = (): EmailQueueAdapter => new EmailQueueAdapter(givenRabbitmqHost)
+const makeSut = (): EmailQueueAdapter => new EmailQueueAdapter(givenRabbitmqHost, givenQueue)
 
 const makeEmailMessage = (): EmailMessage => ({
   to: 'any@email.com',
@@ -34,6 +34,12 @@ describe('EmailQueueAdapter', () => {
     const sut = makeSut()
     await sut.send(makeEmailMessage())
     expect(createChannel).toBeCalled()
+  })
+
+  it('should call channel.assertQueue with correct queue name', async () => {
+    const sut = makeSut()
+    await sut.send(makeEmailMessage())
+    expect(assertQueue).toBeCalledWith(givenQueue)
   })
 
   it.skip('should call amqplib with correct params', async () => {
