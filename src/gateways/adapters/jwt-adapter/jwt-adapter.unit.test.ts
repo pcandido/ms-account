@@ -19,6 +19,22 @@ const makeSut = (): JwtAdapter => new JwtAdapter(givenSecretPhrase)
 
 describe('JwtAdapter', () => {
 
+  describe('generate method', () => {
+
+    it('should call sign with correct params', () => {
+      const sut = makeSut()
+      const signSpy = jest.spyOn(jwt, 'sign')
+      const givenPayload = { field: 1 }
+      const givenExpiresInMinutes = 50
+
+      sut.generate(givenPayload, givenExpiresInMinutes)
+
+      expect(signSpy).toBeCalledWith(givenPayload, givenSecretPhrase, { expiresIn: `${givenExpiresInMinutes} minutes` })
+    })
+
+
+  })
+
   describe('generateSet method', () => {
 
     it('should call sign to access token with correct values', () => {
