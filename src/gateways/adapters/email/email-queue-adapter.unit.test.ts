@@ -56,6 +56,12 @@ describe('EmailQueueAdapter', () => {
     expect(channelClose).toBeCalled()
   })
 
+  it('should call connection.close', async () => {
+    const sut = makeSut()
+    await sut.send(makeEmailMessage())
+    expect(connectionClose).toBeCalled()
+  })
+
   it.each([
     ['connect', connect],
     ['createChannel', createChannel],
