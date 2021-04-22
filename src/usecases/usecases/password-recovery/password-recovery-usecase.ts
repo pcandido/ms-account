@@ -15,7 +15,7 @@ export class PasswordRecoveryUseCase implements PasswordRecovery {
     private tokenExpiresInMinutes: number,
     private emailSubjectFile: string,
     private emailTemplateFile: string,
-    private recoverEndpoint: string,
+    private resetUrl: string,
   ) { }
 
   async recover(email: string): Promise<void> {
@@ -25,7 +25,7 @@ export class PasswordRecoveryUseCase implements PasswordRecovery {
 
     const token = this.tokenGenerator.generate({ email }, this.tokenExpiresInMinutes)
 
-    const link = `${this.recoverEndpoint}?token=${token}`
+    const link = `${this.resetUrl}?token=${token}`
     const subject = (await promisify(fs.readFile)(this.emailSubjectFile)).toString()
     const template = (await promisify(fs.readFile)(this.emailTemplateFile)).toString()
 

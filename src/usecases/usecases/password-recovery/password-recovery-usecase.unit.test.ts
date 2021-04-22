@@ -15,7 +15,7 @@ interface SutTypes {
 
 const expiresInMinutes = 60 * 24
 const givenName = 'Any Name'
-const givenRecoveryLink = 'https://domain.com/recover'
+const givenResetUrl = 'https://domain.com/recover'
 const generatedToken = 'generated.token'
 
 const makeLoadAccountByEmailRepositoryStub = (): LoadAccountByEmailRepository => {
@@ -64,7 +64,7 @@ const makeSut = (): SutTypes => {
     expiresInMinutes,
     'subject_file',
     'template_file',
-    givenRecoveryLink,
+    givenResetUrl,
   )
   return { sut, loadAccountByEmailRepositoryStub, tokenGeneratorStub, emailSenderStub }
 }
@@ -75,7 +75,7 @@ describe('PasswordRecoveryUseCase', () => {
   const givenEmail = 'any@email.com'
 
   beforeEach(() => {
-    const files = {
+    const files: any = {
       subject_file: 'subject',
       template_file: '{{name}},{{link}}',
     }
@@ -130,7 +130,7 @@ describe('PasswordRecoveryUseCase', () => {
 
   it('should call EmailSender with correct params', async () => {
     const { sut, emailSenderStub } = makeSut()
-    const link = `${givenRecoveryLink}?token=${generatedToken}`
+    const link = `${givenResetUrl}?token=${generatedToken}`
     const sendSpy = jest.spyOn(emailSenderStub, 'send')
 
     await sut.recover(givenEmail)
