@@ -68,7 +68,7 @@ describe('EmailQueueAdapter', () => {
     ['assertQueue', assertQueue],
     ['sendToQueue', sendToQueue],
     ['channel.close', channelClose],
-    ['channel.close', channelClose],
+    ['connection.close', connectionClose],
   ])('should not handle %s internal errors', async (methodName, method) => {
     const sut = makeSut()
     const givenError = new Error('any error')
