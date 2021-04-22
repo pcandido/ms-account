@@ -14,7 +14,7 @@ export class EmailQueueAdapter implements EmailSender {
     await channel.assertQueue(this.queueName)
     await channel.sendToQueue(this.queueName, Buffer.from(JSON.stringify(message)))
     await channel.close()
-
+    await connection.close()
   }
 
 }
