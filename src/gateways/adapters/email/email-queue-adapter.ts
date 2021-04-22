@@ -13,6 +13,8 @@ export class EmailQueueAdapter implements EmailSender {
     const channel = await connection.createChannel()
     await channel.assertQueue(this.queueName)
     await channel.sendToQueue(this.queueName, Buffer.from(JSON.stringify(message)))
+    await channel.close()
+
   }
 
 }
