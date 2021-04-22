@@ -9,7 +9,7 @@ export class EmailQueueAdapter implements EmailSender {
   ) { }
 
   async send(message: EmailMessage): Promise<void> {
-    const connection = await connect(this.rabbitmqHost)
+    const connection = await connect(`amqp://${this.rabbitmqHost}`)
     const channel = await connection.createChannel()
     await channel.assertQueue(this.queueName)
     await channel.sendToQueue(this.queueName, Buffer.from(JSON.stringify(message)))

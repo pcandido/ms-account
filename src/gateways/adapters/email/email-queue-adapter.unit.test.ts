@@ -1,4 +1,4 @@
-import { connect, createChannel, sendToQueue, assertQueue, channelClose, connectionClose } from 'amqplib'
+import amqplib from 'amqplib'
 import { EmailMessage } from '@usecases/protocols/email/email-sender'
 import { EmailQueueAdapter } from './email-queue-adapter'
 
@@ -13,7 +13,7 @@ jest.mock('amqplib', () => {
   return { connect, createChannel, assertQueue, sendToQueue, channelClose, connectionClose }
 })
 
-const givenRabbitmqHost = 'amqp://localhost'
+const givenRabbitmqHost = 'localhost'
 const givenQueue = 'any_queue'
 
 const makeSut = (): EmailQueueAdapter => new EmailQueueAdapter(givenRabbitmqHost, givenQueue)
@@ -29,46 +29,46 @@ describe('EmailQueueAdapter', () => {
   it('should call amqplib.connect with correct params', async () => {
     const sut = makeSut()
     await sut.send(makeEmailMessage())
-    expect(connect).toBeCalledWith(givenRabbitmqHost)
+    expect(amqplib.connect).toBeCalledWith(`amqp://${givenRabbitmqHost}`)
   })
 
   it('should call connection.createChannel', async () => {
     const sut = makeSut()
     await sut.send(makeEmailMessage())
-    expect(createChannel).toBeCalled()
+    expect((amqplib as any).createChannel).toBeCalled()
   })
 
   it('should call channel.assertQueue with correct queue name', async () => {
     const sut = makeSut()
     await sut.send(makeEmailMessage())
-    expect(assertQueue).toBeCalledWith(givenQueue)
+    expect((amqplib as any).assertQueue).toBeCalledWith(givenQueue)
   })
 
   it('should call channel.sendToQueue with correct params', async () => {
     const sut = makeSut()
     await sut.send(makeEmailMessage())
-    expect(sendToQueue).toBeCalledWith(givenQueue, Buffer.from(JSON.stringify(makeEmailMessage())))
+    expect((amqplib as any).sendToQueue).toBeCalledWith(givenQueue, Buffer.from(JSON.stringify(makeEmailMessage())))
   })
 
   it('should call channel.close', async () => {
     const sut = makeSut()
     await sut.send(makeEmailMessage())
-    expect(channelClose).toBeCalled()
+    expect((amqplib as any).channelClose).toBeCalled()
   })
 
   it('should call connection.close', async () => {
     const sut = makeSut()
     await sut.send(makeEmailMessage())
-    expect(connectionClose).toBeCalled()
+    expect((amqplib as any).connectionClose).toBeCalled()
   })
 
   it.each([
-    ['connect', connect],
-    ['createChannel', createChannel],
-    ['assertQueue', assertQueue],
-    ['sendToQueue', sendToQueue],
-    ['channel.close', channelClose],
-    ['connection.close', connectionClose],
+    ['connect', amqplib.connect],
+    ['createChannel', (amqplib as any).createChannel],
+    ['assertQueue', (amqplib as any).assertQueue],
+    ['sendToQueue', (amqplib as any).sendToQueue],
+    ['channel.close', (amqplib as any).channelClose],
+    ['connection.close', (amqplib as any).connectionClose],
   ])('should not handle %s internal errors', async (methodName, method) => {
     const sut = makeSut()
     const givenError = new Error('any error')

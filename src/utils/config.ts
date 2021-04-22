@@ -41,7 +41,7 @@ function genConfig() {
       passwordRecovery: {
         expiresInMinutes: getIntConfig('PASSWORD_RECOVERY_EXPIRES_IN_MINUTES', 24 * 60),
         resetUrl: getConfig('PASSWORD_RESET_URL', 'https://domain.com/password-reset'),
-        rabbitmqHost: getConfig('PASSWORD_RECOVERY_RABBITMQ_HOST', 'amqp://localhost'),
+        rabbitmqHost: getConfig('PASSWORD_RECOVERY_RABBITMQ_HOST', 'localhost'),
         queueName: getConfig('PASSWORD_RECOVERY_RABBITMQ_QUEUE', 'send-email'),
       },
     },
