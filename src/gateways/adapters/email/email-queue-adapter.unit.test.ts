@@ -1,14 +1,16 @@
-import { connect, createChannel, sendToQueue, assertQueue } from 'amqplib'
+import { connect, createChannel, sendToQueue, assertQueue, channelClose, connectionClose } from 'amqplib'
 import { EmailMessage } from '@usecases/protocols/email/email-sender'
 import { EmailQueueAdapter } from './email-queue-adapter'
 
 jest.mock('amqplib', () => {
   const assertQueue = jest.fn()
   const sendToQueue = jest.fn()
-  const createChannel = jest.fn().mockResolvedValue({ assertQueue, sendToQueue })
-  const connect = jest.fn().mockResolvedValue({ createChannel })
+  const connectionClose = jest.fn()
+  const channelClose = jest.fn()
+  const createChannel = jest.fn().mockResolvedValue({ assertQueue, sendToQueue, close: channelClose })
+  const connect = jest.fn().mockResolvedValue({ createChannel, close: connectionClose })
 
-  return { connect, createChannel, assertQueue, sendToQueue }
+  return { connect, createChannel, assertQueue, sendToQueue, channelClose, connectionClose }
 })
 
 const givenRabbitmqHost = 'amqp://localhost'
@@ -46,6 +48,12 @@ describe('EmailQueueAdapter', () => {
     const sut = makeSut()
     await sut.send(makeEmailMessage())
     expect(sendToQueue).toBeCalledWith(givenQueue, Buffer.from(JSON.stringify(makeEmailMessage())))
+  })
+
+  it('should call channel.close', async () => {
+    const sut = makeSut()
+    await sut.send(makeEmailMessage())
+    expect(channelClose).toBeCalled()
   })
 
   it.each([
