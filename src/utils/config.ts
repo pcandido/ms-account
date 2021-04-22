@@ -32,11 +32,17 @@ function genConfig() {
       port: getIntConfig('PORT', 5000),
       jwt: {
         secret: getConfig('JWT_SECRET_PHRASE', 'secret_phrase'),
-        expiration:{
+        expiration: {
           accessToken: getConfig('JWT_ACCESS_TOKEN_EXPIRATION', '10 minutes'),
           shortRefreshToken: getConfig('JWT_SHORT_REFRESH_TOKEN_EXPIRATION', '1 hour'),
           longRefreshToken: getConfig('JWT_LONG_REFRESH_TOKEN_EXPIRATION', '10 days'),
         },
+      },
+      passwordRecovery: {
+        expiresInMinutes: getIntConfig('PASSWORD_RECOVERY_EXPIRES_IN_MINUTES', 24 * 60),
+        resetUrl: getConfig('PASSWORD_RESET_URL', 'https://domain.com/password-reset'),
+        rabbitmqHost: getConfig('PASSWORD_RECOVERY_RABBITMQ_HOST', 'amqp://localhost'),
+        queueName: getConfig('PASSWORD_RECOVERY_RABBITMQ_QUEUE', 'send-email'),
       },
     },
     mongodb: {
