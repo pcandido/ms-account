@@ -3,6 +3,7 @@ version: "3"
 volumes:
     volume_account_mongo:
     volume_account_s3:
+    volume_rabbitmq:
 
 secrets:
     MONGO_PASSWORD:
@@ -15,8 +16,19 @@ secrets:
 networks:
     network_account_database:
     network_account_s3:
+    network_rabbitmq:
           
 services:
+
+    rabbitmq:
+        image: rabbitmq:management
+        restart: unless-stopped
+        ports: 
+            - 8881:15672
+        volumes: 
+            - volume_rabbitmq:/var/lib/rabbitmq
+        networks: 
+            - network_rabbitmq
 
     account-mongo:
         image: mongo
@@ -50,15 +62,18 @@ services:
         depends_on:
             - account-mongo
             - account-s3
+            - rabbitmq
         ports: 
             - 3000:3000
         environment:
             PORT: 3000
             S3_ENDPOINT: http://account-s3:4569
+            PASSWORD_RECOVERY_RABBITMQ_HOST: rabbitmq
         secrets:
             - MONGO_URL
             - JWT_SECRET_PHRASE
         networks:
             - network_account_database
             - network_account_s3
+            - network_rabbitmq
           
