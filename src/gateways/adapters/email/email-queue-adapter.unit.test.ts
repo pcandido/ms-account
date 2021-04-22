@@ -58,6 +58,14 @@ describe('EmailQueueAdapter', () => {
     expect(assertQueue).toBeCalledWith(givenQueue)
   })
 
+  it('should not handle assertQueue internal errors', async () => {
+    const sut = makeSut()
+    const givenError = new Error('any error')
+    assertQueue.mockRejectedValueOnce(givenError)
+
+    await expect(() => sut.send(makeEmailMessage())).rejects.toThrow(givenError)
+  })
+
   it('should call channel.sendToQueue with correct params', async () => {
     const sut = makeSut()
     await sut.send(makeEmailMessage())
