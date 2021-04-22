@@ -30,26 +30,10 @@ describe('EmailQueueAdapter', () => {
     expect(connect).toBeCalledWith(givenRabbitmqHost)
   })
 
-  it('should not handle connect internal errors', async () => {
-    const sut = makeSut()
-    const givenError = new Error('any error')
-    connect.mockRejectedValueOnce(givenError)
-
-    await expect(() => sut.send(makeEmailMessage())).rejects.toThrow(givenError)
-  })
-
   it('should call connection.createChannel', async () => {
     const sut = makeSut()
     await sut.send(makeEmailMessage())
     expect(createChannel).toBeCalled()
-  })
-
-  it('should not handle createChannel internal errors', async () => {
-    const sut = makeSut()
-    const givenError = new Error('any error')
-    createChannel.mockRejectedValueOnce(givenError)
-
-    await expect(() => sut.send(makeEmailMessage())).rejects.toThrow(givenError)
   })
 
   it('should call channel.assertQueue with correct queue name', async () => {
@@ -58,18 +42,22 @@ describe('EmailQueueAdapter', () => {
     expect(assertQueue).toBeCalledWith(givenQueue)
   })
 
-  it('should not handle assertQueue internal errors', async () => {
-    const sut = makeSut()
-    const givenError = new Error('any error')
-    assertQueue.mockRejectedValueOnce(givenError)
-
-    await expect(() => sut.send(makeEmailMessage())).rejects.toThrow(givenError)
-  })
-
   it('should call channel.sendToQueue with correct params', async () => {
     const sut = makeSut()
     await sut.send(makeEmailMessage())
     expect(sendToQueue).toBeCalledWith(givenQueue, Buffer.from(JSON.stringify(makeEmailMessage())))
+  })
+
+  it.each([
+    ['connect', connect],
+    ['createChannel', createChannel],
+    ['assertQueue', assertQueue],
+  ])('should not handle %s internal errors', async (methodName, method) => {
+    const sut = makeSut()
+    const givenError = new Error('any error')
+    method.mockRejectedValueOnce(givenError)
+
+    await expect(() => sut.send(makeEmailMessage())).rejects.toThrow(givenError)
   })
 
 })
