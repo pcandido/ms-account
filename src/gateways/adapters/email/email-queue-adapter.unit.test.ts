@@ -30,6 +30,14 @@ describe('EmailQueueAdapter', () => {
     expect(connect).toBeCalledWith(givenRabbitmqHost)
   })
 
+  it('should not handle connect internal errors', async () => {
+    const sut = makeSut()
+    const givenError = new Error('any error')
+    connect.mockRejectedValueOnce(givenError)
+
+    await expect(() => sut.send(makeEmailMessage())).rejects.toThrow(givenError)
+  })
+
   it('should call connection.createChannel', async () => {
     const sut = makeSut()
     await sut.send(makeEmailMessage())
