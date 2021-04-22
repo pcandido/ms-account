@@ -42,11 +42,9 @@ describe('EmailQueueAdapter', () => {
     expect(assertQueue).toBeCalledWith(givenQueue)
   })
 
-  it.skip('should call amqplib with correct params', async () => {
+  it('should call channel.sendToQueue with correct params', async () => {
     const sut = makeSut()
-
     await sut.send(makeEmailMessage())
-
     expect(sendToQueue).toBeCalledWith(givenQueue, Buffer.from(JSON.stringify(makeEmailMessage())))
   })
 
