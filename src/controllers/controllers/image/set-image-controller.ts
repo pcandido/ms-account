@@ -1,7 +1,7 @@
-import { ValidationError } from '@controllers/errors/validation-error'
 import { badRequest, ok, serverError } from '@controllers/helpers/http-helper'
 import { AuthenticatedController, AuthenticatedRequest, Response, Validator } from '@controllers/protocols'
 import { SetImage } from '@domain/usecases'
+import { UserError } from '@errors/user-error'
 
 export class SetImageController implements AuthenticatedController {
 
@@ -16,7 +16,7 @@ export class SetImageController implements AuthenticatedController {
       const setted = await this.setImage.setImage(request.account, request.body.image.buffer)
       return ok(setted)
     } catch (error) {
-      if (error instanceof ValidationError)
+      if (error instanceof UserError)
         return badRequest(error)
       else
         return serverError(error)

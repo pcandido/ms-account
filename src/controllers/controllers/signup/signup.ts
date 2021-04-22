@@ -1,7 +1,7 @@
 import { Controller, Request, Response, Validator } from '@controllers/protocols'
-import { ValidationError } from '@controllers/errors/validation-error'
 import { badRequest, serverError, created } from '@controllers/helpers/http-helper'
 import { AddAccount } from '@domain/usecases'
+import { UserError } from '@errors/user-error'
 
 export class SignUpController implements Controller {
 
@@ -20,15 +20,14 @@ export class SignUpController implements Controller {
         password: request.body.password,
       })
 
-      const {password, ...response} = account
+      const { password, ...response } = account
 
       return created(response)
     } catch (error) {
-      if (error instanceof ValidationError) {
+      if (error instanceof UserError)
         return badRequest(error)
-      } else {
+      else
         return serverError(error)
-      }
     }
   }
 }
