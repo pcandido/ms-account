@@ -41,4 +41,17 @@ describe('POST /password-recovery', () => {
       .expect(404)
   })
 
+  it('should return 200 and add an email to queue on success', async done => {
+    request(app)
+      .post(givenRoute)
+      .send({ email: givenEmail })
+      .end((err, res) => {
+        expect(err).toBeFalsy()
+        expect(res.status).toBe(200)
+
+
+        done()
+      })
+  })
+
 })
