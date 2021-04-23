@@ -46,10 +46,8 @@
     "emitDecoratorMetadata": true
   },
   "include": [
-    "src"
-, "test/account-routes.e2e.test.ts"  ],
-  "exclude": [
-    "**/*.test.ts",
-    "**/*.spec.ts"
-  ]
+    "src",
+    "test"
+  ],
+  "exclude": []
 }
