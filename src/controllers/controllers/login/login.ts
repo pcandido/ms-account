@@ -25,7 +25,7 @@ export class LoginController implements Controller {
       return ok(tokens)
     } catch (error) {
       if (error instanceof UserError)
-        return badRequest(error)
+        return error.toResponse()
       else
         return serverError(error)
     }

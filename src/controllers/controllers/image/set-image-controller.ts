@@ -17,7 +17,7 @@ export class SetImageController implements AuthenticatedController {
       return ok(setted)
     } catch (error) {
       if (error instanceof UserError)
-        return badRequest(error)
+        return error.toResponse()
       else
         return serverError(error)
     }

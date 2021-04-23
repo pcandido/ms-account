@@ -21,7 +21,7 @@ export class PasswordRecoveryUseCase implements PasswordRecovery {
   async recover(email: string): Promise<void> {
     const account = await this.loadAccountByEmailRepositry.loadByEmail(email)
     if (!account)
-      throw new UserError('There is no account with the provied Email')
+      throw new UserError('There is no account with the provied Email', 404)
 
     const token = this.tokenGenerator.generate({ email }, this.tokenExpiresInMinutes)
 

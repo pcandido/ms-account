@@ -34,11 +34,11 @@ describe('POST /password-recovery', () => {
       .expect(400)
   })
 
-  it('should return 400 if an invalid email is provided', async () => {
+  it('should return 404 if provided email does not exists in accounts collection', async () => {
     await request(app)
       .post(givenRoute)
-      .send({ email: 'invalid email' })
-      .expect(400)
+      .send({ email: 'inexistent@email.com' })
+      .expect(404)
   })
 
 })

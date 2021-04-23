@@ -25,7 +25,7 @@ export class SignUpController implements Controller {
       return created(response)
     } catch (error) {
       if (error instanceof UserError)
-        return badRequest(error)
+        return error.toResponse()
       else
         return serverError(error)
     }

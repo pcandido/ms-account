@@ -107,7 +107,7 @@ describe('PasswordRecoveryUseCase', () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
     jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockResolvedValueOnce(null)
 
-    const expectedError = new UserError('There is no account with the provied Email')
+    const expectedError = new UserError('There is no account with the provied Email', 404)
     await expect(() => sut.recover(givenEmail)).rejects.toThrow(expectedError)
   })
 
