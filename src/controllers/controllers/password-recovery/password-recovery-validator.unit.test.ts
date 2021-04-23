@@ -1,6 +1,6 @@
 import { passwordRecoveryValidator } from './password-recovery-validator'
 import { MissingParamError, InvalidParamError } from '@controllers/errors'
-import { Validator, EmailValidator } from '@controllrs/protocols'
+import { Validator, EmailValidator } from '@controllers/protocols'
 
 interface SutTypes {
   sut: Validator
@@ -43,5 +43,5 @@ describe('passwordRecoveryValidator', () => {
     const givenRequest = { email: 'valid@email.com' }
     expect(() => sut.validate(givenRequest)).not.toThrow()
   })
-  
+
 })
