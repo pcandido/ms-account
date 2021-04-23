@@ -1,5 +1,5 @@
 import { AuthenticatedController, AuthenticatedRequest, Response, Validator } from '@controllers/protocols'
-import { badRequest, ok, serverError, unauthorized } from '@controllers/helpers/http-helper'
+import { ok, serverError, unauthorized } from '@controllers/helpers/http-helper'
 import { RefreshToken } from '@domain/usecases'
 import { AuthenticationError } from '@controllers/errors/authentication-error'
 import { UserError } from '@errors/user-error'

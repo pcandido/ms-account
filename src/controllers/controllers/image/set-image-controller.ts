@@ -1,4 +1,4 @@
-import { badRequest, ok, serverError } from '@controllers/helpers/http-helper'
+import { ok, serverError } from '@controllers/helpers/http-helper'
 import { AuthenticatedController, AuthenticatedRequest, Response, Validator } from '@controllers/protocols'
 import { SetImage } from '@domain/usecases'
 import { UserError } from '@errors/user-error'

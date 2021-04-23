@@ -1,6 +1,6 @@
 import config from '@utils/config'
 import { Controller } from '@controllers/protocols'
-import { LoginController } from '@controllers/controllers/login/login'
+import { LoginController } from '@controllers/controllers/login/login-controller'
 import { loginValidator } from '@controllers/controllers/login/login-validator'
 import { ControllerLogger } from '@controllers/decorators/controller-logger'
 import { AuthenticationUseCase } from '@usecases/usecases/authentication/authentication-usecase'

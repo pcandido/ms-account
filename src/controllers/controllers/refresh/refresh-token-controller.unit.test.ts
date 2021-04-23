@@ -1,4 +1,4 @@
-import { RefreshTokenController } from './refresh-token'
+import { RefreshTokenController } from './refresh-token-controller'
 import { Validator, AuthenticatedRequest } from '@controllers/protocols'
 import { badRequest, ok, serverError, unauthorized } from '@controllers/helpers/http-helper'
 import { ValidationError } from '@controllers/errors/validation-error'

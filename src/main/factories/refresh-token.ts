@@ -6,7 +6,7 @@ import { AccountMongoRepository } from '@gateways/repositories/acount/account-mo
 import { ConsoleLoggerAdapter } from '@utils/console-logger-adapter'
 import { RefreshTokenUseCase } from '@usecases/usecases/refresh-token/refresh-token-usecase'
 import { refreshTokenValidator } from '@controllers/controllers/refresh/refresh-token-validator'
-import { RefreshTokenController } from '@controllers/controllers/refresh/refresh-token'
+import { RefreshTokenController } from '@controllers/controllers/refresh/refresh-token-controller'
 
 export const makeRefreshTokenController = (): AuthenticatedController => {
   const loadByEmailRepository = new AccountMongoRepository()

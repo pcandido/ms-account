@@ -4,7 +4,7 @@ import { AuthenticationError } from '@controllers/errors/authentication-error'
 import { ValidationError } from '@controllers/errors/validation-error'
 import { badRequest, serverError, unauthorized, ok } from '@controllers/helpers/http-helper'
 import { Validator } from '@controllers/protocols'
-import { LoginController } from './login'
+import { LoginController } from './login-controller'
 
 interface SutTypes {
   sut: LoginController

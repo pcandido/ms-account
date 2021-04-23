@@ -1,5 +1,5 @@
 import { Controller, Request, Response, Validator } from '@controllers/protocols'
-import { badRequest, ok, serverError } from '@controllers/helpers/http-helper'
+import { ok, serverError } from '@controllers/helpers/http-helper'
 import { PasswordRecovery } from '@domain/usecases'
 import { UserError } from '@errors/user-error'
 
