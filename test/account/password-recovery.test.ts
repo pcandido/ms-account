@@ -27,4 +27,18 @@ describe('POST /password-recovery', () => {
       .expect(400)
   })
 
+  it('should return 400 if an invalid email is provided', async () => {
+    await request(app)
+      .post(givenRoute)
+      .send({ email: 'invalid email' })
+      .expect(400)
+  })
+
+  it('should return 400 if an invalid email is provided', async () => {
+    await request(app)
+      .post(givenRoute)
+      .send({ email: 'invalid email' })
+      .expect(400)
+  })
+
 })
