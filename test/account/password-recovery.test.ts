@@ -1,20 +1,23 @@
 import request from 'supertest'
 import app from '@main/config/app'
 import { MongoHelper } from '@gateways/helpers/mogodb-helper'
+import { QueueHelper } from '@gateways/helpers/queue-helper'
 import { Collection } from 'mongodb'
+import config from '@utils/config'
 
 
 describe('POST /password-recovery', () => {
 
   const givenRoute = '/password-recovery'
   const givenEmail = 'any@email.com'
+  const givenName = 'any name'
   let accountsCollection: Collection
 
   beforeEach(async () => {
     accountsCollection = await MongoHelper.getCollection('accounts')
     await accountsCollection.deleteMany({})
     await accountsCollection.insertOne({
-      name: 'any name',
+      name: givenName,
       email: givenEmail,
       password: '$2b$12$BQwxpEG4DiXrJIj7EvTiFOzbRlkctrKB9pgajOmhyqY1uXYfV4mAu',
     })
@@ -45,10 +48,16 @@ describe('POST /password-recovery', () => {
     request(app)
       .post(givenRoute)
       .send({ email: givenEmail })
-      .end((err, res) => {
+      .end(async (err, res) => {
         expect(err).toBeFalsy()
         expect(res.status).toBe(200)
 
+        const message = await QueueHelper.getMessage(config.app.passwordRecovery.queueName)
+        expect(JSON.parse(message.toString())).toEqual({
+          to: givenEmail,
+          subject: expect.any(String),
+          body: expect.stringContaining(givenName),
+        })
 
         done()
       })
