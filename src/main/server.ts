@@ -1,12 +1,13 @@
 import '../utils/module-aliases'
 import config from '@utils/config'
 import { MongoHelper } from '@gateways/helpers/mogodb-helper'
+import { QueueHelper } from '@gateways/helpers/queue-helper'
 
 
 async function start() {
 
-  const mongodbUrl = config.mongodb.url
-  await MongoHelper.connect(mongodbUrl)
+  await MongoHelper.connect(config.mongodb.url)
+  await QueueHelper.connect(config.rabbitmq.host)
 
   const port = config.app.port
   const app = (await import('@main/config/app')).default

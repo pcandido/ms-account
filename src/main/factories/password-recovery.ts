@@ -12,7 +12,7 @@ import { ConsoleLoggerAdapter } from '@utils/console-logger-adapter'
 import { EmailValidatorAdapter } from '@utils/email-validator-adapter'
 
 export const makePasswordRecoveryController = (): Controller => {
-  const emailSender = new EmailQueueAdapter(config.app.passwordRecovery.rabbitmqHost, config.app.passwordRecovery.queueName)
+  const emailSender = new EmailQueueAdapter(config.app.passwordRecovery.queueName)
   const tokenGenerator = new JwtAdapter(config.app.jwt.secret)
   const loadByEmailRepository = new AccountMongoRepository()
   const passwordRecovery = new PasswordRecoveryUseCase(
