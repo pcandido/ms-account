@@ -4,12 +4,13 @@ import { QueueHelper } from './queue-helper'
 jest.mock('amqplib', () => {
   const assertQueue = jest.fn()
   const sendToQueue = jest.fn()
+  const get = jest.fn()
   const connectionClose = jest.fn()
   const channelClose = jest.fn()
-  const createChannel = jest.fn().mockResolvedValue({ assertQueue, sendToQueue, close: channelClose })
+  const createChannel = jest.fn().mockResolvedValue({ assertQueue, sendToQueue, get, close: channelClose })
   const connect = jest.fn().mockResolvedValue({ createChannel, close: connectionClose })
 
-  return { connect, createChannel, assertQueue, sendToQueue, channelClose, connectionClose }
+  return { connect, createChannel, assertQueue, sendToQueue, get, channelClose, connectionClose }
 })
 
 describe('QueueHelper', () => {
@@ -76,6 +77,34 @@ describe('QueueHelper', () => {
     it('should call sendToQueue with correct params', async () => {
       await QueueHelper.sendMessage(givenQueue, givenMessage)
       expect((amqplib as any).sendToQueue).toBeCalledWith(givenQueue, Buffer.from(JSON.stringify(givenMessage)))
+    })
+
+  })
+
+  describe('getMessage', () => {
+
+    const givenQueue = 'q1'
+    const givenMessage = { field: 1 }
+
+    beforeEach(async () => {
+      await QueueHelper.connect(givenHost)
+      await QueueHelper.sendMessage(givenQueue, givenMessage)
+    })
+
+    it('should call assertQueue with correct queue name', async () => {
+      await QueueHelper.getMessage(givenQueue)
+      expect((amqplib as any).assertQueue).toBeCalledWith(givenQueue)
+    })
+
+    it('should call get with correct queue name', async () => {
+      await QueueHelper.getMessage(givenQueue)
+      expect((amqplib as any).get).toBeCalledWith(givenQueue)
+    })
+
+    it('should return gotten message', async () => {
+      (amqplib as any).get.mockResolvedValue({ content: givenMessage })
+      const message = await QueueHelper.getMessage(givenQueue)
+      expect(message).toEqual(givenMessage)
     })
 
   })
