@@ -91,11 +91,6 @@ describe('QueueHelper', () => {
       await QueueHelper.sendMessage(givenQueue, givenMessage)
     })
 
-    it('should call assertQueue with correct queue name', async () => {
-      await QueueHelper.getMessage(givenQueue)
-      expect((amqplib as any).assertQueue).toBeCalledWith(givenQueue)
-    })
-
     it('should call get with correct queue name', async () => {
       await QueueHelper.getMessage(givenQueue)
       expect((amqplib as any).get).toBeCalledWith(givenQueue)

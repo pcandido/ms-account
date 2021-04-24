@@ -22,7 +22,6 @@ export const QueueHelper = {
   },
 
   async getMessage(queue: string): Promise<Buffer | false> {
-    await this.channel?.assertQueue(queue)
     const message = await this.channel?.get(queue)
 
     if (message)
