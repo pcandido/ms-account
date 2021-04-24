@@ -89,7 +89,7 @@ describe('PasswordRecoveryController', () => {
   it('should return server error if PasswordRecovery usecase throws internal error', async () => {
     const { sut, passwordRecoveryStub } = makeSut()
     const givenError = new Error('any errror')
-    jest.spyOn(passwordRecoveryStub, 'recover').mockImplementationOnce(() => { throw givenError })
+    jest.spyOn(passwordRecoveryStub, 'recover').mockRejectedValueOnce(givenError)
 
     const response = await sut.handle(makeRequest())
 
