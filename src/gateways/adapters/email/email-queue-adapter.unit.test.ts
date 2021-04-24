@@ -25,7 +25,7 @@ describe('EmailQueueAdapter', () => {
   it('should not handle QueueHelper internal errors', async () => {
     const sut = makeSut()
     const givenError = new Error('any error')
-    QueueHelper.sendMessage.mockRejectedValueOnce(givenError)
+    jest.spyOn(QueueHelper, 'sendMessage').mockRejectedValueOnce(givenError)
     await expect(() => sut.send(makeEmailMessage())).rejects.toThrow(givenError)
   })
 
