@@ -7,7 +7,7 @@
   "scripts": {
     "postinstall": "husky install",
     "start": "node dist/main/server.js",
-    "build": "rimraf dist && tsc",
+    "build": "rimraf dist && tsc -p tsconfig-build.json",
     "dev": "ts-node-dev src/main/server.ts",
     "test": "jest --passWithNoTests --runInBand",
     "test:watch": "jest --passWithNoTests --runInBand --watch",
