@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { adaptAuthenticatedRoute, adaptRoute } from '@main/adapters/express-request-adapter'
-import { makeSignUpController, makeLoginController, makeRefreshTokenController, makeSetImageController, makePasswordRecoveryController } from '@main/factories'
+import { makeSignUpController, makeLoginController, makeRefreshTokenController, makeSetImageController, makePasswordRecoveryController, makePasswordResetController } from '@main/factories'
 
 export default (): Router => {
   const router = Router()
@@ -10,6 +10,7 @@ export default (): Router => {
   router.route('/refresh-token').post(adaptAuthenticatedRoute(makeRefreshTokenController()))
   router.route('/set-image').post(adaptAuthenticatedRoute(makeSetImageController()))
   router.route('/password-recovery').post(adaptRoute(makePasswordRecoveryController()))
+  router.route('/password-reset').post(adaptRoute(makePasswordResetController()))
 
   return router
 }
